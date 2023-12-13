@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(schema = "smartshell", name = "TBL_COMPANY_INFO")
+@Table(schema = "smart_shell", name = "TBL_COMPANY_INFO")
 public class CompanyInfoEntity extends AuditingEntity {
 
     @Id

@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
-@Table(schema = "smartshell", name= "TBL_TYPE_COMMERCIAL_DOCUMENT")
+@Table(schema = "smart_shell", name= "TBL_TYPE_COMMERCIAL_DOCUMENT")
 @Entity
 public class TypeCommercialDocumentEntity extends AuditingEntity {
 	@Id

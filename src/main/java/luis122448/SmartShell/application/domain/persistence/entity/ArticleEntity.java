@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(schema = "smartshell", name= "TBL_ARTICLE")
+@Table(schema = "smart_shell", name= "TBL_ARTICLE")
 public class ArticleEntity extends AuditingEntity implements Serializable {
 	@Id
     private String codart;

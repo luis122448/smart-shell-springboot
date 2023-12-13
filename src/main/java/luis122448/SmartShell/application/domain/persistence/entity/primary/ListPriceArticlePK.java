@@ -13,3 +13,4 @@ public class ListPriceArticlePK implements Serializable {
     private Integer codlistprice;
     private String codart;
 }
+

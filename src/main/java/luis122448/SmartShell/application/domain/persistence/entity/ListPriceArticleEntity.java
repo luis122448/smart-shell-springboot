@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @IdClass(ListPriceArticlePK.class)
-@Table(schema = "smartshell",name = "TBL_LIST_PRICE_ARTICLE")
+@Table(schema = "smart_shell",name = "TBL_LIST_PRICE_ARTICLE")
 public class ListPriceArticleEntity extends AuditingEntity {
     @Id
     private Integer codlistprice;

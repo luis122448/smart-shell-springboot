@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @IdClass(ArticleAttachedPK.class)
 @Entity
-@Table(schema = "smartshell", name = "TBL_ARTICLE_ATTACHED")
+@Table(schema = "smart_shell", name = "TBL_ARTICLE_ATTACHED")
 public class ArticleAttachedEntity extends AuditingEntity {
 
     @Id

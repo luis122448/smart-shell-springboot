@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
-@Table(schema = "smartshell", name= "TBL_USUARIO")
+@Table(schema = "smart_shell", name= "TBL_USUARIO")
 @Entity
 public class UsuarioEntity {
 	@Id
