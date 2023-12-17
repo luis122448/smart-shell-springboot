@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: smart-shell-springboot
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_DATABASE: $POSTGRES_DATABASE
+      POSTGRES_USERNAME: $POSTGRES_USERNAME
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      MONGO_HOST: $MONGO_HOST
+      MONGO_DATABASE: $MONGO_DATABASE
+      MONGO_USERNAME: $MONGO_USERNAME
+      MONGO_PASSWORD: $MONGO_PASSWORD
+      REDIS_HOST: $REDIS_HOST
+      REDIS_PASSWORD: $REDIS_PASSWORD
+    ports:
+      - "8080:8080"
+    networks:
+      - smart-shell-net  # Conexión a la red smart-shell-net
+
+networks:
+  smart-shell-net:  # Definición de la red smart-shell-net
+    external: true   # Indicador de que la red ya está creada externamente
