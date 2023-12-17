@@ -38,3 +38,13 @@ build/
 
 ### DEPLOYMMENT ###
 app/
+
+### SSH ###
+key/
+**/src/main/resorces/key
+*.cert
+*.pem
+*.p12
+
+## DEPLOY ###
+application-pdn.properties

@@ -35,3 +35,8 @@ build/
 
 ### ENVIRONMENT ###
 .env
+
+### SSH ###
+.pem
+.cert
+.p12
