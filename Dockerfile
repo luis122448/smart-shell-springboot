@@ -5,7 +5,7 @@ FROM openjdk:21
 WORKDIR /app
 
 # Copia el JAR construido a la imagen
-COPY ./target/smart-shell.jar /app/smart-shell.jar
+COPY ./app/smart-shell.jar ./smart-shell.jar
 
 # Expone el puerto en el que tu aplicación se ejecutará
 EXPOSE 8080

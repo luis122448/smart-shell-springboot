@@ -36,3 +36,5 @@ build/
 ### ENVIRONMENT ###
 .env
 
+### DEPLOYMMENT ###
+app/
