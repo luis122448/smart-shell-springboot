@@ -37,7 +37,7 @@ build/
 .env
 
 ### DEPLOYMMENT ###
-app/
+#app/
 
 ### SSH ###
 key/
