@@ -36,7 +36,15 @@ build/
 ### ENVIRONMENT ###
 .env
 
+### DEPLOYMMENT ###
+app/
+
 ### SSH ###
-.pem
-.cert
-.p12
+key/
+**/src/main/resorces/key
+*.cert
+*.pem
+*.p12
+
+## DEPLOY ###
+**/src/main/resources/application-pdn.properties

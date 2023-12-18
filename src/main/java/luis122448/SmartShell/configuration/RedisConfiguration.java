@@ -1,5 +1,6 @@
 package luis122448.SmartShell.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -24,11 +25,23 @@ import java.util.HashMap;
 )
 public class RedisConfiguration {
 
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+
+    @Value("${spring.data.redis.username}")
+    private String redisUsername;
+
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
+
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration("34.221.144.166", 6379);
-        redisConfiguration.setUsername("default");
-        redisConfiguration.setPassword("1073741824");
+        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
+        redisConfiguration.setUsername(redisUsername);
+        redisConfiguration.setPassword(redisPassword);
         return new JedisConnectionFactory(redisConfiguration);
     }
 

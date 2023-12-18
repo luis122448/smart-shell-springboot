@@ -47,4 +47,4 @@ key/
 *.p12
 
 ## DEPLOY ###
-application-pdn.properties
+**/src/main/resources/application-pdn.properties
