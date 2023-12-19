@@ -7,8 +7,7 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class ArticleSpecificationPK implements Serializable {
     private Integer typinv;
     private Integer typspe;

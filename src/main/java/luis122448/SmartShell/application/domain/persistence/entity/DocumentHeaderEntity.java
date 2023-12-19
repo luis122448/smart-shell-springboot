@@ -95,7 +95,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
-@Table(schema = "smartshell", name= "TBL_DOCUMENT_HEADER")
+@Table(schema = "smart_shell", name= "TBL_DOCUMENT_HEADER")
 @Entity
 public class DocumentHeaderEntity extends AuditingEntity {
 		

@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 @IdClass(DocumentDetailPK.class)
-@Table(schema = "smartshell",name = "TBL_DOCUMENT_DETAIL")
+@Table(schema = "smart_shell",name = "TBL_DOCUMENT_DETAIL")
 @Entity
 public class DocumentDetailEntity extends AuditingEntity {
 

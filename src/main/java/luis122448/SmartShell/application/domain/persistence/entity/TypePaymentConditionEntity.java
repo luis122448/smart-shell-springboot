@@ -13,11 +13,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
-@Table(schema = "smartshell", name= "TBL_TYPE_PAYMENT_CONDITION")
+@Table(schema = "smart_shell", name= "TBL_TYPE_PAYMENT_CONDITION")
 @Entity
 public class TypePaymentConditionEntity extends AuditingEntity {
 	@Id
-    private String typpaycon;
+    private Short typpaycon;
     private String abrevi;
     private String descri;
     private String codext;

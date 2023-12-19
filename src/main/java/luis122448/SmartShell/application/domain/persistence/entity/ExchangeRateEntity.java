@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 @IdClass(ExchangeRatePK.class)
-@Table(schema = "smartshell", name= "TBL_EXCHANGE_RATE")
+@Table(schema = "smart_shell", name= "TBL_EXCHANGE_RATE")
 @Entity
 public class ExchangeRateEntity extends AuditingEntity {
 	@Id

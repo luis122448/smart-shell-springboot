@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @IdClass(ReasonCommercialDocumentPK.class)
 @EntityListeners({AuditingEntityListener.class})
 @Entity
-@Table(schema = "smartshell",name = "TBL_REASON_COMMERCIAL_DOCUMENT")
+@Table(schema = "smart_shell",name = "TBL_REASON_COMMERCIAL_DOCUMENT")
 public class ReasonCommercialDocumentEntity extends AuditingEntity {
     @Id
     public Integer typcomdoc;

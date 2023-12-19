@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 @IdClass(BusparPaymentConditionPagoPK.class)
-@Table(schema = "smartshell", name= "TBL_BUSPAR_PAYMENT_CONDITION")
+@Table(schema = "smart_shell", name= "TBL_BUSPAR_PAYMENT_CONDITION")
 @Entity
 public class BusparPaymentConditionEntity extends AuditingEntity {
 	@Id

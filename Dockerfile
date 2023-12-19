@@ -1,14 +1,14 @@
 # Usa una imagen base de OpenJDK
-FROM openjdk:17
+FROM openjdk:21
 
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
 # Copia el JAR construido a la imagen
-COPY target/smart-shell-1.0.0.jar smart-shell-1.0.0.jar
+COPY ./app/smart-shell.jar ./smart-shell.jar
 
 # Expone el puerto en el que tu aplicación se ejecutará
 EXPOSE 8080
 
-# Comando para ejecutar tu aplicación cuando se inicie el contenedor
-CMD ["java", "-jar", "smart-shell-1.0.0.jar"]
+# Comando para ejecutsar tu aplicación cuando se inicie el contenedor
+CMD ["java", "-jar", "smart-shell.jar"]

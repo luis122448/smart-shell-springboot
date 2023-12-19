@@ -15,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.mvn
 *.iws
 *.iml
 *.ipr
@@ -31,3 +32,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### ENVIRONMENT ###
+.env
+
+### DEPLOYMMENT ###
+#app/
+
+### SSH ###
+key/
+**/src/main/resorces/key
+*.cert
+*.pem
+*.p12
+
+## DEPLOY ###
+**/src/main/resources/application-pdn.properties
