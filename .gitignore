@@ -36,9 +36,6 @@ build/
 ### ENVIRONMENT ###
 .env
 
-### DEPLOYMMENT ###
-#app/
-
 ### SSH ###
 key/
 **/src/main/resorces/key
