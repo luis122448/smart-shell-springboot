@@ -1,6 +1,9 @@
 # Crenado directorio para certificados SSL
 mkdir -p key
 
+# Creando archivo .env
+touch .env
+
 # Configuracion del SSL
 #export COUNTRY=PE
 #export STATE=LIMA

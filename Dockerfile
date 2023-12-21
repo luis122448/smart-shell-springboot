@@ -1,14 +1,11 @@
-# Usa una imagen base de OpenJDK
+# Build stage
+FROM maven AS build
+COPY ./src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
+
+# Package stage
 FROM openjdk:21
-
-# Establece el directorio de trabajo en /app
-WORKDIR /app
-
-# Copia el JAR construido a la imagen
-COPY ./app/smart-shell.jar ./smart-shell.jar
-
-# Expone el puerto en el que tu aplicación se ejecutará
+COPY --from=build /home/app/target/smart-shell-1.0.0.jar /usr/local/lib/smart-shell.jar
 EXPOSE 8080
-
-# Comando para ejecutsar tu aplicación cuando se inicie el contenedor
-CMD ["java", "-jar", "smart-shell.jar"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/smart-shell.jar"]
