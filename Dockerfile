@@ -3,6 +3,19 @@ FROM maven:3.9.6-amazoncorretto-21 AS build
 COPY ./src /home/app/src
 COPY pom.xml /home/app
 
+# Specify the variable you need
+ARG POSTGRES_HOST
+ARG POSTGRES_DATABASE
+ARG POSTGRES_USERNAME
+ARG POSTGRES_PASSWORD
+ARG MONGO_HOST
+ARG MONGO_DATABASE
+ARG MONGO_USERNAME
+ARG MONGO_PASSWORD
+ARG REDIS_HOST
+ARG REDIS_USERNAME
+ARG REDIS_PASSWORD
+
 # Definiendo variables de entorno
 #ENV POSTGRES_HOST=$POSTGRES_HOST
 #ENV POSTGRES_DATABASE=$POSTGRES_DATABASE
@@ -16,11 +29,11 @@ COPY pom.xml /home/app
 #ENV REDIS_USERNAME=$REDIS_USERNAME
 #ENV REDIS_PASSWORD=$REDIS_PASSWORD
 
-#COPY dev-install.sh /home/app
+COPY dev-install.sh /home/app
 
 # Ejecutar el script para reemplazar propiedades
-#RUN chmod +x /home/app/dev-install.sh
-#RUN /home/app/dev-install.sh
+RUN chmod +x /home/app/dev-install.sh
+RUN /home/app/dev-install.sh
 
 RUN mvn -f /home/app/pom.xml clean package
 
