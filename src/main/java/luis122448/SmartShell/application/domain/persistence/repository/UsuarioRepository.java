@@ -10,6 +10,6 @@ import luis122448.SmartShell.application.domain.persistence.entity.UsuarioEntity
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, String>{
 
 	@Modifying
-	@Query(nativeQuery = true,value = "UPDATE TBL_USUARIO SET CODVER=:codver WHERE CODUSER = :coduser")
+	@Query(nativeQuery = true,value = "UPDATE TBL_USER SET CODVER=:codver WHERE CODUSER = :coduser")
 	void updateVerifyCode(@Param("coduser") String coduser ,@Param("codver") String codver);
 }
