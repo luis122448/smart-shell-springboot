@@ -1,0 +1,4 @@
+[build]
+builder = "DOCKERFILE"
+watchPatterns = ["src/**"]
+buildCommand = "bash deploy.sh"
