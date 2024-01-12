@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import luis122448.SmartShell.application.domain.domain.service.service.SerieComm
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,49 +24,44 @@ public class SerieCommercialDocumentServiceImpl implements SerieCommercialDocume
 	}
 
 	@Override
-	public ApiResponseList<SerieCommercialDocumentEntity> findAll(SerieCommercialDocumentEntity t)
-			throws GenericListServiceException {
-		return new ApiResponseList<SerieCommercialDocumentEntity>(1,"Ok",Optional.of(this.serieCommercialDocumentRepository.findAll()));
+	public ApiResponseObject<SerieCommercialDocumentEntity> save(SerieCommercialDocumentEntity serieCommercialDocumentEntity) throws GenericObjectServiceException {
+		SerieCommercialDocumentEntity tmp = this.serieCommercialDocumentRepository.save(serieCommercialDocumentEntity);
+		return new ApiResponseObject<>(Optional.of(tmp));
 	}
 
 	@Override
-	public ApiResponseList<SerieCommercialDocumentEntity> findByLike(SerieCommercialDocumentEntity t)
-			throws GenericListServiceException {
-		return new ApiResponseList<SerieCommercialDocumentEntity>(1,"Ok",Optional.ofNullable(this.serieCommercialDocumentRepository.findByTypcomdoc(t.getTypcomdoc())));
+	public ApiResponseObject<SerieCommercialDocumentEntity> update(SerieCommercialDocumentEntity serieCommercialDocumentEntity) throws GenericObjectServiceException {
+		SerieCommercialDocumentEntity tmp = this.serieCommercialDocumentRepository.save(serieCommercialDocumentEntity);
+		return new ApiResponseObject<>(Optional.of(tmp));
 	}
 
 	@Override
-	public ApiResponseObject<SerieCommercialDocumentEntity> findById(SerieCommercialDocumentEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public ApiResponseObject<SerieCommercialDocumentEntity> delete(SerieCommercialDocumentPK serieCommercialDocumentPK) throws GenericObjectServiceException {
+		this.serieCommercialDocumentRepository.deleteById(serieCommercialDocumentPK);
+		return new ApiResponseObject<>(Optional.empty());
 	}
 
 	@Override
-	public ApiResponseObject<SerieCommercialDocumentEntity> save(SerieCommercialDocumentEntity t)
-			throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public ApiResponseList<SerieCommercialDocumentEntity> findAll() throws GenericListServiceException {
+		List<SerieCommercialDocumentEntity> list = this.serieCommercialDocumentRepository.findAll();
+		if (list.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(list));
 	}
 
 	@Override
-	public ApiResponseObject<SerieCommercialDocumentEntity> update(SerieCommercialDocumentEntity t)
-			throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public ApiResponseList<SerieCommercialDocumentEntity> findByLike(SerieCommercialDocumentEntity serieCommercialDocumentEntity) throws GenericListServiceException {
+		List<SerieCommercialDocumentEntity> list = this.serieCommercialDocumentRepository.findByTypcomdoc(serieCommercialDocumentEntity.getTypcomdoc());
+		if (list.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(list));
 	}
 
 	@Override
-	public ApiResponseObject<SerieCommercialDocumentEntity> delete(SerieCommercialDocumentEntity t)
-			throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<SerieCommercialDocumentEntity> undelete(SerieCommercialDocumentEntity t)
-			throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public ApiResponseObject<SerieCommercialDocumentEntity> findById(SerieCommercialDocumentPK serieCommercialDocumentPK) throws GenericObjectServiceException {
+		return new ApiResponseObject<>(serieCommercialDocumentRepository.findById(serieCommercialDocumentPK));
 	}
 
 }

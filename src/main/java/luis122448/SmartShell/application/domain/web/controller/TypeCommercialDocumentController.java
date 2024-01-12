@@ -14,7 +14,7 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 
 @Slf4j
 @RestController
-@RequestMapping(PATH_BILLING + "/tipdoccom")
+@RequestMapping(PATH_BILLING + "/type-commercial-document")
 public class TypeCommercialDocumentController {
 	
 	private final TypeCommercialDocumentService typeCommercialDocumentService;
@@ -23,7 +23,7 @@ public class TypeCommercialDocumentController {
 		this.typeCommercialDocumentService = typeCommercialDocumentService;
 	}
 
-	@GetMapping
+	@GetMapping("/by-all")
 	public ResponseEntity<?> findAll() throws GenericListServiceException {
 		TypeCommercialDocumentEntity obj = new TypeCommercialDocumentEntity();
 		ApiResponseList<TypeCommercialDocumentEntity> lst = this.typeCommercialDocumentService.findAll(obj);

@@ -38,7 +38,7 @@ public class BusinessPartnerEntity extends AuditingEntity {
     private String email;
     private Short typpaycon;
     private BigDecimal limcre;
-    private String lispre;
+    private Short codlistprice;
     private byte[] image;
     private String observ;
     private String commen;

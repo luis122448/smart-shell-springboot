@@ -33,6 +33,12 @@ public class ListPriceArticleController {
         return ResponseEntity.ok(obj);
     }
 
+    @GetMapping("/by-generate")
+    public ResponseEntity<?> generateExcel(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice) throws GenericListServiceException, GenericByteServiceException {
+        ApiResponseByte<?> obj = this.listPriceArticleReport.generateByExcel(codlistprice);
+        return ResponseEntity.ok(obj);
+    }
+
     @PostMapping("/by-import")
     public ResponseEntity<?> importExcel(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
                                          @RequestParam(name = "archive") MultipartFile multipartFile) throws GenericByteServiceException {

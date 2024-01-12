@@ -130,7 +130,7 @@ public class ArticleReport {
         }
     }
 
-    public ApiResponseReport<?> readXSSFWorkbook(Integer typinv, XSSFWorkbook xssfWorkbook) throws IOException, JRException {
+    public ApiResponseReport<?> readXSSFWorkbook(Integer typinv, XSSFWorkbook xssfWorkbook) throws IOException, JRException, GenericByteServiceException {
 
         List<ColumnInfo> columnInfoList = readHeaderXSSFWorkbook(xssfWorkbook);
         for (ColumnInfo columnInfo : columnInfoList) {
@@ -176,14 +176,14 @@ public class ArticleReport {
             articleEntity.setUpdateat(LocalDateTime.now());
             articleEntityList.add(articleEntity);
         }
-        if (importErrorModelListGeneral.size() != 0){
+        if (!importErrorModelListGeneral.isEmpty()){
             Integer numberRow = lastRow - (startRow - 1);
             return this.genericReport.genericResponseReport(importErrorModelListGeneral,TITLE_ARTICLE, numberRow);
         }
         return validateAndImportList(articleEntityList, startRow, lastRow);
     }
 
-    public ApiResponseReport<?> validateAndImportList(List<ArticleEntity> articleEntityList, Integer startRow, Integer lastRow) throws JRException {
+    public ApiResponseReport<?> validateAndImportList(List<ArticleEntity> articleEntityList, Integer startRow, Integer lastRow) throws JRException,GenericByteServiceException {
 
         List<ImportErrorModel> importErrorModelList = new ArrayList<>();
 
@@ -204,7 +204,7 @@ public class ArticleReport {
             currentRow = currentRow + 1;
         }
         Integer numberRow = lastRow - (startRow - 1);
-        if (importErrorModelList.size() == 0){
+        if (importErrorModelList.isEmpty()){
             this.articleRepository.saveAll(articleEntityList);
         }
         return this.genericReport.genericResponseReport(importErrorModelList,TITLE_ARTICLE, numberRow);

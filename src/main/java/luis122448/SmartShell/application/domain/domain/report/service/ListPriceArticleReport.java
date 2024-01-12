@@ -2,6 +2,7 @@ package luis122448.SmartShell.application.domain.domain.report.service;
 
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
+import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ListPriceArticleRepository;
@@ -46,6 +47,19 @@ public class ListPriceArticleReport {
     public ApiResponseByte<?> exportByExcel(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
         try{
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            try (XSSFWorkbook xssfWorkbook = this.exportXSSFWorkbook(codlistprice)) {
+                xssfWorkbook.write(byteArrayOutputStream);
+            }
+            byte[] excelBytes = byteArrayOutputStream.toByteArray();
+            return new ApiResponseByte<>(1,EXPORT_SUCCESS, Optional.of(excelBytes),NAME_PRICE_LIST_ARTICLE,EXCEL_FORMAT,EXCEL_EXTENSION);
+        } catch ( IOException e ) {
+            throw new GenericByteServiceException(EXPORT_FAILED,e.getMessage(),e);
+        }
+    }
+
+    public ApiResponseByte<?> generateByExcel(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
+        try{
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             try (XSSFWorkbook xssfWorkbook = this.generateXSSFWorkbook(codlistprice)) {
                 xssfWorkbook.write(byteArrayOutputStream);
             }
@@ -62,7 +76,7 @@ public class ListPriceArticleReport {
             byte[] fileBytes = multipartFile.getBytes();
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fileBytes);
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(byteArrayInputStream);
-            ApiResponseReport<?> tmp = this.readXSSFWorkbook(codlistprice, xssfWorkbook);
+            ApiResponseReport<?> tmp = this.importXSSFWorkbook(codlistprice, xssfWorkbook);
             JasperPrint jasperPrint = tmp.getJasperPrint().orElseThrow();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             JRPdfExporter exporter = new JRPdfExporter();
@@ -76,7 +90,7 @@ public class ListPriceArticleReport {
         }
     }
 
-    private XSSFWorkbook generateXSSFWorkbook(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
+    private XSSFWorkbook exportXSSFWorkbook(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
         try{
             List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByCodlistprice(codlistprice);
             File file = new File(FORMAT_PRICE_LIST_ARTICLE);
@@ -136,7 +150,108 @@ public class ListPriceArticleReport {
         }
     }
 
-    public ApiResponseReport<?> readXSSFWorkbook(Integer codlistprice, XSSFWorkbook xssfWorkbook) throws IOException, JRException {
+    private XSSFWorkbook generateXSSFWorkbook(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
+        try{
+            List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByCodlistprice(codlistprice);
+            List<ArticleEntity> listPriceNotArticleEntityList = this.articleRepository.findByArticleNotExistsListPrice(codlistprice);
+            File file = new File(FORMAT_PRICE_LIST_ARTICLE);
+            InputStream inputStream = new FileInputStream(file);
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
+            XSSFSheet format = xssfWorkbook.getSheet(IMPORT_SHEET_PRINCIPAL);
+
+            int startRow = IMPORT_START_ROW;
+
+            CellStyle priceCellStyle = importStyle(xssfWorkbook);
+            CellStyle descCellStyle = discountStyle(xssfWorkbook);
+
+            for (int i = startRow; i < listPriceArticleEntityList.size() + startRow; i++) {
+                Row rowData = format.createRow(i);
+
+                Cell cellData = rowData.createCell(0);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getCodart());
+
+                cellData = rowData.createCell(1);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesart());
+
+                cellData = rowData.createCell(2);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getPrice().doubleValue());
+                cellData.setCellStyle(priceCellStyle);
+
+                cellData = rowData.createCell(3);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getModprice());
+
+                cellData = rowData.createCell(4);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getModdesc());
+
+                cellData = rowData.createCell(5);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesmax().doubleValue());
+
+                cellData = rowData.createCell(6);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesc01().doubleValue());
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(7);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesc02().doubleValue());
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(8);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesc03().doubleValue());
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(9);
+                cellData.setCellValue(listPriceArticleEntityList.get(i - startRow).getDesc04().doubleValue());
+                cellData.setCellStyle(descCellStyle);
+            }
+
+            for (int i = startRow; i < listPriceNotArticleEntityList.size() + startRow; i++) {
+                Row rowData = format.createRow(i);
+
+                Cell cellData = rowData.createCell(0);
+                cellData.setCellValue(listPriceNotArticleEntityList.get(i - startRow).getCodart());
+
+                cellData = rowData.createCell(1);
+                cellData.setCellValue(listPriceNotArticleEntityList.get(i - startRow).getDescri());
+
+                cellData = rowData.createCell(2);
+                cellData.setCellValue(0.0);
+                cellData.setCellStyle(priceCellStyle);
+
+                cellData = rowData.createCell(3);
+                cellData.setCellValue("N");
+
+                cellData = rowData.createCell(4);
+                cellData.setCellValue("N");
+
+                cellData = rowData.createCell(5);
+                cellData.setCellValue(100.0);
+
+                cellData = rowData.createCell(6);
+                cellData.setCellValue(0.0);
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(7);
+                cellData.setCellValue(0.0);
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(8);
+                cellData.setCellValue(0.0);
+                cellData.setCellStyle(descCellStyle);
+
+                cellData = rowData.createCell(9);
+                cellData.setCellValue(0.0);
+                cellData.setCellStyle(descCellStyle);
+            }
+
+            return xssfWorkbook;
+        }
+        catch ( FileNotFoundException e ) {
+            throw new GenericByteServiceException("REPORTED NOT IMPLEMENT",e.getMessage(),e);
+        } catch ( IOException e ) {
+            throw new GenericByteServiceException(EXPORT_FAILED,e.getMessage(),e);
+        }
+    }
+
+    public ApiResponseReport<?> importXSSFWorkbook(Integer codlistprice, XSSFWorkbook xssfWorkbook) throws IOException, JRException, GenericByteServiceException {
 
         List<ColumnInfo> columnInfoList = readHeaderXSSFWorkbook(xssfWorkbook);
         List<ListPriceArticleEntity> listPriceArticleEntityList = new ArrayList<>();
@@ -169,14 +284,14 @@ public class ListPriceArticleReport {
             listPriceArticleEntity.setDesc04(getBigDecimalCellValue(row.getCell(9)));
             listPriceArticleEntityList.add(listPriceArticleEntity);
         }
-        if (importErrorModelListGeneral.size() != 0){
+        if (!importErrorModelListGeneral.isEmpty()){
             Integer numberRow = lastRow - (startRow - 1);
             return this.genericReport.genericResponseReport(importErrorModelListGeneral,TITLE_PRICE_LIST_ARTICLE, numberRow);
         }
         return validateAndImportList(listPriceArticleEntityList, startRow, lastRow);
     }
 
-    public ApiResponseReport<?> validateAndImportList(List<ListPriceArticleEntity> listPriceArticleEntityList, Integer startRow, Integer lastRow) throws JRException {
+    public ApiResponseReport<?> validateAndImportList(List<ListPriceArticleEntity> listPriceArticleEntityList, Integer startRow, Integer lastRow) throws JRException, GenericByteServiceException {
 
         List<ImportErrorModel> importErrorModelList = new ArrayList<>();
 
@@ -205,7 +320,7 @@ public class ListPriceArticleReport {
             }
         }
         Integer numberRow = lastRow - (startRow - 1);
-        if (importErrorModelList.size() == 0){
+        if (importErrorModelList.isEmpty()){
             this.listPriceArticleRepository.saveAll(listPriceArticleEntityList);
         }
         return this.genericReport.genericResponseReport(importErrorModelList,TITLE_PRICE_LIST_ARTICLE, numberRow);

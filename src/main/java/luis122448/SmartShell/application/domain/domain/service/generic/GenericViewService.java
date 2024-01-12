@@ -8,6 +8,5 @@ import luis122448.SmartShell.util.object.api.ApiResponsePage;
 
 public interface GenericViewService<T> {
 	ApiResponseList<T> findByLike(T t) throws GenericObjectServiceException;
-	
 	ApiResponsePage<T> findByPage(T t, Pageable p) throws GenericObjectServiceException;
 }

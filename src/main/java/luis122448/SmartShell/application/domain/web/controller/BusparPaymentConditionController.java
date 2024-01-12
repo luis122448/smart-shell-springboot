@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
+import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BUSINESS_PARTNER;
 
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 
 @Slf4j
 @RestController
-@RequestMapping(PATH_BILLING + "/intcom/tipconpag")
+@RequestMapping(PATH_BILLING + PATH_BUSINESS_PARTNER + "/typpaycon")
 public class BusparPaymentConditionController {
 	
 	private final BusparPaymentConditionService intcomCondicionPago;

@@ -1,9 +1,12 @@
 package luis122448.SmartShell.application.domain.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -11,25 +14,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
-@IdClass(SerieCommercialDocumentPK.class)
-@Table(schema = "smart_shell", name= "TBL_SERIE_COMMERCIAL_DOCUMENT")
+@IdClass(FormatCommercialDocumentPK.class)
+@Table(schema = "smart_shell", name= "TBL_FORMAT_COMMERCIAL_DOCUMENT")
 @Entity
-public class SerieCommercialDocumentEntity extends AuditingEntity {
-	
-	@Id
+public class FormatCommercialDocumentEntity extends AuditingEntity {
+
+    @Id
     private Integer typcomdoc;
     @Id
-    private String serie;
+    private Integer typformat;
     private String abrevi;
     private String descri;
-    private String codext;
-    private Integer codbranch;
-    private String docelectr;
-    private String typcorrel;
-    private Long nrocorrel;
-    private Integer typformat;
+    private String format;
+    private String url;
     private String observ;
     private String commen;
     private String defaul;
+    private String status;
 
 }

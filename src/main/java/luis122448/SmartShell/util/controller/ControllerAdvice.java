@@ -9,6 +9,7 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import luis122448.SmartShell.util.object.api.ApiResponsePage;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,7 +43,7 @@ public class ControllerAdvice {
     @ExceptionHandler(value = GenericListServiceException.class)
     public ResponseEntity<?> genericListServiceException(GenericListServiceException e){
         ApiResponseList<?> tmp = new ApiResponseList<>(-2,e.getMessage(),e.getMessage(),Optional.empty());
-        return new ResponseEntity<>(tmp, HttpStatus.OK);
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
     }
 
     @ExceptionHandler(value = GenericPageServiceException.class)

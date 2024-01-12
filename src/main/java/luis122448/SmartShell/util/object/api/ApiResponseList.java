@@ -35,6 +35,39 @@ public class ApiResponseList<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+    public ApiResponseList(int status) {
+        this.status = (short) status;
+        if (status == 1) {
+            this.message = "OK";
+        } else if (status == 404) {
+            this.message = "No se encontraron registros";
+        } else {
+            this.message = "Error desconocido";
+        }
+        this.list = Optional.empty();
+        this.logMessage = message;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            this.logUser = authentication.getName();
+        } else {
+            this.logUser = "Unknown";
+        }
+        this.logTime = LocalDateTime.now();
+    }
+
+    public ApiResponseList(int status, String message) {
+        this.status = (short) status;
+        this.message = message;
+        this.list = Optional.empty();
+        this.logMessage = message;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            this.logUser = authentication.getName();
+        } else {
+            this.logUser = "Unknown";
+        }
+        this.logTime = LocalDateTime.now();
+    }
     public ApiResponseList(int status, String message, Optional<List<T>> list) {
         this.status = (short) status;
         this.message = message;

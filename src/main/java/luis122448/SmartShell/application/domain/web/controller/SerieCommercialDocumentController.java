@@ -3,17 +3,20 @@ package luis122448.SmartShell.application.domain.web.controller;
 import static java.util.Objects.isNull;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 
+import luis122448.SmartShell.application.domain.domain.service.implement.SerieCommercialDocumentServiceImpl;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
+import luis122448.SmartShell.util.exception.GenericObjectServiceException;
+import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.persistence.entity.SerieCommercialDocumentEntity;
 import luis122448.SmartShell.application.domain.domain.service.service.SerieCommercialDocumentService;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
+
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -27,13 +30,9 @@ public class SerieCommercialDocumentController {
 		this.serieCommercialDocumentService = serieCommercialDocumentService;
 	}
 
-	@GetMapping()
+	@GetMapping("/by-all")
 	public ResponseEntity<?> findAll () throws GenericListServiceException {
-		SerieCommercialDocumentEntity tmp = new SerieCommercialDocumentEntity();
-		ApiResponseList<SerieCommercialDocumentEntity> lst = this.serieCommercialDocumentService.findAll(tmp);
-		if (isNull(lst)) {
-			return ResponseEntity.noContent().build();
-		}
+		ApiResponseList<SerieCommercialDocumentEntity> lst = this.serieCommercialDocumentService.findAll();
 		return ResponseEntity.ok(lst);
 	}
 
@@ -42,10 +41,32 @@ public class SerieCommercialDocumentController {
 		SerieCommercialDocumentEntity tmp = new SerieCommercialDocumentEntity();
 		tmp.setTypcomdoc(typcomdoc);
 		ApiResponseList<SerieCommercialDocumentEntity> lst = this.serieCommercialDocumentService.findByLike(tmp);
-		if (isNull(lst)) {
-			return ResponseEntity.noContent().build();
-		}
 		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/by-id")
+	public ResponseEntity<?> findById (@RequestParam(name = "typcomdoc", defaultValue = "") Integer typcomdoc,
+										@RequestParam(name = "serie", defaultValue = "") String serie) throws GenericObjectServiceException {
+		SerieCommercialDocumentPK tmp = new SerieCommercialDocumentPK();
+		tmp.setTypcomdoc(typcomdoc);
+		tmp.setSerie(serie);
+		ApiResponseObject<SerieCommercialDocumentEntity> obj = this.serieCommercialDocumentService.findById(tmp);
+		return ResponseEntity.ok(obj);
+	}
+
+	@PostMapping
+	public ResponseEntity<?> save (@RequestBody SerieCommercialDocumentEntity t) throws GenericObjectServiceException {
+		return ResponseEntity.ok(this.serieCommercialDocumentService.save(t));
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update (@RequestBody SerieCommercialDocumentEntity t) throws GenericObjectServiceException {
+		return ResponseEntity.ok(this.serieCommercialDocumentService.update(t));
+	}
+
+	@DeleteMapping
+	public ResponseEntity<?> delete (@RequestBody SerieCommercialDocumentPK t) throws GenericObjectServiceException {
+		return ResponseEntity.ok(this.serieCommercialDocumentService.delete(t));
 	}
 
 }

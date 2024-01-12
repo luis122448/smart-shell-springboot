@@ -29,4 +29,6 @@ public class ReasonCommercialDocumentEntity extends AuditingEntity {
     public String codext;
     public String observ;
     public String commen;
+    public String defaul;
+
 }

@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Immutable
 @EntityListeners({AuditingEntityListener.class})
 @IdClass(BusparPaymentConditionPagoPK.class)
-@Table(schema = "smartshell", name= "VW_TYPE_PAYMENT_CONDITION")
+@Table(schema = "smart_shell", name= "VW_TYPE_PAYMENT_CONDITION")
 @Entity
 public class TypePaymentConditionViewEntity extends AuditingEntity {
 	

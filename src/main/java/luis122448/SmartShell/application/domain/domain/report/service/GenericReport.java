@@ -72,11 +72,14 @@ public class GenericReport {
         return "";
     }
 
-    public Map<String, Object> genericResponseInfo(String title, String status, Integer numberRow, Integer numberError){
+    public Map<String, Object> genericResponseInfo(String title, String status, Integer numberRow, Integer numberError) throws GenericByteServiceException{
 
         Map<String, Object> params = new HashMap<>();
         params.put("title", title);
-        CompanyInfoEntity companyInfoEntity = this.companyInfoRepository.findById(1).get();
+        CompanyInfoEntity companyInfoEntity = this.companyInfoRepository.findById(1).orElse(new CompanyInfoEntity());
+        if (companyInfoEntity.getGloss() == null){
+            throw new GenericByteServiceException("THE COMPANY GLOSS IS NULL");
+        }
         InputStream comglossInputStream = new ByteArrayInputStream(companyInfoEntity.getGloss());
         params.put("comgloss", comglossInputStream);
         params.put("company", companyInfoEntity.getComnam());
@@ -93,14 +96,14 @@ public class GenericReport {
         return params;
     }
 
-    public ApiResponseReport<?> genericResponseReport(List<ImportErrorModel> importErrorModelList,String title, Integer numberRow) throws JRException {
-        JRDataSource dataSource = new JRBeanCollectionDataSource(importErrorModelList);
-        Integer numberError = importErrorModelList.size();
+    public ApiResponseReport<?> genericResponseReport(List<ImportErrorModel> importErrorModelList,String title, Integer numberRow) throws JRException, GenericByteServiceException {
         if (importErrorModelList.isEmpty()){
             Map<String, Object> params = this.genericResponseInfo(title,IMPORT_SUCCESS,numberRow,0);
             JasperPrint jasperPrint = JasperFillManager.fillReport(REPORT_SUCCESS_IMPORT_A4_HORIZONTAL,params, new JREmptyDataSource());
             return new ApiResponseReport<>(1,IMPORT_SUCCESS, Optional.of(jasperPrint));
         } else {
+            JRDataSource dataSource = new JRBeanCollectionDataSource(importErrorModelList);
+            Integer numberError = importErrorModelList.size();
             Map<String, Object> params = this.genericResponseInfo(title,IMPORT_FAILED,numberRow,numberError);
             JasperPrint jasperPrint = JasperFillManager.fillReport(REPORT_ERROR_IMPORT_A4_HORIZONTAL,params, dataSource);
             return new ApiResponseReport<>(-1,IMPORT_FAILED, Optional.of(jasperPrint));

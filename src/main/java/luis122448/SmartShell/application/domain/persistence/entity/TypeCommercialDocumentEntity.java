@@ -21,7 +21,6 @@ public class TypeCommercialDocumentEntity extends AuditingEntity {
     private String abrevi;
     private String descri;
     private String codext;
-    private Byte[] image;
     private String observ;
     private String commen;
 
