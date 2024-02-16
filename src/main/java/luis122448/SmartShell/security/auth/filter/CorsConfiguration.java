@@ -16,8 +16,8 @@ public class CorsConfiguration {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:4200",
-                                "https://platform-training.luis122448.com",
-                                "https://platform-training-angular.railway.internal"
+                                "https://smart-shell.luis122448.com",
+                                "https://smart-shell-angular-production.up.railway.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
