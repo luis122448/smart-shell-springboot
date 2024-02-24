@@ -49,7 +49,7 @@ public class ControllerAdvice {
     @ExceptionHandler(value = GenericPageServiceException.class)
     public ResponseEntity<?> genericPageServiceException(GenericPageServiceException e){
         ApiResponsePage<?> tmp = new ApiResponsePage<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
-        return new ResponseEntity<>(tmp, HttpStatus.OK);
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
     }
 
     @ExceptionHandler(value = GenericByteServiceException.class)

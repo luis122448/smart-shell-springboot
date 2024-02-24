@@ -2,6 +2,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import static luis122448.SmartShell.util.code.Utils.copyNonNullProperties;
 
+import java.util.List;
 import java.util.Optional;
 
 import luis122448.SmartShell.util.exception.GenericListServiceException;
@@ -41,9 +42,17 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ApiResponseList<ArticleEntity> findByLike(ArticleEntity t) throws GenericListServiceException {
 		if (!t.getCodart().isEmpty()) {
-			return new ApiResponseList<ArticleEntity>(1,"Ok", Optional.ofNullable(this.articleRepository.findByCodart(t.getCodart())));
+			List<ArticleEntity> list = this.articleRepository.findByCodart(t.getCodart());
+			if(list.isEmpty()) {
+				throw new GenericListServiceException(404);
+			}
+			return new ApiResponseList<ArticleEntity>(Optional.of(list));
 		} else if(!t.getDescri().isEmpty()) {
-			return new ApiResponseList<ArticleEntity>(1,"Ok", Optional.ofNullable(this.articleRepository.findByDescri(t.getDescri())));
+			List<ArticleEntity> list = this.articleRepository.findByDescri(t.getDescri());
+			if(list.isEmpty()) {
+				throw new GenericListServiceException(404);
+			}
+			return new ApiResponseList<ArticleEntity>(Optional.of(list));
 		} else {
 			return new ApiResponseList<ArticleEntity>(-2,"No Case",Optional.empty());
 		}

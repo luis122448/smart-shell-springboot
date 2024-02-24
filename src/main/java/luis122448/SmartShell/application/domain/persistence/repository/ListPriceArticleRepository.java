@@ -18,9 +18,10 @@ public interface ListPriceArticleRepository extends JpaRepository<ListPriceArtic
 
     List<ListPriceArticleEntity> findByCodart(@Param(value = "codart") String codart) throws GenericListServiceException;
 
-    Page<ListPriceArticleEntity> findByCodlistpriceAndCodartLikeAndDesartLikeOrderByCodartAsc(@Param(value = "codlistprice") Integer codlistprice,
-                                                                                              @Param(value = "codart") String codart,
-                                                                                              @Param(value = "desart") String desart,
-                                                                                              Pageable pageable) throws GenericPageServiceException;
+    @Query(value = "SELECT l FROM ListPriceArticleEntity l WHERE l.codlistprice = :codlistprice AND l.codart LIKE %:codart% AND l.desart LIKE %:desart% ORDER BY l.codart ASC")
+    Page<ListPriceArticleEntity> findByLike(@Param(value = "codlistprice") Integer codlistprice,
+                                            @Param(value = "codart") String codart,
+                                            @Param(value = "desart") String desart,
+                                            Pageable pageable) throws GenericPageServiceException;
 
 }

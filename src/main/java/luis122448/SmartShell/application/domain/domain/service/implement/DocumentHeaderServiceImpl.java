@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.lettuce.core.ScriptOutputType;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchFilterDTO;
@@ -39,10 +40,10 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 	public ApiResponseObject<DocumentHeaderEntity> registerDocumentHeader(DocumentHeaderEntity t) throws GenericObjectServiceException {
 		try {
 			Map<String, Object> obj = this.documentHeaderRepository.registerDocumentHeader(t.toJson(), 0L,0,"","");
-//			for (String key : obj.keySet()) {
-//				Object value = obj.get(key);
-//				System.out.println("Clave: " + key + ", Valor: " + value);
-//			}
+			for (String key : obj.keySet()) {
+				Object value = obj.get(key);
+				System.out.println("Clave: " + key + ", Valor: " + value);
+			}
 			if ((Integer) obj.get("out_code") < 0 ){
 				throw new GenericObjectServiceException(obj.get("out_message").toString(), obj.get("out_log").toString());
 			}

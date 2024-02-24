@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -22,6 +23,19 @@ public class ApiResponsePage<T> {
     private String logMessage;
     private String logUser;
     private LocalDateTime logTime;
+    public ApiResponsePage(Optional<Page<T>> page) {
+        this.status = (short) 1;
+        this.message = "OK";
+        this.page = page;
+        this.logMessage = message;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            this.logUser = authentication.getName();
+        } else {
+            this.logUser = "Unknown";
+        }
+        this.logTime = LocalDateTime.now();
+    }
     public ApiResponsePage(int status, String message, Optional<Page<T>> page) {
         this.status = (short) status;
         this.message = message;

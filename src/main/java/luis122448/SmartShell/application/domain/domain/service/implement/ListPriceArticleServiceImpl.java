@@ -10,9 +10,11 @@ import luis122448.SmartShell.application.domain.persistence.repository.ListPrice
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import luis122448.SmartShell.util.object.api.ApiResponsePage;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import static luis122448.SmartShell.util.constant.MESSAGEConstants.*;
+
 import java.util.Optional;
 
 @Service
@@ -25,7 +27,11 @@ public class ListPriceArticleServiceImpl implements ListPriceArticleService{
 
     @Override
     public ApiResponsePage<ListPriceArticleEntity> findByPage(ListPriceArticleEntity listPriceArticleEntity, Pageable pageable) throws GenericPageServiceException {
-        return new ApiResponsePage<ListPriceArticleEntity>(1, "Ok", Optional.of(this.listPriceArticleRepository.findByCodlistpriceAndCodartLikeAndDesartLikeOrderByCodartAsc(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart(),listPriceArticleEntity.getDesart(),pageable)));
+        Page<ListPriceArticleEntity> page = this.listPriceArticleRepository.findByLike(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart(),listPriceArticleEntity.getDesart(),pageable);
+        if (page.getContent().isEmpty()) {
+            throw new GenericPageServiceException(404);
+        }
+        return new ApiResponsePage<>(Optional.of(page));
     }
 
     @Override
