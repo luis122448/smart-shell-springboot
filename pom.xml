@@ -64,17 +64,27 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.20.5</version>
+			<version>6.21.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.barcode4j</groupId>
+			<artifactId>barcode4j</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-bridge</artifactId>
+			<version>1.17</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.10</version>
+			<version>1.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
-			<version>3.2.1</version>
+			<version>3.5.3</version>
 		</dependency>
     	<dependency>
       		<groupId>org.springframework.security</groupId>
@@ -124,6 +134,7 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+			<version>42.7.2</version>
 		</dependency>
 		<!-- Spring Data MongoDB -->
 		<dependency>
@@ -151,6 +162,11 @@
 		    <groupId>commons-beanutils</groupId>
 		    <artifactId>commons-beanutils</artifactId>
 	    	<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
 		</dependency>
 		<!-- Hibernate NO AUTH REDIS -->
 		<dependency>
@@ -183,7 +199,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.2.3</version>
+			<version>5.2.5</version>
 		</dependency>
 		<!-- MockMultipartFile -->
 		<dependency>
@@ -232,6 +248,19 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version> <!-- Utiliza la versión más reciente del plugin si es posible -->
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.10.8</version> <!-- Utiliza la versión más reciente de Apache Ant -->
+					</dependency>
+				</dependencies>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -5,6 +5,7 @@ import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSear
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -108,5 +109,9 @@ public interface DocumentInvoiceMapper {
 
     public default List<DocumentInvoiceSearchDTO> toListDocumentInvoiceSearchDTO(List<DocumentInvoiceSearch> t){
         return t.stream().map(this::toDocumentInvoiceSearchDTO).toList();
+    }
+
+    public default Page<DocumentInvoiceSearchDTO> toPageDocumentInvoiceSearchDTO(Page<DocumentInvoiceSearch> t){
+        return t.map(this::toDocumentInvoiceSearchDTO);
     }
 }

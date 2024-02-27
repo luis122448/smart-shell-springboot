@@ -18,6 +18,13 @@ public class SituationCommercialDocumentController {
     public SituationCommercialDocumentController(SituationCommercialDocumentService situationCommercialDocumentService) {
         this.situationCommercialDocumentService = situationCommercialDocumentService;
     }
+
+    @GetMapping("/by-all")
+    public ResponseEntity<?> findAll() throws GenericListServiceException {
+        ApiResponseList<SituationCommercialDocumentEntity> lst = this.situationCommercialDocumentService.findAll(new SituationCommercialDocumentEntity());
+        return ResponseEntity.ok(lst);
+    }
+
     @GetMapping("/by-like")
     public ResponseEntity<?> findByLike(@RequestParam(name = "typcomdoc") Integer typcomdoc) throws GenericListServiceException{
         SituationCommercialDocumentEntity tmp = new SituationCommercialDocumentEntity();

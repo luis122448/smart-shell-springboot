@@ -7,14 +7,19 @@ import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeade
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
+import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
+import luis122448.SmartShell.util.object.api.ApiResponsePage;
+import org.springframework.data.domain.Pageable;
 
 public interface DocumentHeaderService{
 
     ApiResponseObject<DocumentHeaderEntity> findById(DocumentHeaderEntity t) throws GenericObjectServiceException;
     ApiResponseList<DocumentInvoiceSearch> searchDocumentInvoice(DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException;
+    ApiResponsePage<DocumentInvoiceSearch> pageDocumentInvoice(DocumentInvoiceSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException;
     ApiResponseObject<DocumentHeaderEntity> registerDocumentHeader(DocumentHeaderEntity t) throws GenericObjectServiceException;
     ApiResponseList<DocumentInvoicePrint> printDocumentInvoice(Long numint) throws GenericListServiceException;
     ApiResponseObject<?> calculateImportDocument(Long numint) throws GenericProcedureException;
+    ApiResponseObject<?> cancelImportDocument(Long numint) throws GenericProcedureException;
 }

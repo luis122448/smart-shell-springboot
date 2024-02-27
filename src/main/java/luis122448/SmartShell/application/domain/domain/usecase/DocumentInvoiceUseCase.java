@@ -11,8 +11,12 @@ import luis122448.SmartShell.application.domain.domain.service.service.DocumentH
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentDetailEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
+import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
+import luis122448.SmartShell.util.object.api.ApiResponsePage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,11 +62,20 @@ public class DocumentInvoiceUseCase {
 
     public ApiResponseList<DocumentInvoicePrintDTO> printDocument(Long numint) throws GenericListServiceException {
         List<DocumentInvoicePrintDTO> obj =  this.documentInvoiceMapper.toListDocumentInvoicePrintDTO(this.documentHeaderService.printDocumentInvoice(numint).getList().orElseThrow());
-        return new ApiResponseList<DocumentInvoicePrintDTO>(1,"Ok",Optional.of(obj));
+        return new ApiResponseList<DocumentInvoicePrintDTO>(Optional.of(obj));
     }
 
     public ApiResponseList<DocumentInvoiceSearchDTO> searchDocument(DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException {
         List<DocumentInvoiceSearchDTO> obj = this.documentInvoiceMapper.toListDocumentInvoiceSearchDTO(this.documentHeaderService.searchDocumentInvoice(t).getList().orElseThrow());
-        return new ApiResponseList<DocumentInvoiceSearchDTO>(1,"Ok", Optional.of(obj));
+        return new ApiResponseList<DocumentInvoiceSearchDTO>(Optional.of(obj));
+    }
+
+    public ApiResponsePage<DocumentInvoiceSearchDTO> pageDocument(DocumentInvoiceSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
+        Page<DocumentInvoiceSearchDTO> obj = this.documentInvoiceMapper.toPageDocumentInvoiceSearchDTO(this.documentHeaderService.pageDocumentInvoice(t,pageable).getPage().orElseThrow());
+        return new ApiResponsePage<DocumentInvoiceSearchDTO>(Optional.of(obj));
+    }
+
+    public ApiResponseObject<?> cancelDocument(Long numint) throws GenericProcedureException {
+        return this.documentHeaderService.cancelImportDocument(numint);
     }
 }

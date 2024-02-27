@@ -9,6 +9,7 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,12 +22,20 @@ public class SituationCommercialDocumentServiceImpl implements SituationCommerci
 
     @Override
     public ApiResponseList<SituationCommercialDocumentEntity> findAll(SituationCommercialDocumentEntity situationCommercialDocumentEntity) throws GenericListServiceException {
-        return null;
+        List<SituationCommercialDocumentEntity> lst = this.situationCommercialDocumentRepository.findAll();
+        if (lst.isEmpty()){
+            throw new GenericListServiceException(404);
+        }
+        return new ApiResponseList<SituationCommercialDocumentEntity>(1, "Ok", Optional.of(lst));
     }
 
     @Override
     public ApiResponseList<SituationCommercialDocumentEntity> findByLike(SituationCommercialDocumentEntity t) throws GenericListServiceException {
-        return new ApiResponseList<SituationCommercialDocumentEntity>(1, "Ok", Optional.of(this.situationCommercialDocumentRepository.findByLike(t.typcomdoc)));
+        List<SituationCommercialDocumentEntity> lst = this.situationCommercialDocumentRepository.findByLike(t.getTypcomdoc());
+        if (lst.isEmpty()){
+            throw new GenericListServiceException(404);
+        }
+        return new ApiResponseList<SituationCommercialDocumentEntity>(1, "Ok", Optional.of(lst));
     }
 
     @Override
