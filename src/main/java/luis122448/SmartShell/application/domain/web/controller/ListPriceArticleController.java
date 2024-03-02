@@ -77,7 +77,7 @@ public class ListPriceArticleController {
     }
 
     @GetMapping("/by-id")
-    public ResponseEntity<?> findAll(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
+    public ResponseEntity<?> findById(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
                                      @RequestParam(value = "codart", defaultValue = "") String codart) throws GenericObjectServiceException {
         ListPriceArticleEntity tmp = new ListPriceArticleEntity();
         tmp.setCodlistprice(codlistprice);

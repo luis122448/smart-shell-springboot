@@ -26,7 +26,7 @@ public class TypeInventoryController {
 
 	@GetMapping("/by-all")
 	public ResponseEntity<?> findAll() throws GenericListServiceException {
-		ApiResponseList<TypeInventoryEntity> obj = this.typeInventoryService.findAll(null);
+		ApiResponseList<TypeInventoryEntity> obj = this.typeInventoryService.findAll();
 		return ResponseEntity.ok(obj);
 	}
 }

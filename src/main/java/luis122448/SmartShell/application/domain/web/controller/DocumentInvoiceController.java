@@ -13,7 +13,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -40,7 +39,7 @@ private final DocumentInvoiceReport documentInvoiceReport;
 
     @GetMapping("/print")
     public ResponseEntity<?> printDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericListServiceException, JRException {
-        ApiResponseReport<?> tmp = this.documentInvoiceReport.invoiceReportA4Horizontal(numint);
+        ApiResponseReport<?> tmp = this.documentInvoiceReport.invoicePrintDocument(numint);
         JasperPrint jasperPrint = tmp.getJasperPrint().orElseThrow();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         JRPdfExporter exporter = new JRPdfExporter();

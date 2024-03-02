@@ -17,6 +17,8 @@ import java.time.LocalDate;
 @Immutable
 public class DocumentInvoicePrintDTO {
 
+    private Integer typformat;
+    private Integer typcomdoc;
     private String comdestypidedoc;
     private String comnroidedoc;
     private String comnam;

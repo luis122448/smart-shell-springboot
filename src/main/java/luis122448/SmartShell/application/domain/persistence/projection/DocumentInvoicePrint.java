@@ -46,6 +46,8 @@ import java.time.LocalDate;
 
 public interface DocumentInvoicePrint {
 
+    Integer getTypformat();
+    Integer getTypcomdoc();
     String getComdestypidedoc();
     String getComnroidedoc();
     String getComnam();

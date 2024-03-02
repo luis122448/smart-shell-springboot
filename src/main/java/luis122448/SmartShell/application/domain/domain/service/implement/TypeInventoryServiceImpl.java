@@ -10,6 +10,7 @@ import luis122448.SmartShell.application.domain.domain.service.service.TypeInven
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,44 +23,11 @@ public class TypeInventoryServiceImpl implements TypeInventoryService {
 	}
 
 	@Override
-	public ApiResponseList<TypeInventoryEntity> findAll(TypeInventoryEntity t) throws GenericListServiceException {
-		return new ApiResponseList<TypeInventoryEntity>(1,"Ok",Optional.of(this.typeInventoryRepository.findAll()));
+	public ApiResponseList<TypeInventoryEntity> findAll() throws GenericListServiceException {
+		List<TypeInventoryEntity> list = typeInventoryRepository.findAll();
+		if (list.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<TypeInventoryEntity>(Optional.of(list));
 	}
-
-	@Override
-	public ApiResponseList<TypeInventoryEntity> findByLike(TypeInventoryEntity t) throws GenericListServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeInventoryEntity> findById(TypeInventoryEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeInventoryEntity> save(TypeInventoryEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeInventoryEntity> update(TypeInventoryEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeInventoryEntity> delete(TypeInventoryEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeInventoryEntity> undelete(TypeInventoryEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

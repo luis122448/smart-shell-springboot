@@ -29,6 +29,8 @@ public interface DocumentInvoiceMapper {
 
     public default DocumentInvoicePrintDTO toDocumentInvoicePrintDTO(DocumentInvoicePrint source){
         DocumentInvoicePrintDTO target = new DocumentInvoicePrintDTO();
+        target.setTypformat(source.getTypformat());
+        target.setTypcomdoc(source.getTypcomdoc());
         target.setComdestypidedoc(source.getComdestypidedoc());
         target.setComnroidedoc(source.getComnroidedoc());
         target.setComnam(source.getComnam());

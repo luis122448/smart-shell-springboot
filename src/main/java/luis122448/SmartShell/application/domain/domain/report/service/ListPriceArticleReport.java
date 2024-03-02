@@ -19,6 +19,8 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,8 @@ import static luis122448.SmartShell.util.code.Utils.*;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -252,11 +256,11 @@ public class ListPriceArticleReport {
     }
 
     public ApiResponseReport<?> importXSSFWorkbook(Integer codlistprice, XSSFWorkbook xssfWorkbook) throws IOException, JRException, GenericByteServiceException {
-
         List<ColumnInfo> columnInfoList = readHeaderXSSFWorkbook(xssfWorkbook);
         List<ListPriceArticleEntity> listPriceArticleEntityList = new ArrayList<>();
         XSSFSheet formatSheet = xssfWorkbook.getSheet(IMPORT_SHEET_PRINCIPAL);
         List<ImportErrorModel> importErrorModelListGeneral = new ArrayList<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int startRow = IMPORT_START_ROW;
         int lastRow = formatSheet.getLastRowNum();
         log.info("lastRow {}",lastRow);
@@ -282,6 +286,23 @@ public class ListPriceArticleReport {
             listPriceArticleEntity.setDesc02(getBigDecimalCellValue(row.getCell(7)));
             listPriceArticleEntity.setDesc03(getBigDecimalCellValue(row.getCell(8)));
             listPriceArticleEntity.setDesc04(getBigDecimalCellValue(row.getCell(9)));
+            listPriceArticleEntity.setImpigv(BigDecimal.ZERO);
+            listPriceArticleEntity.setImpisc(BigDecimal.ZERO);
+            listPriceArticleEntity.setImptribadd01(BigDecimal.ZERO);
+            listPriceArticleEntity.setImptribadd02(BigDecimal.ZERO);
+            listPriceArticleEntity.setImptribadd03(BigDecimal.ZERO);
+            listPriceArticleEntity.setImptribadd04(BigDecimal.ZERO);
+            listPriceArticleEntity.setImplistprice(listPriceArticleEntity.getPrice());
+            BigDecimal totalDiscount = listPriceArticleEntity.getDesc01().add(listPriceArticleEntity.getDesc02()).add(listPriceArticleEntity.getDesc03()).add(listPriceArticleEntity.getDesc04());
+            listPriceArticleEntity.setImpdesctotal(listPriceArticleEntity.getPrice().multiply(totalDiscount));
+            listPriceArticleEntity.setImpsaleprice(listPriceArticleEntity.getPrice().subtract(listPriceArticleEntity.getImpdesctotal()));
+            listPriceArticleEntity.setImptribtotal(BigDecimal.ZERO);
+            listPriceArticleEntity.setImptotal(listPriceArticleEntity.getImpsaleprice().subtract(listPriceArticleEntity.getImptribtotal()));
+            listPriceArticleEntity.setStatus("Y");
+            listPriceArticleEntity.setCreateat(LocalDateTime.now());
+            listPriceArticleEntity.setCreateby(authentication.getName());
+            listPriceArticleEntity.setUpdateat(LocalDateTime.now());
+            listPriceArticleEntity.setUpdateby(authentication.getName());
             listPriceArticleEntityList.add(listPriceArticleEntity);
         }
         if (!importErrorModelListGeneral.isEmpty()){
@@ -316,6 +337,11 @@ public class ListPriceArticleReport {
             }
             if(entity.getDesmax().compareTo(new BigDecimal(99)) > 0 || entity.getDesmax().compareTo(new BigDecimal(0)) < 0 ){
                 ImportErrorModel importErrorModel = new ImportErrorModel(currentRow,entity.getDesmax().toString(),"DISCOUNT MAXIMUS BETWEEN VALUES IN 99 AND 0");
+                importErrorModelList.add(importErrorModel);
+            }
+            BigDecimal totalDiscount = entity.getDesc01().add(entity.getDesc02()).add(entity.getDesc03()).add(entity.getDesc04());
+            if(totalDiscount.compareTo(entity.getDesmax()) > 0){
+                ImportErrorModel importErrorModel = new ImportErrorModel(currentRow,totalDiscount.toString(),"TOTAL DISCOUNT IS GREATER THAN MAXIMUM ALLOWED DISCOUNT");
                 importErrorModelList.add(importErrorModel);
             }
         }

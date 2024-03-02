@@ -24,11 +24,25 @@ public class DocumentInvoiceReport {
         this.documentInvoiceUseCase = documentInvoiceUseCase;
     }
 
-
-    public ApiResponseReport<?> invoiceReportA4Horizontal(Long numint) throws GenericListServiceException, JRException {
+    public ApiResponseReport<?> invoicePrintDocument(Long numint) throws GenericListServiceException, JRException {
         List<DocumentInvoicePrintDTO> obj = this.documentInvoiceUseCase.printDocument(numint).getList().orElseThrow();
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(REPORT_INVOICE_A4_HORIZONTAL,new HashMap<>(), dataSource);
+        String report = "";
+        Integer typformat = obj.get(0).getTypformat();
+        Integer typcomdoc = obj.get(0).getTypcomdoc();
+        if (typcomdoc == 1 && typformat == 1 ) {
+            report = REPORT_INVOICE_A4_HORIZONTAL;
+        } else if (typcomdoc == 1 && typformat == 2) {
+            report = REPORT_INVOICE_A4_VERTICAL;
+        } else if (typcomdoc == 2 && typformat == 1) {
+            report = REPORT_RECEIPT_A4_HORIZONTAL;
+        } else if (typcomdoc == 2 && typformat == 2) {
+            report = REPORT_RECEIPT_A4_VERTICAL;
+        } else {
+            report = REPORT_INVOICE_A4_HORIZONTAL;
+        }
+        System.out.println(report);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(report,new HashMap<>(), dataSource);
         return new ApiResponseReport<>(1,"Ok", Optional.of(jasperPrint));
     }
 }

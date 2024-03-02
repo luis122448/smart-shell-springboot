@@ -2,11 +2,34 @@
 
 # Despliegue del Backend de Smart Shell
 
-Este repositorio contiene los scripts necesarios para el despliegue del backend de Smart Shell, utilizando Docker y Docker Compose.
+Repositorio con el código fuente y los scripts necesarios para el despliegue del servidor de API REST del proyecto Smart Shell.
 
-## Descripción
+## Características
+- Implementa doble capa de seguridad con Spring Security y JWT.
+- API RESTFULL con autenticación JWT y Hateoas.
+- API REST para subida y descarga de archivos y reportes.
+- Optimización de caching con Redis.
+- Gestión de dependencias con Maven.
+- Conexión simultanea a tres bases de datos Postgres, Mongo y Redis.
+- Automatización del despliegue con Docker y Docker-Compose.
 
-El propósito de este proyecto es facilitar el despliegue del backend de Smart Shell, utilizando Docker y Docker Compose.
+## Repositorios Relacionados
+
+### Repositorio Actual
+- [Smart-Shell-SpringBoot](https://github.com/luis122448/smart-shell-springboot)
+
+### Repositorios Relacionados
+
+Repositorio referido al FRONTEND de la aplicación.
+- [Smart-Shell-Angular](https://github.com/luis122448/smart-shell-angular)
+
+Repositorio relacionado con la automatización del despliegue de las Bases de Datos.
+- [Smart-Shell-Bash](https://github.com/luis122448/smart-shell-bash)
+
+Repositorios relacionados con las bases de datos del proyecto.
+- [Smart-Shell-Postgres](https://github.com/luis122448/smart-shell-postgres)
+- [Smart-Shell-Mongo](https://github.com/luis122448/smart-shell-mongo)
+- [Smart-Shell-Redis](https://github.com/luis122448/smart-shell-redis)
 
 ## Configuración del Entorno
 
