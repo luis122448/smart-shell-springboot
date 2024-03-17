@@ -1,9 +1,11 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
 import lombok.extern.slf4j.Slf4j;
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ListPriceArticleRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
@@ -30,21 +32,21 @@ import static luis122448.SmartShell.util.code.Utils.*;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
 @Service
 public class ListPriceArticleReport {
-
     private final ListPriceArticleRepository listPriceArticleRepository;
     private final ArticleRepository articleRepository;
     private final GenericReport genericReport;
-    public ListPriceArticleReport(ListPriceArticleRepository listPriceArticleRepository, ArticleRepository articleRepository, GenericReport genericReport) {
+    private final SecurityContextInitializer securityContextInitializer;
+    public ListPriceArticleReport(ListPriceArticleRepository listPriceArticleRepository, ArticleRepository articleRepository, GenericReport genericReport, SecurityContextInitializer securityContextInitializer) {
         this.listPriceArticleRepository = listPriceArticleRepository;
         this.articleRepository = articleRepository;
         this.genericReport = genericReport;
+        this.securityContextInitializer = securityContextInitializer;
     }
     public static final String NAME_PRICE_LIST_ARTICLE = "LIST PRICE ARTICLE IMPORT";
     public static final String TITLE_PRICE_LIST_ARTICLE = "REPORT OF IMPORT ERROR OF LIST PRICE BY ARTICLE";
@@ -96,7 +98,8 @@ public class ListPriceArticleReport {
 
     private XSSFWorkbook exportXSSFWorkbook(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
         try{
-            List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByCodlistprice(codlistprice);
+            Integer idcompany = securityContextInitializer.getIdCompany();
+            List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByIdcompanyAndCodlistprice(idcompany,codlistprice);
             File file = new File(FORMAT_PRICE_LIST_ARTICLE);
             InputStream inputStream = new FileInputStream(file);
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
@@ -156,8 +159,9 @@ public class ListPriceArticleReport {
 
     private XSSFWorkbook generateXSSFWorkbook(Integer codlistprice) throws GenericByteServiceException, GenericListServiceException {
         try{
-            List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByCodlistprice(codlistprice);
-            List<ArticleEntity> listPriceNotArticleEntityList = this.articleRepository.findByArticleNotExistsListPrice(codlistprice);
+            Integer idcompany = securityContextInitializer.getIdCompany();
+            List<ListPriceArticleEntity> listPriceArticleEntityList = this.listPriceArticleRepository.findByIdcompanyAndCodlistprice(idcompany,codlistprice);
+            List<ArticleEntity> listPriceNotArticleEntityList = this.articleRepository.findByArticleNotExistsListPrice(idcompany,codlistprice);
             File file = new File(FORMAT_PRICE_LIST_ARTICLE);
             InputStream inputStream = new FileInputStream(file);
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
@@ -256,6 +260,8 @@ public class ListPriceArticleReport {
     }
 
     public ApiResponseReport<?> importXSSFWorkbook(Integer codlistprice, XSSFWorkbook xssfWorkbook) throws IOException, JRException, GenericByteServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        String coduser = securityContextInitializer.getCodUser();
         List<ColumnInfo> columnInfoList = readHeaderXSSFWorkbook(xssfWorkbook);
         List<ListPriceArticleEntity> listPriceArticleEntityList = new ArrayList<>();
         XSSFSheet formatSheet = xssfWorkbook.getSheet(IMPORT_SHEET_PRINCIPAL);
@@ -263,9 +269,7 @@ public class ListPriceArticleReport {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         int startRow = IMPORT_START_ROW;
         int lastRow = formatSheet.getLastRowNum();
-        log.info("lastRow {}",lastRow);
         for (int i = startRow; i <= lastRow; i++) {
-            log.info("i {}",i);
             ListPriceArticleEntity listPriceArticleEntity = new ListPriceArticleEntity();
 
             Row row = formatSheet.getRow(i);
@@ -275,6 +279,7 @@ public class ListPriceArticleReport {
             importErrorModelListGeneral.addAll(importErrorModelList);
 
             // Register
+            listPriceArticleEntity.setIdcompany(idcompany);
             listPriceArticleEntity.setCodlistprice(codlistprice);
             listPriceArticleEntity.setCodart(getStringCellValue(row.getCell(0)));
             listPriceArticleEntity.setDesart(getStringCellValue(row.getCell(1)));
@@ -300,9 +305,9 @@ public class ListPriceArticleReport {
             listPriceArticleEntity.setImptotal(listPriceArticleEntity.getImpsaleprice().subtract(listPriceArticleEntity.getImptribtotal()));
             listPriceArticleEntity.setStatus("Y");
             listPriceArticleEntity.setCreateat(LocalDateTime.now());
-            listPriceArticleEntity.setCreateby(authentication.getName());
+            listPriceArticleEntity.setCreateby(coduser);
             listPriceArticleEntity.setUpdateat(LocalDateTime.now());
-            listPriceArticleEntity.setUpdateby(authentication.getName());
+            listPriceArticleEntity.setUpdateby(coduser);
             listPriceArticleEntityList.add(listPriceArticleEntity);
         }
         if (!importErrorModelListGeneral.isEmpty()){
@@ -313,13 +318,12 @@ public class ListPriceArticleReport {
     }
 
     public ApiResponseReport<?> validateAndImportList(List<ListPriceArticleEntity> listPriceArticleEntityList, Integer startRow, Integer lastRow) throws JRException, GenericByteServiceException {
-
+        Integer idcompany = securityContextInitializer.getIdCompany();
         List<ImportErrorModel> importErrorModelList = new ArrayList<>();
-
         Integer currentRow = startRow;
         for (ListPriceArticleEntity entity : listPriceArticleEntityList) {
             currentRow = currentRow + 1;
-            if(!this.articleRepository.existsById(entity.getCodart())){
+            if(!this.articleRepository.existsById(new ArticlePK(idcompany,entity.getCodart()))){
                 ImportErrorModel importErrorModel = new ImportErrorModel(currentRow,entity.getCodart(),"ARTICLE NOT EXISTS");
                 importErrorModelList.add(importErrorModel);
             }

@@ -3,12 +3,10 @@ package luis122448.SmartShell.application.domain.persistence.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.BusinessPartnerPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -16,10 +14,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
+@IdClass(BusinessPartnerPK.class)
 @Table(schema = "smart_shell", name= "TBL_BUSINESS_PARTNER")
 @Entity
 public class BusinessPartnerEntity extends AuditingEntity {
-		
+    @Id
+    private Integer idcompany;
 	@Id
     private String codbuspar;
     private Short typbuspar;

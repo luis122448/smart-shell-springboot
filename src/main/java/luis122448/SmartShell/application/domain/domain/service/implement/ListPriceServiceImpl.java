@@ -1,5 +1,7 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ListPricePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ListPriceService;
@@ -14,49 +16,56 @@ import java.util.Optional;
 @Service
 public class ListPriceServiceImpl implements ListPriceService {
     private final ListPriceRepository listPriceRepository;
-    public ListPriceServiceImpl(ListPriceRepository listPriceRepository) {
+    private final SecurityContextInitializer securityContextInitializer;
+    public ListPriceServiceImpl(ListPriceRepository listPriceRepository, SecurityContextInitializer securityContextInitializer) {
         this.listPriceRepository = listPriceRepository;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     @Override
-    public ApiResponseList<ListPriceEntity> findAll(ListPriceEntity listPriceEntity) throws GenericListServiceException {
-        return new ApiResponseList<ListPriceEntity>(1,"Ok", Optional.of(this.listPriceRepository.findAll()));
+    public ApiResponseList<ListPriceEntity> findAll() throws GenericListServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        return new ApiResponseList<ListPriceEntity>(Optional.of(this.listPriceRepository.findByIdcompany(idcompany)));
     }
 
     @Override
     public ApiResponseList<ListPriceEntity> findByLike(ListPriceEntity listPriceEntity) throws GenericListServiceException {
-        return null;
+        throw new GenericListServiceException(405);
     }
 
     @Override
     public ApiResponseObject<ListPriceEntity> findById(ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        return new ApiResponseObject<ListPriceEntity>(1,"Ok", this.listPriceRepository.findById(listPriceEntity.getCodlistprice()));
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        return new ApiResponseObject<ListPriceEntity>(this.listPriceRepository.findById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice())));
     }
 
     @Override
     public ApiResponseObject<ListPriceEntity> save(ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        if(this.listPriceRepository.existsById(listPriceEntity.getCodlistprice())){
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        if(this.listPriceRepository.existsById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice()))){
             throw new GenericObjectServiceException(ID_EXISTS(listPriceEntity.getCodlistprice().toString()));
         }
-        return new ApiResponseObject<ListPriceEntity>(1,"Ok",Optional.of(this.listPriceRepository.save(listPriceEntity)));
+        return new ApiResponseObject<ListPriceEntity>(Optional.of(this.listPriceRepository.save(listPriceEntity)));
     }
 
     @Override
     public ApiResponseObject<ListPriceEntity> update(ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        if(!this.listPriceRepository.existsById(listPriceEntity.getCodlistprice())){
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        if(!this.listPriceRepository.existsById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice()))){
             throw new GenericObjectServiceException(ID_NOT_EXISTS(listPriceEntity.getCodlistprice().toString()));
         }
-        return new ApiResponseObject<ListPriceEntity>(1,"Ok",Optional.of(this.listPriceRepository.save(listPriceEntity)));
+        return new ApiResponseObject<ListPriceEntity>(Optional.of(this.listPriceRepository.save(listPriceEntity)));
     }
 
     @Override
     public ApiResponseObject<ListPriceEntity> delete(ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        this.listPriceRepository.deleteById(listPriceEntity.getCodlistprice());
-        return new ApiResponseObject<ListPriceEntity>(1,"Ok",Optional.empty());
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        this.listPriceRepository.deleteById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice()));
+        return new ApiResponseObject<ListPriceEntity>(Optional.empty());
     }
 
     @Override
     public ApiResponseObject<ListPriceEntity> undelete(ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        return null;
+        throw new GenericObjectServiceException(405);
     }
 }

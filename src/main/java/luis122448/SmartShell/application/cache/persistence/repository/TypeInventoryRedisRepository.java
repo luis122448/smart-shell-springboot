@@ -36,11 +36,16 @@ public class TypeInventoryRedisRepository {
     }
 
     @SuppressWarnings("unchecked")
+    public List<TypeInventoryRedis> findByIdcompany(Integer idcompany) {
+        log.info("findByIdcompany...");
+        return (List<TypeInventoryRedis>) hashOperations.get(TYPE_INVENTORY, idcompany);
+    }
+
+    @SuppressWarnings("unchecked")
     public TypeInventoryRedis findById(Integer typinv) {
         log.info("findById...");
         return (TypeInventoryRedis) hashOperations.get(TYPE_INVENTORY, typinv);
     }
-
 
     public void update(TypeInventoryRedis typeInventoryRedis) {
         log.info("update...");

@@ -25,9 +25,9 @@ public class SellerController {
 		this.sellerService = sellerService;
 	}
 
-	@GetMapping
+	@GetMapping("/by-all")
 	public ResponseEntity<?> findAll() throws GenericListServiceException {
-		ApiResponseList<SellerEntity> lst= sellerService.findAll(null);
+		ApiResponseList<SellerEntity> lst = sellerService.findAll();
 		return ResponseEntity.ok(lst);
 	}
 

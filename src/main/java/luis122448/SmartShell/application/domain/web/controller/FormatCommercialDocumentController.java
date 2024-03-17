@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.web.controller;
 
 import luis122448.SmartShell.application.domain.domain.service.service.FormatCommercialDocumentService;
 import luis122448.SmartShell.application.domain.persistence.entity.FormatCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.FormatCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import org.springframework.http.ResponseEntity;

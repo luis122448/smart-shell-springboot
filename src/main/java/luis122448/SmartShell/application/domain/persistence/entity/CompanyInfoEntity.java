@@ -19,12 +19,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(schema = "smart_shell", name = "TBL_COMPANY_INFO")
 public class CompanyInfoEntity extends AuditingEntity {
-
     @Id
-    private Integer numint;
-    private Integer typidedoc;
-    private String nroidedoc;
-    private String comnam;
+    private Integer idcompany;
+    private String company;
+    private String appellation;
     private String addres;
     private String poscod;
     private byte[] image;

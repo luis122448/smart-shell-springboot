@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.persistence.entity.CompanyInfoEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.constants.CompanyInfoRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
@@ -21,11 +22,12 @@ import static luis122448.SmartShell.application.domain.domain.report.constant.DI
 
 @Service
 public class GenericReport {
-
     private final CompanyInfoRepository companyInfoRepository;
+    private final SecurityContextInitializer securityContextInitializer;
 
-    public GenericReport(CompanyInfoRepository companyInfoRepository) {
+    public GenericReport(CompanyInfoRepository companyInfoRepository, SecurityContextInitializer securityContextInitializer) {
         this.companyInfoRepository = companyInfoRepository;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     public void genericValidArchive(MultipartFile multipartFile, String name, String extension) throws GenericByteServiceException{
@@ -73,23 +75,21 @@ public class GenericReport {
     }
 
     public Map<String, Object> genericResponseInfo(String title, String status, Integer numberRow, Integer numberError) throws GenericByteServiceException{
-
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        String coduser = securityContextInitializer.getCodUser();
+        String username = securityContextInitializer.getUsername();
         Map<String, Object> params = new HashMap<>();
-        params.put("title", title);
-        CompanyInfoEntity companyInfoEntity = this.companyInfoRepository.findById(1).orElse(new CompanyInfoEntity());
+        CompanyInfoEntity companyInfoEntity = this.companyInfoRepository.findById(idcompany).orElseThrow(
+                () -> new GenericByteServiceException("THE COMPANY INFORMATION IS NOT FOUND")
+        );
         if (companyInfoEntity.getGloss() == null){
             throw new GenericByteServiceException("THE COMPANY GLOSS IS NULL");
         }
         InputStream comglossInputStream = new ByteArrayInputStream(companyInfoEntity.getGloss());
         params.put("comgloss", comglossInputStream);
-        params.put("company", companyInfoEntity.getComnam());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            params.put("username", authentication.getName());
-        } else {
-            params.put("username", "Unknown");
-        }
-        params.put("author", "Luis Antonio Calvo Quispe");
+        params.put("company", companyInfoEntity.getAppellation());
+        params.put("username", coduser);
+        params.put("author", username);
         params.put("numberRow", numberRow);
         params.put("numberError", numberError );
         params.put("status",status);

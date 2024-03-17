@@ -2,22 +2,21 @@ package luis122448.SmartShell.application.domain.domain.report.service;
 
 import luis122448.SmartShell.application.archive.domain.service.implement.ArchiveServiceImpl;
 import luis122448.SmartShell.application.archive.persistence.entity.ArchiveEntity;
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleAttachedEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleAttachedPK;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleSpecificationPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleAttachedPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleSpecificationPK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleAttachedRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleSpecificationRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
-import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseByte;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,47 +32,47 @@ import java.util.zip.ZipOutputStream;
 
 @Service
 public class ArticleAttachedArchive {
-
     private final ArticleRepository articleRepository;
     private final ArticleAttachedRepository articleAttachedRepository;
     private final ArticleSpecificationRepository articleSpecificationRepository;
     private final ArchiveServiceImpl archiveService;
     private final GenericReport genericReport;
-    public ArticleAttachedArchive(ArticleRepository articleRepository, ArticleAttachedRepository articleAttachedRepository, ArticleSpecificationRepository articleSpecificationRepository, ArchiveServiceImpl archiveService, GenericReport genericReport) {
+    private final SecurityContextInitializer securityContextInitializer;
+    public ArticleAttachedArchive(ArticleRepository articleRepository, ArticleAttachedRepository articleAttachedRepository, ArticleSpecificationRepository articleSpecificationRepository, ArchiveServiceImpl archiveService, GenericReport genericReport, SecurityContextInitializer securityContextInitializer) {
         this.articleRepository = articleRepository;
         this.articleAttachedRepository = articleAttachedRepository;
         this.articleSpecificationRepository = articleSpecificationRepository;
         this.archiveService = archiveService;
         this.genericReport = genericReport;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     public ArticleSpecificationEntity validateSave(ArticleAttachedEntity articleAttachedEntity) throws GenericObjectServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
         if (articleAttachedEntity.getTypspe() <= 0){
             throw new GenericObjectServiceException("CODE OF SPECIFICATION IS REQUIRED!");
         }
-        Optional<ArticleEntity> articleEntityOptional = this.articleRepository.findById(articleAttachedEntity.getCodart());
-        if (articleEntityOptional.isEmpty()){
-            throw new GenericObjectServiceException("ARTICLE NOT EXISTS!");
-        }
-        Optional<ArticleSpecificationEntity> articleSpecificationEntityOptional = this.articleSpecificationRepository.findById(new ArticleSpecificationPK(articleEntityOptional.get().getTypinv(),articleAttachedEntity.getTypspe()));
-        if (articleSpecificationEntityOptional.isEmpty()){
-            throw new GenericObjectServiceException("SPECIFICATION NOT EXISTS!");
-        }
-        return articleSpecificationEntityOptional.get();
+        ArticleEntity articleEntity = this.articleRepository.findById(new ArticlePK(idcompany, articleAttachedEntity.getCodart())).orElseThrow(
+                () -> new GenericObjectServiceException("ARTICLE NOT EXISTS!")
+        );
+        return this.articleSpecificationRepository.findById(new ArticleSpecificationPK(idcompany, articleEntity.getTypinv(), articleAttachedEntity.getTypspe())).orElseThrow(
+                () -> new GenericObjectServiceException("SPECIFICATION NOT EXISTS!")
+        );
     }
 
     public ApiResponseByte<?> downloaderArchive(String codart, Integer typeps) throws GenericObjectServiceException{
-        ArticleAttachedEntity articleAttachedEntity =  this.articleAttachedRepository.findById(new ArticleAttachedPK(codart, typeps)).orElseThrow();
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ArticleAttachedEntity articleAttachedEntity =  this.articleAttachedRepository.findById(new ArticleAttachedPK(idcompany,codart, typeps)).orElseThrow();
         if (articleAttachedEntity.getIdMongo().isEmpty()){
             throw new GenericObjectServiceException("THE REQUESTED FILE DOES NOT EXIST");
         }
         ArchiveEntity archiveEntity = this.archiveService.findArchive(articleAttachedEntity.getIdMongo()).getObject().orElseThrow();
         byte[] bytes = archiveEntity.getArchive().getData();
-        return new ApiResponseByte<>(1,"DOWNLOADER SUCESS",Optional.of(bytes), archiveEntity.getTitle() , archiveEntity.getFormat(), archiveEntity.getExtension() );
+        return new ApiResponseByte<>(1,"DOWNLOADER SUCCESS",Optional.of(bytes), archiveEntity.getTitle() , archiveEntity.getFormat(), archiveEntity.getExtension() );
     }
 
     public ApiResponseObject<ArticleAttachedEntity> save(ArticleAttachedEntity articleAttachedEntity,  List<ArchiveEntity> archiveEntityList, List<MultipartFile> multipartFileList) throws GenericObjectServiceException, GenericByteServiceException {
-
+        String coduser = securityContextInitializer.getCodUser();
         ArticleSpecificationEntity articleSpecificationEntity = validateSave(articleAttachedEntity);
         if (articleSpecificationEntity.getMultip().equals("N")){
             if (multipartFileList.size() > 1) {
@@ -103,22 +102,17 @@ public class ArticleAttachedArchive {
         }
         articleAttachedEntity.setCreateat(LocalDateTime.now());
         articleAttachedEntity.setUpdateat(LocalDateTime.now());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            articleAttachedEntity.setCreateby(authentication.getName());
-            articleAttachedEntity.setUpdateby(authentication.getName());
-        } else {
-            articleAttachedEntity.setCreateby("Unknown");
-            articleAttachedEntity.setUpdateby("Unknown");
-        }
+        articleAttachedEntity.setCreateby(coduser);
+        articleAttachedEntity.setUpdateby(coduser);
         return new ApiResponseObject<ArticleAttachedEntity>(Optional.of(this.articleAttachedRepository.save(articleAttachedEntity)));
     }
 
     public ApiResponseObject<ArticleAttachedEntity> delete(String codart, Integer typspe) throws GenericObjectServiceException {
-        ArticleAttachedEntity articleAttachedEntity = this.articleAttachedRepository.findById(new ArticleAttachedPK(codart, typspe)).orElseThrow();
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ArticleAttachedEntity articleAttachedEntity = this.articleAttachedRepository.findById(new ArticleAttachedPK(idcompany, codart, typspe)).orElseThrow();
         this.archiveService.deleteArchive(articleAttachedEntity.getIdMongo());
-        this.articleAttachedRepository.deleteById(new ArticleAttachedPK(codart, typspe));
-        return new ApiResponseObject<ArticleAttachedEntity>(1, "DELETE SUCCESS",Optional.empty());
+        this.articleAttachedRepository.deleteById(new ArticleAttachedPK(idcompany, codart, typspe));
+        return new ApiResponseObject<ArticleAttachedEntity>(Optional.empty());
     }
 
     private MultipartFile createZipFile(String title,  List<MultipartFile> validFiles) throws GenericObjectServiceException {

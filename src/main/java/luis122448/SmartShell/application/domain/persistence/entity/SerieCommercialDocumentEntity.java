@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -15,7 +15,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(schema = "smart_shell", name= "TBL_SERIE_COMMERCIAL_DOCUMENT")
 @Entity
 public class SerieCommercialDocumentEntity extends AuditingEntity {
-	
+    @Id
+    private Integer idcompany;
 	@Id
     private Integer typcomdoc;
     @Id

@@ -1,71 +1,80 @@
 package luis122448.SmartShell.security.auth.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.jsonwebtoken.*;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
+import luis122448.SmartShell.security.auth.user.UserDetailsServiceCustom;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import luis122448.SmartShell.security.constant.SecurityConstant;
+import luis122448.SmartShell.security.utility.constant.SecurityConstant;
 
 @Slf4j
 @Component
 public class JWTUtils {
 
-	private final UserDetailsService userDetailsService;
+	private final UserDetailsServiceCustom userDetailsServiceCustom;
+
+	public JWTUtils(UserDetailsServiceCustom userDetailsServiceCustom) {
+		this.userDetailsServiceCustom = userDetailsServiceCustom;
+	}
+
+	public String generateJwtToken(String company, String usuario, Boolean swRefreshToken) throws SecurityException {
+		try {
+			UserDetailsCustom userDetailsCustom = userDetailsServiceCustom.loadUserByUsernameAndCompany(company, usuario);
+			long time= (!swRefreshToken)? SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN:SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN;
+			Map<String, Object> tokenData = new HashMap<>();
+			tokenData.put(SecurityConstant.AUTHORITIES, userDetailsCustom.getAuthorities());
+			tokenData.put(SecurityConstant.IDCOMPANY, userDetailsCustom.getIdcompany());
+			tokenData.put(SecurityConstant.COMPANY, userDetailsCustom.getCompany());
+			tokenData.put(SecurityConstant.APPELLATION, userDetailsCustom.getAppellation());
+			tokenData.put(SecurityConstant.CODUSER, userDetailsCustom.getCoduser());
+			tokenData.put(SecurityConstant.USERNAME, userDetailsCustom.getUsername());
+            return Jwts
+					.builder()
+					.setSubject(userDetailsCustom.getCoduser())
+					.setIssuedAt(new Date()).setIssuer(SecurityConstant.ISSUER_INFO)
+					.setExpiration(new Date(System.currentTimeMillis() + time))
+					.signWith(SignatureAlgorithm.HS512, SecurityConstant.SUPER_SECRET_KEY)
+					.addClaims(tokenData)
+					.compact();
+		} catch (SecurityException e) {
+			throw new SecurityException("ERROR IN GENERATE TOKEN", e);
+		}
+	}
 	
-	public JWTUtils(UserDetailsService userDetailsService) {
-		super();
-		this.userDetailsService = userDetailsService;
+	public String generateJwtFromTokenRefresh(String refreshToken) throws SecurityException {
+		try{
+			Map<String, Object> tokenData = getDataJwtToken(refreshToken);
+			String coduser = tokenData.get(SecurityConstant.CODUSER).toString();
+            return Jwts
+					.builder()
+					.setSubject(coduser)
+					.setIssuedAt(new Date()).setIssuer(SecurityConstant.ISSUER_INFO)
+					.setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN))
+					.signWith(SignatureAlgorithm.HS512, SecurityConstant.SUPER_SECRET_KEY)
+					.addClaims(tokenData)
+					.compact();
+		} catch (SecurityException e) {
+			throw new SecurityException("\"ERROR IN GENERATE REFRESH TOKEN", e);
+		}
 	}
 
-	public String generateJwtToken(String usuario, Boolean swRefreshToken) {
-		
-		UserDetails userDetails = userDetailsService.loadUserByUsername(usuario);
-			
-		Long time= (!swRefreshToken)? SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN:SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN;
-		
-		String token = Jwts
-						.builder()
-						.setIssuedAt(new Date()).setIssuer(SecurityConstant.ISSUER_INFO)
-						.setSubject(usuario)
-						.setExpiration(new Date(System.currentTimeMillis() + time))
-						.claim(SecurityConstant.AUTHORITIES, userDetails.getAuthorities())
-						.signWith(SignatureAlgorithm.HS512, SecurityConstant.SUPER_SECRET_KEY)
-						.compact();
-		
-		System.out.println("token -> "+token);
-		return token;
-	}
-	
-	public String generateJwtFromTokenRefresh(String refreshToken) {
-		String username = this.getUserNameFromJwtToken(refreshToken);
-		log.info("username {}", username);
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-		String token = Jwts
-						.builder()
-						.setIssuedAt(new Date()).setIssuer(SecurityConstant.ISSUER_INFO)
-						.setSubject(userDetails.getUsername())
-						.setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN))
-						.claim(SecurityConstant.AUTHORITIES, userDetails.getAuthorities())
-						.signWith(SignatureAlgorithm.HS512, SecurityConstant.SUPER_SECRET_KEY)
-						.compact();
-		
-		log.info("token {}", token);
-		return token;
-	}
-
-	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(SecurityConstant.SUPER_SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+	public Map<String, Object> getDataJwtToken(String token) throws SecurityException {
+		try{
+			Claims claims = Jwts.parser().setSigningKey(SecurityConstant.SUPER_SECRET_KEY).parseClaimsJws(token).getBody();
+			return new HashMap<>(claims);
+		} catch (SignatureException e) {
+			throw new SecurityException("INVALID LOGIN, PLEASE RE-LOGIN", e);
+		}
 	}
 
 	public boolean validateJwtToken(String authToken) throws SecurityException  {
-		log.info("validateJwtToken");
 		try {
 			Jwts.parser().setSigningKey(SecurityConstant.SUPER_SECRET_KEY).parseClaimsJws(authToken);
 			return true;
@@ -84,10 +93,9 @@ public class JWTUtils {
 	}
 	
 	public String parseJwt(HttpServletRequest request) throws SecurityException {
-		log.info("Parse Jwt");
 		String headerAuth = request.getHeader(SecurityConstant.HEADER_AUTHORIZACION_KEY);
 		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(SecurityConstant.TOKEN_BEARER_PREFIX)) {
-			return headerAuth.substring(7, headerAuth.length());
+			return headerAuth.substring(7);
 		}
 		return null;		
 	}

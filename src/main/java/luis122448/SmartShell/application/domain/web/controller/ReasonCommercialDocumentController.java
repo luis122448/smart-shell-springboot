@@ -22,8 +22,7 @@ public class ReasonCommercialDocumentController {
 
     @GetMapping("/by-all")
     public ResponseEntity<?> findAll() throws GenericListServiceException{
-        ReasonCommercialDocumentEntity tmp = new ReasonCommercialDocumentEntity();
-        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findAll(tmp);
+        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findAll();
         return ResponseEntity.ok(obj);
     }
 
@@ -33,7 +32,7 @@ public class ReasonCommercialDocumentController {
         ReasonCommercialDocumentEntity tmp = new ReasonCommercialDocumentEntity();
         tmp.setTypcomdoc(typcomdoc);
         tmp.setIngsalcom(ingsalcom);
-        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findByLike(tmp);
+        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findByTypcomdocAndIngsalcom(tmp);
         return ResponseEntity.ok(obj);
     }
 

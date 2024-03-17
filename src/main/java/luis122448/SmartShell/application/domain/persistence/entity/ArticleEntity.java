@@ -3,12 +3,10 @@ package luis122448.SmartShell.application.domain.persistence.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -16,9 +14,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@IdClass(ArticlePK.class)
 @Entity
 @Table(schema = "smart_shell", name= "TBL_ARTICLE")
 public class ArticleEntity extends AuditingEntity implements Serializable {
+    @Id
+    private Integer idcompany;
 	@Id
     private String codart;
     private Integer typinv;

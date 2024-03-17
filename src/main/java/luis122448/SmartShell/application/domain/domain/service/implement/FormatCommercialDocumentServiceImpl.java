@@ -1,8 +1,9 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.service.service.FormatCommercialDocumentService;
 import luis122448.SmartShell.application.domain.persistence.entity.FormatCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.FormatCommercialDocumentPK;
 import luis122448.SmartShell.application.domain.persistence.repository.FormatCommercialDocumentRepository;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
@@ -17,14 +18,17 @@ import java.util.Optional;
 public class FormatCommercialDocumentServiceImpl implements FormatCommercialDocumentService {
 
     private final FormatCommercialDocumentRepository formatCommercialDocumentRepository;
+    private final SecurityContextInitializer securityContextInitializer;
 
-    public FormatCommercialDocumentServiceImpl(FormatCommercialDocumentRepository formatCommercialDocumentRepository) {
+    public FormatCommercialDocumentServiceImpl(FormatCommercialDocumentRepository formatCommercialDocumentRepository, SecurityContextInitializer securityContextInitializer) {
         this.formatCommercialDocumentRepository = formatCommercialDocumentRepository;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     @Override
     public ApiResponseList<FormatCommercialDocumentEntity> findAll() throws GenericListServiceException {
-        List<FormatCommercialDocumentEntity> lst = this.formatCommercialDocumentRepository.findAll();
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        List<FormatCommercialDocumentEntity> lst = this.formatCommercialDocumentRepository.findByIdcompany(idcompany);
         if (lst.isEmpty()) {
             throw new GenericListServiceException(404);
         }
@@ -33,7 +37,8 @@ public class FormatCommercialDocumentServiceImpl implements FormatCommercialDocu
 
     @Override
     public ApiResponseList<FormatCommercialDocumentEntity> findByLike(FormatCommercialDocumentEntity formatCommercialDocumentEntity) throws GenericListServiceException {
-        List<FormatCommercialDocumentEntity> lst = this.formatCommercialDocumentRepository.findByTypcomdoc(formatCommercialDocumentEntity.getTypcomdoc());
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        List<FormatCommercialDocumentEntity> lst = this.formatCommercialDocumentRepository.findByIdcompanyAndTypcomdoc(idcompany, formatCommercialDocumentEntity.getTypcomdoc());
         if (lst.isEmpty()) {
             throw new GenericListServiceException(404);
         }
@@ -42,6 +47,8 @@ public class FormatCommercialDocumentServiceImpl implements FormatCommercialDocu
 
     @Override
     public ApiResponseObject<FormatCommercialDocumentEntity> findById(FormatCommercialDocumentPK formatCommercialDocumentPK) throws GenericObjectServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        formatCommercialDocumentPK.setIdcompany(idcompany);
         return new ApiResponseObject<>(this.formatCommercialDocumentRepository.findById(formatCommercialDocumentPK));
     }
 

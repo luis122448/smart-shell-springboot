@@ -35,7 +35,7 @@ public class DocumentHeaderController {
 	public ResponseEntity<?> findById (@RequestParam(name = "numint", defaultValue = "") Long numint ) throws GenericObjectServiceException {
 		DocumentHeaderEntity tmp = new DocumentHeaderEntity();
 		tmp.setNumint(numint);
-		ApiResponseObject<DocumentHeaderEntity> obj = this.documentHeaderService.findById(tmp);
+		ApiResponseObject<DocumentHeaderEntity> obj = this.documentHeaderService.findByNumint(numint);
 		return ResponseEntity.ok(obj);
 	}
 

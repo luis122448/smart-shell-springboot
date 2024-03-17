@@ -21,23 +21,12 @@ public class CompanyInfoController {
 
     @GetMapping("/by-all")
     public ResponseEntity<?> findAll() throws GenericListServiceException{
-        CompanyInfoEntity tmp = new CompanyInfoEntity();
-        ApiResponseList<CompanyInfoEntity> obj = this.companyInfoService.findAll(tmp);
-        return ResponseEntity.ok(obj);
-    }
-
-    @GetMapping("/by-id")
-    public ResponseEntity<?> findById(@RequestParam(name = "numint", defaultValue = "1") Integer numint) throws GenericObjectServiceException{
-        CompanyInfoEntity tmp = new CompanyInfoEntity();
-        tmp.setNumint(numint);
-        ApiResponseObject<CompanyInfoEntity> obj = this.companyInfoService.findById(tmp);
+        ApiResponseList<CompanyInfoEntity> obj = this.companyInfoService.findAll();
         return ResponseEntity.ok(obj);
     }
 
     @PutMapping()
-    public ResponseEntity<?> update(@RequestParam(name = "numint", defaultValue = "1") Integer numint,
-                                    @RequestBody CompanyInfoEntity companyInfoEntity) throws GenericObjectServiceException{
-        companyInfoEntity.setNumint(numint);
+    public ResponseEntity<?> update(@RequestBody CompanyInfoEntity companyInfoEntity) throws GenericObjectServiceException{
         ApiResponseObject<CompanyInfoEntity> obj = this.companyInfoService.update(companyInfoEntity);
         return ResponseEntity.ok(obj);
     }

@@ -5,6 +5,7 @@ import luis122448.SmartShell.application.archive.persistence.entity.ArchiveEntit
 import luis122448.SmartShell.application.domain.domain.report.service.ArticleAttachedArchive;
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleAttachedService;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleAttachedEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleAttachedPK;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
@@ -35,18 +36,15 @@ public class ArticleAttachedController {
     public ResponseEntity<?> findByAll(@RequestParam("codart") String codart) throws GenericListServiceException{
         ArticleAttachedEntity articleAttachedEntity = new ArticleAttachedEntity();
         articleAttachedEntity.setCodart(codart);
-        ApiResponseList<ArticleAttachedEntity> apiResponseList = this.articleAttachedService.findAll(articleAttachedEntity);
+        ApiResponseList<ArticleAttachedEntity> apiResponseList = this.articleAttachedService.findByLike(articleAttachedEntity);
         return ResponseEntity.ok(apiResponseList);
     }
 
     @GetMapping("/by-id")
     public ResponseEntity<?> findById(@RequestParam("codart") String codart,
                                       @RequestParam("typeps") Integer typeps) throws GenericObjectServiceException{
-        ArticleAttachedEntity articleAttachedEntity = new ArticleAttachedEntity();
-        articleAttachedEntity.setCodart(codart);
-        articleAttachedEntity.setTypspe(typeps);
-        ApiResponseObject<ArticleAttachedEntity> apiResponseObject = this.articleAttachedService.findById(articleAttachedEntity);
-        return ResponseEntity.ok(apiResponseObject);
+        ArticleAttachedPK articleAttachedPK = new ArticleAttachedPK(0,codart,typeps);
+        return ResponseEntity.ok(this.articleAttachedService.findById(articleAttachedPK));
     }
 
     @GetMapping("/by-downloader")
@@ -63,7 +61,7 @@ public class ArticleAttachedController {
                                 @RequestParam("archiveEntityList") List<ArchiveEntity> archiveEntityList,
                                 @RequestParam("multipartFileList") List<MultipartFile> multipartFileList
     ) throws GenericByteServiceException, GenericObjectServiceException {
-        ArticleAttachedEntity articleAttachedEntity = new ArticleAttachedEntity(codart,typspe,"",observ,"");
+        ArticleAttachedEntity articleAttachedEntity = new ArticleAttachedEntity(0,codart,typspe,"",observ,"");
         ApiResponseObject<ArticleAttachedEntity> apiResponseObject = this.articleAttachedArchive.save(articleAttachedEntity, archiveEntityList, multipartFileList);
         return ResponseEntity.ok(apiResponseObject);
     }

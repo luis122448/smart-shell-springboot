@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.stereotype.Service;
 
@@ -10,21 +11,26 @@ import luis122448.SmartShell.application.domain.domain.service.service.SellerSer
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SellerServiceImpl implements SellerService {
-
 	private final SellerRepository sellerRepository;
-	
-	public SellerServiceImpl(SellerRepository sellerRepository) {
-		super();
+	private final SecurityContextInitializer securityContextInitializer;
+	public SellerServiceImpl(SellerRepository sellerRepository, SecurityContextInitializer securityContextInitializer) {
 		this.sellerRepository = sellerRepository;
+		this.securityContextInitializer = securityContextInitializer;
 	}
 
 	@Override
-	public ApiResponseList<SellerEntity> findAll(SellerEntity t) throws GenericListServiceException {
-		return new ApiResponseList<SellerEntity>(1,"Ok",Optional.of(this.sellerRepository.findAll()));
+	public ApiResponseList<SellerEntity> findAll() throws GenericListServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		List<SellerEntity> lst = this.sellerRepository.findByIdcompany(idcompany);
+		if (lst.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(lst));
 	}
 
 	@Override

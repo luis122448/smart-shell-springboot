@@ -7,7 +7,6 @@ import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
 public interface GenericSearchService<T, Q> {
 
-    ApiResponseList<T> findAll() throws GenericListServiceException;
     ApiResponseList<T> findByLike(T t) throws GenericListServiceException;
     ApiResponseObject<T> findById(Q q) throws GenericObjectServiceException;
 

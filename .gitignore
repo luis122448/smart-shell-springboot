@@ -43,5 +43,5 @@ key/
 *.pem
 *.p12
 
-## DEPLOY ###
-#**/src/main/resources/application-pdn.properties
+# DEPLOY ###
+**/src/main/resources/application-dev.properties

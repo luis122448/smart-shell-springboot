@@ -15,11 +15,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface DocumentHeaderService{
 
-    ApiResponseObject<DocumentHeaderEntity> findById(DocumentHeaderEntity t) throws GenericObjectServiceException;
+    ApiResponseObject<DocumentHeaderEntity> findByNumint(Long numint) throws GenericObjectServiceException;
     ApiResponseList<DocumentInvoiceSearch> searchDocumentInvoice(DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException;
     ApiResponsePage<DocumentInvoiceSearch> pageDocumentInvoice(DocumentInvoiceSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException;
     ApiResponseObject<DocumentHeaderEntity> registerDocumentHeader(DocumentHeaderEntity t) throws GenericObjectServiceException;
     ApiResponseList<DocumentInvoicePrint> printDocumentInvoice(Long numint) throws GenericListServiceException;
     ApiResponseObject<?> calculateImportDocument(Long numint) throws GenericProcedureException;
-    ApiResponseObject<?> cancelImportDocument(Long numint) throws GenericProcedureException;
+    ApiResponseObject<?> approvedImportDocument(Long numint) throws GenericProcedureException;
+    ApiResponseObject<?> onAccountImportDocument(Long numint) throws GenericProcedureException;
+    ApiResponseObject<?> cancelImportDocument(Long numint, String commen) throws GenericProcedureException;
+    ApiResponseObject<?> deleteImportDocument(Long numint, String commen) throws GenericProcedureException;
 }

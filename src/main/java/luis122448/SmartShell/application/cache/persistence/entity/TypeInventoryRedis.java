@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class TypeInventoryRedis implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
+    private Integer idcompany;
     private Integer typinv;
     private String abrevi;
     private String descri;

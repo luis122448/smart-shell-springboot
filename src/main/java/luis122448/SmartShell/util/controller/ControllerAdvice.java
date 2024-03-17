@@ -1,5 +1,7 @@
 package luis122448.SmartShell.util.controller;
 
+import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
+import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
@@ -37,12 +39,12 @@ public class ControllerAdvice {
     @ExceptionHandler(value = GenericObjectServiceException.class)
     public ResponseEntity<?> genericObjectServiceException(GenericObjectServiceException e){
         ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
-        return new ResponseEntity<>(tmp, HttpStatus.OK);
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
     }
 
     @ExceptionHandler(value = GenericListServiceException.class)
     public ResponseEntity<?> genericListServiceException(GenericListServiceException e){
-        ApiResponseList<?> tmp = new ApiResponseList<>(-2,e.getMessage(),e.getMessage(),Optional.empty());
+        ApiResponseList<?> tmp = new ApiResponseList<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
         return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
     }
 
@@ -56,6 +58,18 @@ public class ControllerAdvice {
     public ResponseEntity<?> genericByteServiceException(GenericByteServiceException e){
         ApiResponseByte<?> tmp = new ApiResponseByte<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
         return new ResponseEntity<>(tmp, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = GenericAuthServiceException.class)
+    public ResponseEntity<?> genericAuthServiceException(GenericAuthServiceException e){
+        ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
+    }
+
+    @ExceptionHandler(value = GenericProcedureException.class)
+    public ResponseEntity<?> genericProcedureException(GenericProcedureException e){
+        ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
     }
 
 }

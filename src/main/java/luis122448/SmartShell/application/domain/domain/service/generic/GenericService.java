@@ -8,8 +8,7 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
 public interface GenericService<T> {
-		
-	ApiResponseList<T> findAll(T t) throws GenericListServiceException;
+
 	ApiResponseList<T> findByLike(T t) throws GenericListServiceException;
 	ApiResponseObject<T> findById(T t) throws GenericObjectServiceException;
 	ApiResponseObject<T> save(T t) throws GenericObjectServiceException;

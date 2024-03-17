@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 //@NamedStoredProcedureQueries({
@@ -95,10 +96,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
+@IdClass(DocumentHeaderPK.class)
 @Table(schema = "smart_shell", name= "TBL_DOCUMENT_HEADER")
 @Entity
 public class DocumentHeaderEntity extends AuditingEntity {
-		
+    @Id
+    private Integer idcompany;
 	@Id
     private Long numint;
     private String codext;

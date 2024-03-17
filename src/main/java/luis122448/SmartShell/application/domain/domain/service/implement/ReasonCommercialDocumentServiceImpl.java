@@ -1,56 +1,43 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ReasonCommercialDocumentService;
 import luis122448.SmartShell.application.domain.persistence.entity.ReasonCommercialDocumentEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.ReasonCommercialDocumentRepository;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
-import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ReasonCommercialDocumentServiceImpl implements ReasonCommercialDocumentService {
-
     private final ReasonCommercialDocumentRepository reasonCommercialDocumentRepository;
-    public ReasonCommercialDocumentServiceImpl(ReasonCommercialDocumentRepository reasonCommercialDocumentRepository) {
+    private final SecurityContextInitializer securityContextInitializer;
+    public ReasonCommercialDocumentServiceImpl(ReasonCommercialDocumentRepository reasonCommercialDocumentRepository, SecurityContextInitializer securityContextInitializer) {
         this.reasonCommercialDocumentRepository = reasonCommercialDocumentRepository;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     @Override
-    public ApiResponseList<ReasonCommercialDocumentEntity> findAll(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericListServiceException {
-        return new ApiResponseList<ReasonCommercialDocumentEntity>(1,"Ok", Optional.of(this.reasonCommercialDocumentRepository.findAll()));
+    public ApiResponseList<ReasonCommercialDocumentEntity> findAll() throws GenericListServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        List<ReasonCommercialDocumentEntity> lst = this.reasonCommercialDocumentRepository.findByIdcompany(idcompany);
+        if (lst.isEmpty()){
+            throw new GenericListServiceException(404);
+        }
+        return new ApiResponseList<>(Optional.of(lst));
     }
 
     @Override
-    public ApiResponseList<ReasonCommercialDocumentEntity> findByLike(ReasonCommercialDocumentEntity t) throws GenericListServiceException {
-        return new ApiResponseList<ReasonCommercialDocumentEntity>(1,"Ok", Optional.of(this.reasonCommercialDocumentRepository.findByLike(t.typcomdoc,t.ingsalcom)));
+    public ApiResponseList<ReasonCommercialDocumentEntity> findByTypcomdocAndIngsalcom(ReasonCommercialDocumentEntity t) throws GenericListServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        List<ReasonCommercialDocumentEntity> list = this.reasonCommercialDocumentRepository.findByIdcompanyAndTypcomdocAndIngsalcom(idcompany,t.typcomdoc,t.ingsalcom);
+        if (list.isEmpty()){
+            throw new GenericListServiceException(404);
+        }
+        return new ApiResponseList<>(Optional.of(list));
     }
 
-    @Override
-    public ApiResponseObject<ReasonCommercialDocumentEntity> findById(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericObjectServiceException {
-        return null;
-    }
-
-    @Override
-    public ApiResponseObject<ReasonCommercialDocumentEntity> save(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericObjectServiceException {
-        return null;
-    }
-
-    @Override
-    public ApiResponseObject<ReasonCommercialDocumentEntity> update(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericObjectServiceException {
-        return null;
-    }
-
-    @Override
-    public ApiResponseObject<ReasonCommercialDocumentEntity> delete(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericObjectServiceException {
-        return null;
-    }
-
-    @Override
-    public ApiResponseObject<ReasonCommercialDocumentEntity> undelete(ReasonCommercialDocumentEntity reasonCommercialDocumentEntity) throws GenericObjectServiceException {
-        return null;
-    }
 }

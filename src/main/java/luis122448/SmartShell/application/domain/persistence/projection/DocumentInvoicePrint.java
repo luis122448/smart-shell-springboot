@@ -2,48 +2,6 @@ package luis122448.SmartShell.application.domain.persistence.projection;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//public class DocumentInvoicePrint{
-//
-//    private Long numint;
-//    private Long numdoc;
-//    private String serie;
-//    private String desdoccom;
-//    private String dessitcom;
-//    private LocalDate fregis;
-//    private String desingsalcom;
-//    private String desmotcom;
-//    private String codbuspar;
-//    private String razsoc;
-//    private String desplaiss;
-//    private String codmon;
-//    private String dessel;
-//    private String despaycon;
-//    private BigDecimal imppreven;
-//    private BigDecimal impdesctotal;
-//    private BigDecimal impsubtotal;
-//    private BigDecimal imptribtotal;
-//    private BigDecimal imptotal;
-//    private Long numite;
-//    private String typinv;
-//    private String destypinv;
-//    private String codart;
-//    private String desart;
-//    private Long etiqueta;
-//    private String desetiqueta;
-//    private String cantid;
-//    private String price;
-//    private BigDecimal detpreven;
-//    private BigDecimal detdesctotal;
-//    private BigDecimal detsubtotal;
-//    private BigDecimal dettribtotal;
-//    private BigDecimal dettotal;
-//
-//}
-
 public interface DocumentInvoicePrint {
 
     Integer getTypformat();

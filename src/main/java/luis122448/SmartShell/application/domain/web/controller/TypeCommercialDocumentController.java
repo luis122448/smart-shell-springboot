@@ -25,8 +25,7 @@ public class TypeCommercialDocumentController {
 
 	@GetMapping("/by-all")
 	public ResponseEntity<?> findAll() throws GenericListServiceException {
-		TypeCommercialDocumentEntity obj = new TypeCommercialDocumentEntity();
-		ApiResponseList<TypeCommercialDocumentEntity> lst = this.typeCommercialDocumentService.findAll(obj);
+		ApiResponseList<TypeCommercialDocumentEntity> lst = this.typeCommercialDocumentService.findAll();
 		return ResponseEntity.ok(lst);
 	}
 	

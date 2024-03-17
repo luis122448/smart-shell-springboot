@@ -20,8 +20,7 @@ public class ListPriceController {
 
     @GetMapping("/by-all")
     public ResponseEntity<?> findAll() throws GenericListServiceException {
-        ListPriceEntity tmp = new ListPriceEntity();
-        ApiResponseList<ListPriceEntity> obj = this.listPriceService.findAll(tmp);
+        ApiResponseList<ListPriceEntity> obj = this.listPriceService.findAll();
         return ResponseEntity.ok(obj);
     }
 

@@ -18,10 +18,14 @@ public class DocumentInvoiceSearchDTO {
     private Long numint;
     private Long numdoc;
     private String serie;
+    private Integer typcomdoc;
     private String destypcomdoc;
+    private Integer sitcomdoc;
     private String dessitcomdoc;
     private LocalDate registdate;
+    private Integer ingsalcom;
     private String desingsalcom;
+    private Integer reacomdoc;
     private String desreacomdoc;
     private String codbuspar;
     private String busnam;

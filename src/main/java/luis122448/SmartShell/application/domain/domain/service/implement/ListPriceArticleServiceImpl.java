@@ -1,11 +1,12 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ListPriceArticleService;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.ListPriceArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ListPriceArticlePK;
 import luis122448.SmartShell.application.domain.persistence.repository.ListPriceArticleRepository;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
@@ -21,14 +22,16 @@ import java.util.Optional;
 @Service
 public class ListPriceArticleServiceImpl implements ListPriceArticleService{
     private final ListPriceArticleRepository listPriceArticleRepository;
-
-    public ListPriceArticleServiceImpl(ListPriceArticleRepository listPriceArticleRepository) {
+    private final SecurityContextInitializer securityContextInitializer;
+    public ListPriceArticleServiceImpl(ListPriceArticleRepository listPriceArticleRepository, SecurityContextInitializer securityContextInitializer) {
         this.listPriceArticleRepository = listPriceArticleRepository;
+        this.securityContextInitializer = securityContextInitializer;
     }
 
     @Override
     public ApiResponsePage<ListPriceArticleEntity> findByPage(ListPriceArticleEntity listPriceArticleEntity, Pageable pageable) throws GenericPageServiceException {
-        Page<ListPriceArticleEntity> page = this.listPriceArticleRepository.findByLike(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart(),listPriceArticleEntity.getDesart(),pageable);
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        Page<ListPriceArticleEntity> page = this.listPriceArticleRepository.findByLike(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart(),listPriceArticleEntity.getDesart(),pageable);
         if (page.getContent().isEmpty()) {
             throw new GenericPageServiceException(404);
         }
@@ -36,24 +39,28 @@ public class ListPriceArticleServiceImpl implements ListPriceArticleService{
     }
 
     @Override
-    public ApiResponseList<ListPriceArticleEntity> findAll(ListPriceArticleEntity listPriceArticleEntity) throws GenericListServiceException {
-        return new ApiResponseList<ListPriceArticleEntity>(1, "Ok", Optional.of(this.listPriceArticleRepository.findByCodlistprice(listPriceArticleEntity.getCodlistprice())));
+    public ApiResponseList<ListPriceArticleEntity> findByCodlistprice(ListPriceArticleEntity listPriceArticleEntity) throws GenericListServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        return new ApiResponseList<>(Optional.of(this.listPriceArticleRepository.findByIdcompanyAndCodlistprice(idcompany,listPriceArticleEntity.getCodlistprice())));
     }
 
     @Override
     public ApiResponseList<ListPriceArticleEntity> findByLike(ListPriceArticleEntity listPriceArticleEntity) throws GenericListServiceException {
-        return new ApiResponseList<ListPriceArticleEntity>(1, "Ok", Optional.of(this.listPriceArticleRepository.findByCodart(listPriceArticleEntity.getCodart())));
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        return new ApiResponseList<>(Optional.of(this.listPriceArticleRepository.findByIdcompanyAndCodart(idcompany,listPriceArticleEntity.getCodart())));
     }
 
     @Override
     public ApiResponseObject<ListPriceArticleEntity> findById(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        ListPriceArticlePK tmp = new ListPriceArticlePK(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
-        return new ApiResponseObject<ListPriceArticleEntity>(1,"Ok", this.listPriceArticleRepository.findById(tmp));
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
+        return new ApiResponseObject<>(this.listPriceArticleRepository.findById(tmp));
     }
 
     @Override
     public ApiResponseObject<ListPriceArticleEntity> save(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        ListPriceArticlePK pk = new ListPriceArticlePK(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ListPriceArticlePK pk = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
         if (this.listPriceArticleRepository.existsById(pk)){
            throw new GenericObjectServiceException(ID_EXISTS(pk.getClass().toString()));
         }
@@ -68,7 +75,8 @@ public class ListPriceArticleServiceImpl implements ListPriceArticleService{
 
     @Override
     public ApiResponseObject<ListPriceArticleEntity> update(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        ListPriceArticlePK tmp = new ListPriceArticlePK(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
         if (!this.listPriceArticleRepository.existsById(tmp)){
             throw new GenericObjectServiceException(ID_NOT_EXISTS(tmp.getClass().toString()));
         }
@@ -83,14 +91,15 @@ public class ListPriceArticleServiceImpl implements ListPriceArticleService{
 
     @Override
     public ApiResponseObject<ListPriceArticleEntity> delete(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        ListPriceArticlePK tmp = new ListPriceArticlePK(listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
         this.listPriceArticleRepository.deleteById(tmp);
-        return new ApiResponseObject<ListPriceArticleEntity>(1,"Ok",Optional.empty());
+        return new ApiResponseObject<ListPriceArticleEntity>(Optional.empty());
     }
 
     @Override
     public ApiResponseObject<ListPriceArticleEntity> undelete(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        return null;
+        throw new GenericObjectServiceException(405);
     }
 
     public ListPriceArticleEntity calculateFields(ListPriceArticleEntity listPriceArticleEntity){

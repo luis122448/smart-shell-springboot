@@ -28,13 +28,13 @@ public class TypePaymentConditionController {
 
 	@GetMapping("/by-codintcom")
 	public ResponseEntity<?> findByCodbuspar (@RequestParam(name = "codbuspar", defaultValue = "") String codbuspar ) throws GenericListServiceException {
-		ApiResponseList<TypePaymentConditionEntity> lst = typePaymentConditionService.findByCodintcom(codbuspar);
+		ApiResponseList<TypePaymentConditionEntity> lst = typePaymentConditionService.findByCodbuspar(codbuspar);
 		return ResponseEntity.ok(lst);
 	}
 	
 	@GetMapping("/by-all")
 	public ResponseEntity<?> findByAll () throws GenericListServiceException {
-		ApiResponseList<TypePaymentConditionEntity> lst = typePaymentConditionService.findAll(null);
+		ApiResponseList<TypePaymentConditionEntity> lst = typePaymentConditionService.findAll();
 		return ResponseEntity.ok(lst);
 	}
 

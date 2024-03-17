@@ -1,7 +1,11 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.TypeBusinessPartnerEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.TypeBusinessPartnerPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TypeBusinessPartnerRepository extends JpaRepository<TypeBusinessPartnerEntity, Short>{
+import java.util.List;
+
+public interface TypeBusinessPartnerRepository extends JpaRepository<TypeBusinessPartnerEntity, TypeBusinessPartnerPK>{
+    List<TypeBusinessPartnerEntity> findByIdcompany(Integer idcompany);
 }

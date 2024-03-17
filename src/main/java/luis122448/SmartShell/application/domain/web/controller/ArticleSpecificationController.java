@@ -11,7 +11,6 @@ import static luis122448.SmartShell.application.domain.web.constant.APIConstants
 @RestController
 @RequestMapping(PATH_BILLING + "/article-specification")
 public class ArticleSpecificationController {
-
     private final ArticleSpecificationService articleSpecificationService;
 
     public ArticleSpecificationController(ArticleSpecificationService articleSpecificationService) {
@@ -22,7 +21,7 @@ public class ArticleSpecificationController {
     public ResponseEntity<?> findByAll(@RequestParam(value = "typinv", defaultValue = "0") Integer typinv) throws GenericListServiceException{
         ArticleSpecificationEntity articleSpecificationEntity = new ArticleSpecificationEntity();
         articleSpecificationEntity.setTypinv(typinv);
-        return ResponseEntity.ok(this.articleSpecificationService.findAll(articleSpecificationEntity));
+        return ResponseEntity.ok(this.articleSpecificationService.findByLike(articleSpecificationEntity));
     }
 
 }

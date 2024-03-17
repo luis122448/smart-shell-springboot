@@ -1,8 +1,9 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.lettuce.core.ScriptOutputType;
 import lombok.extern.slf4j.Slf4j;
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
+import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchFilterDTO;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
@@ -22,28 +23,35 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Service
 public class DocumentHeaderServiceImpl implements DocumentHeaderService {
-
 	private final DocumentHeaderRepository documentHeaderRepository;
-	public DocumentHeaderServiceImpl(DocumentHeaderRepository documentHeaderRepository) {
-		super();
-		this.documentHeaderRepository = documentHeaderRepository;;
+	private final SecurityContextInitializer securityContextInitializer;
+	public DocumentHeaderServiceImpl(DocumentHeaderRepository documentHeaderRepository, SecurityContextInitializer securityContextInitializer) {
+		this.documentHeaderRepository = documentHeaderRepository;
+		this.securityContextInitializer = securityContextInitializer;
 	}
 
 	@Override
-	public ApiResponseObject<DocumentHeaderEntity> findById(DocumentHeaderEntity t) throws GenericObjectServiceException {
-		return new ApiResponseObject<DocumentHeaderEntity>(1,"Ok",documentHeaderRepository.findById(t.getNumint()));
+	public ApiResponseObject<DocumentHeaderEntity> findByNumint(Long numint) throws GenericObjectServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		DocumentHeaderEntity documentHeaderEntity = this.documentHeaderRepository.findById(new DocumentHeaderPK(idcompany,numint)).orElseThrow(
+				() -> new GenericObjectServiceException(404)
+		);
+		return new ApiResponseObject<>(Optional.of(documentHeaderEntity));
 	}
 
 	@Override
 	public ApiResponseObject<DocumentHeaderEntity> registerDocumentHeader(DocumentHeaderEntity t) throws GenericObjectServiceException {
 		try {
-			Map<String, Object> obj = this.documentHeaderRepository.registerDocumentHeader(t.toJson(), 0L,0,"","");
+			Integer idcompany = securityContextInitializer.getIdCompany();
+			String coduser = securityContextInitializer.getCodUser();
+			Map<String, Object> obj = this.documentHeaderRepository.registerDocumentHeader(idcompany,coduser,t.toJson(), 0L,0,"","");
 			for (String key : obj.keySet()) {
 				Object value = obj.get(key);
 				System.out.println("Clave: " + key + ", Valor: " + value);
@@ -51,7 +59,7 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 			if ((Integer) obj.get("out_code") < 0 ){
 				throw new GenericObjectServiceException(obj.get("out_message").toString(), obj.get("out_log").toString());
 			}
-			Optional<DocumentHeaderEntity> tmp = this.documentHeaderRepository.findById((Long) obj.get("out_numint"));
+			Optional<DocumentHeaderEntity> tmp = this.documentHeaderRepository.findById(new DocumentHeaderPK(idcompany,(Long) obj.get("out_numint")));
 			return new ApiResponseObject<DocumentHeaderEntity>((Integer) obj.get("out_code"), obj.get("out_message").toString(), obj.get("out_log").toString(),tmp);
 		} catch (GenericProcedureException | JsonProcessingException e) {
 			throw new GenericObjectServiceException(e);
@@ -60,14 +68,24 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 
 	@Override
 	public ApiResponseList<DocumentInvoicePrint> printDocumentInvoice(Long numint) throws GenericListServiceException {
-		return new ApiResponseList<DocumentInvoicePrint>(1,"Ok",Optional.of(this.documentHeaderRepository.printDocumentInvoice(numint)));
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		List<DocumentInvoicePrint> list = this.documentHeaderRepository.printDocumentInvoice(idcompany,coduser,numint);
+		if (list.isEmpty()){
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(list));
 	}
 
 	@Override
 	public ApiResponseList<DocumentInvoiceSearch> searchDocumentInvoice(DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException {
 		try {
-			return new  ApiResponseList<DocumentInvoiceSearch>(1,"Ok",
-					Optional.of(this.documentHeaderRepository.searchDocumentInvoice(t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar())));
+			Integer idcompany = securityContextInitializer.getIdCompany();
+			List<DocumentInvoiceSearch> list = this.documentHeaderRepository.searchDocumentInvoice(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar());
+			if (list.isEmpty()){
+				throw new GenericListServiceException(404);
+			}
+			return new  ApiResponseList<>(Optional.of(list));
 		} catch (GenericFunctionException e) {
 			throw new GenericListServiceException(e);
 		}
@@ -76,7 +94,8 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 	@Override
 	public ApiResponsePage<DocumentInvoiceSearch> pageDocumentInvoice(DocumentInvoiceSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
 		try {
-			Page<DocumentInvoiceSearch> obj = this.documentHeaderRepository.pageDocumentInvoice(t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar(),pageable);
+			Integer idcompany = securityContextInitializer.getIdCompany();
+			Page<DocumentInvoiceSearch> obj = this.documentHeaderRepository.pageDocumentInvoice(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar(),pageable);
 			if (obj.isEmpty()){
 				throw new GenericPageServiceException(404);
 			}
@@ -88,19 +107,58 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 
 	@Override
 	public ApiResponseObject<?> calculateImportDocument(Long numint) throws GenericProcedureException {
-		Map<String, Object> obj = this.documentHeaderRepository.calculateImportDocument(numint,0,"","");
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		Map<String, Object> obj = this.documentHeaderRepository.calculateImportDocument(idcompany,coduser,numint,0,"","");
 		if ( (Integer) obj.get("out_code") < 0 ){
 			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
 		}
-		return new ApiResponseObject<>(1,"Ok",Optional.empty());
+		return new ApiResponseObject<>(Optional.empty());
 	}
 
 	@Override
-	public ApiResponseObject<?> cancelImportDocument(Long numint) throws GenericProcedureException {
-		Map<String, Object> obj = this.documentHeaderRepository.cancelImportDocument(numint,0,"","");
+	public ApiResponseObject<?> approvedImportDocument(Long numint) throws GenericProcedureException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		Map<String, Object> obj = this.documentHeaderRepository.approvedImportDocument(idcompany,coduser,numint,0,"","");
 		if ( (Integer) obj.get("out_code") < 0 ){
 			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
 		}
-		return new ApiResponseObject<>(1,"Ok",Optional.empty());
+		return new ApiResponseObject<>(Optional.empty());
+	}
+
+	@Override
+	public ApiResponseObject<?> onAccountImportDocument(Long numint) throws GenericProcedureException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		Map<String, Object> obj = this.documentHeaderRepository.onAccountImportDocument(idcompany,coduser,numint,0,"","");
+		if ( (Integer) obj.get("out_code") < 0 ){
+			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
+		}
+		return new ApiResponseObject<>(Optional.empty());
+	}
+
+	@Override
+	public ApiResponseObject<?> cancelImportDocument(Long numint, String commen) throws GenericProcedureException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		Map<String, Object> obj = this.documentHeaderRepository.cancelImportDocument(idcompany,coduser,numint,commen,0,"","");
+		if ( (Integer) obj.get("out_code") < 0 ){
+			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
+		}
+		return new ApiResponseObject<>(Optional.empty());
+	}
+
+	@Override
+	public ApiResponseObject<?> deleteImportDocument(Long numint, String commen) throws GenericProcedureException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		Map<String, Object> obj = this.documentHeaderRepository.deleteImportDocument(idcompany,coduser,numint,commen,0,"","");
+		log.info(obj.get("out_code").toString());
+		log.info("Error: {}, {}",obj.get("out_message").toString(),obj.get("out_log").toString());
+		if ( (Integer) obj.get("out_code") < 0 ){
+			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
+		}
+		return new ApiResponseObject<>(Optional.empty());
 	}
 }

@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = {"luis122448.SmartShell.security.api.repository",
+        basePackages = {"luis122448.SmartShell.security.application.repository",
                 "luis122448.SmartShell.application.domain.persistence.repository",
                 "luis122448.SmartShell.application.domain.persistence.repository.procedure"},
         entityManagerFactoryRef = "postgresEntityManagerFactory",
@@ -52,7 +52,7 @@ public class PostgresConfiguration {
             (EntityManagerFactoryBuilder builder,
              @Qualifier("postgresDataSource") DataSource dataSource){
         String[] packagesToScan = {
-                "luis122448.SmartShell.security.api.entity",
+                "luis122448.SmartShell.security.application.entity",
                 "luis122448.SmartShell.application.domain.persistence.entity",
                 "luis122448.SmartShell.application.domain.persistence.view"
         };

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.SituationCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.SituationCommercialDocumentPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -18,6 +18,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(schema = "smart_shell", name = "TBL_SITUATION_COMMERCIAL_DOCUMENT")
 public class SituationCommercialDocumentEntity extends AuditingEntity {
+    @Id
+    private Integer idcompany;
     @Id
     public Integer typcomdoc;
     @Id

@@ -3,6 +3,7 @@ package luis122448.SmartShell.application.domain.web.controller;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BUSINESS_PARTNER;
 
+import luis122448.SmartShell.application.domain.persistence.entity.key.BusparPaymentConditionPK;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,9 +52,7 @@ public class BusparPaymentConditionController {
 	
 	@DeleteMapping
 	public ResponseEntity<?> delete (@RequestParam(name = "codbuspar", defaultValue = "") String codbuspar, @RequestParam(name = "typpaycon", defaultValue = "") Short typpaycon ) throws GenericObjectServiceException {
-		BusparPaymentConditionEntity tmp = new BusparPaymentConditionEntity();
-		tmp.setCodbuspar(codbuspar);
-		tmp.setTyppaycon(typpaycon);
+		BusparPaymentConditionPK tmp = new BusparPaymentConditionPK(0, codbuspar, typpaycon);
 		ApiResponseObject<BusparPaymentConditionEntity> lst = this.intcomCondicionPago.delete(tmp);
 		return ResponseEntity.ok(lst);
 	}

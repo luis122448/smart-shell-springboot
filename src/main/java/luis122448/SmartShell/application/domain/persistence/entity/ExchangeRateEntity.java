@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.ExchangeRatePK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ExchangeRatePK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -18,6 +18,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(schema = "smart_shell", name= "TBL_EXCHANGE_RATE")
 @Entity
 public class ExchangeRateEntity extends AuditingEntity {
+    @Id
+    private Integer idcompany;
 	@Id
     private LocalDate registdate;
 	@Id

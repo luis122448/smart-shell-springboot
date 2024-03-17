@@ -8,6 +8,7 @@ Repositorio con el código fuente y los scripts necesarios para el despliegue de
 - Implementa doble capa de seguridad con Spring Security y JWT.
 - API RESTFULL con autenticación JWT y Hateoas.
 - API REST para subida y descarga de archivos y reportes.
+- Paginación y ordenamiento de resultados.
 - Optimización de caching con Redis.
 - Gestión de dependencias con Maven.
 - Conexión simultanea a tres bases de datos Postgres, Mongo y Redis.

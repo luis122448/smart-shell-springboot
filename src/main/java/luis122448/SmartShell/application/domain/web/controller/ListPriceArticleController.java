@@ -64,7 +64,7 @@ public class ListPriceArticleController {
     public ResponseEntity<?> findAll(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice) throws GenericListServiceException {
         ListPriceArticleEntity tmp = new ListPriceArticleEntity();
         tmp.setCodlistprice(codlistprice);
-        ApiResponseList<ListPriceArticleEntity> obj = this.listPriceArticleService.findAll(tmp);
+        ApiResponseList<ListPriceArticleEntity> obj = this.listPriceArticleService.findByCodlistprice(tmp);
         return ResponseEntity.ok(obj);
     }
 

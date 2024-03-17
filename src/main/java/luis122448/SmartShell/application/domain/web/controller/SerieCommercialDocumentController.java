@@ -1,10 +1,8 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
-import static java.util.Objects.isNull;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 
-import luis122448.SmartShell.application.domain.domain.service.implement.SerieCommercialDocumentServiceImpl;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
@@ -15,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.persistence.entity.SerieCommercialDocumentEntity;
 import luis122448.SmartShell.application.domain.domain.service.service.SerieCommercialDocumentService;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
-
-import java.util.Optional;
 
 @Slf4j
 @RestController

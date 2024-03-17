@@ -88,15 +88,46 @@ private final DocumentInvoiceReport documentInvoiceReport;
         return ResponseEntity.ok(tmp);
     }
 
+    @GetMapping("/by-numint")
+    public ResponseEntity<?> findByNumint(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericObjectServiceException, GenericListServiceException {
+        return ResponseEntity.ok(this.documentInvoiceUseCase.findByNumint(numint));
+    }
+
     @PostMapping("")
     public ResponseEntity<?> registerDocument(@RequestBody DocumentInvoiceRegisterDTO obj) throws GenericObjectServiceException, GenericProcedureException {
         ApiResponseObject<DocumentInvoiceBasicDTO> tmp = this.documentInvoiceUseCase.registerDocument(obj);
         return ResponseEntity.status(HttpStatus.CREATED).body(tmp);
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<?> cancelDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericProcedureException {
-        ApiResponseObject<?> tmp = this.documentInvoiceUseCase.cancelDocument(numint);
+    @PutMapping("")
+    public ResponseEntity<?> modifyDocument(@RequestBody DocumentInvoiceRegisterDTO obj) throws GenericObjectServiceException, GenericProcedureException {
+        ApiResponseObject<DocumentInvoiceBasicDTO> tmp = this.documentInvoiceUseCase.modifyDocument(obj);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tmp);
+    }
+
+    @PutMapping("/approved")
+    public ResponseEntity<?> approvedDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericProcedureException {
+        ApiResponseObject<?> tmp = this.documentInvoiceUseCase.approvedDocument(numint);
+        return ResponseEntity.ok(tmp);
+    }
+
+    @PutMapping("/on-account")
+    public ResponseEntity<?> onAccountDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericProcedureException {
+        ApiResponseObject<?> tmp = this.documentInvoiceUseCase.onAccountDocument(numint);
+        return ResponseEntity.ok(tmp);
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<?> cancelDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint,
+                                            @RequestParam(name = "commen", defaultValue = "") String commen) throws GenericProcedureException {
+        ApiResponseObject<?> tmp = this.documentInvoiceUseCase.cancelDocument(numint,commen);
+        return ResponseEntity.ok(tmp);
+    }
+
+    @PutMapping("/delete")
+    public ResponseEntity<?> deleteDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint,
+                                            @RequestParam(name = "commen", defaultValue = "") String commen) throws GenericProcedureException {
+        ApiResponseObject<?> tmp = this.documentInvoiceUseCase.deleteDocument(numint,commen);
         return ResponseEntity.ok(tmp);
     }
 

@@ -1,65 +1,30 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.stereotype.Service;
 
 import luis122448.SmartShell.application.domain.persistence.entity.TypeCommercialDocumentEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.TypeCommercialDocumentRepository;
-import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.TypeCommercialDocumentService;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
-import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
 import java.util.Optional;
 
 @Service
 public class TypeCommercialDocumentServiceImp implements TypeCommercialDocumentService {
-
 	private final TypeCommercialDocumentRepository typeCommercialDocumentRepository;
+	private final SecurityContextInitializer securityContextInitializer;
 	public TypeCommercialDocumentServiceImp(
-			TypeCommercialDocumentRepository typeCommercialDocumentRepository) {
-		super();
+			TypeCommercialDocumentRepository typeCommercialDocumentRepository, SecurityContextInitializer securityContextInitializer) {
 		this.typeCommercialDocumentRepository = typeCommercialDocumentRepository;
+		this.securityContextInitializer = securityContextInitializer;
 	}
 
 	@Override
-	public ApiResponseList<TypeCommercialDocumentEntity> findAll(TypeCommercialDocumentEntity t) throws GenericListServiceException {
-		return new ApiResponseList<TypeCommercialDocumentEntity>(1,"Ok",Optional.of(typeCommercialDocumentRepository.findAll()));
+	public ApiResponseList<TypeCommercialDocumentEntity> findAll() throws GenericListServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		return new ApiResponseList<>(Optional.of(typeCommercialDocumentRepository.findByIdcompany(idcompany)));
 	}
 
-	@Override
-	public ApiResponseList<TypeCommercialDocumentEntity> findByLike(TypeCommercialDocumentEntity t) throws GenericListServiceException {
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeCommercialDocumentEntity> findById(TypeCommercialDocumentEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeCommercialDocumentEntity> save(TypeCommercialDocumentEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeCommercialDocumentEntity> update(TypeCommercialDocumentEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeCommercialDocumentEntity> delete(TypeCommercialDocumentEntity t) throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ApiResponseObject<TypeCommercialDocumentEntity> undelete(TypeCommercialDocumentEntity t)
-			throws GenericObjectServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

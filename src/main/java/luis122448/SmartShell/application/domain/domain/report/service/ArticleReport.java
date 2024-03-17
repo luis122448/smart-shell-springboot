@@ -1,8 +1,10 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
 import lombok.extern.slf4j.Slf4j;
+import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.TypeInventoryPK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.TypeInventoryRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
@@ -32,15 +34,16 @@ import static luis122448.SmartShell.util.code.Utils.*;
 @Slf4j
 @Service
 public class ArticleReport {
-
     private final ArticleRepository articleRepository;
     private final TypeInventoryRepository typeInventoryRepository;
     private final GenericReport genericReport;
+    private final SecurityContextInitializer securityContextInitializer;
 
-    public ArticleReport(ArticleRepository articleRepository, TypeInventoryRepository typeInventoryRepository, GenericReport genericReport) {
+    public ArticleReport(ArticleRepository articleRepository, TypeInventoryRepository typeInventoryRepository, GenericReport genericReport, SecurityContextInitializer securityContextInitializer) {
         this.articleRepository = articleRepository;
         this.typeInventoryRepository = typeInventoryRepository;
         this.genericReport = genericReport;
+        this.securityContextInitializer = securityContextInitializer;
     }
     public static final String NAME_ARTICLE = "ARTICLE IMPORT";
     public static final String TITLE_ARTICLE = "REPORT OF IMPORT ERROR OF ARTICLE";
@@ -80,7 +83,8 @@ public class ArticleReport {
 
     private XSSFWorkbook generateXSSFWorkbook(Integer typinv) throws GenericByteServiceException, GenericListServiceException {
         try{
-            List<ArticleEntity> articleEntityList = this.articleRepository.findByTypinv(typinv);
+            Integer idcompany = securityContextInitializer.getIdCompany();
+            List<ArticleEntity> articleEntityList = this.articleRepository.findByIdcompanyAndTypinv(idcompany, typinv);
             File file = new File(FORMAT_ARTICLE);
             InputStream inputStream = new FileInputStream(file);
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
@@ -184,12 +188,11 @@ public class ArticleReport {
     }
 
     public ApiResponseReport<?> validateAndImportList(List<ArticleEntity> articleEntityList, Integer startRow, Integer lastRow) throws JRException,GenericByteServiceException {
-
+        Integer idcompany = securityContextInitializer.getIdCompany();
         List<ImportErrorModel> importErrorModelList = new ArrayList<>();
-
         Integer currentRow = startRow;
         for (ArticleEntity entity : articleEntityList) {
-            if(!this.typeInventoryRepository.existsById(entity.getTypinv())){
+            if(!this.typeInventoryRepository.existsById(new TypeInventoryPK(idcompany, entity.getTypinv()))){
                 ImportErrorModel importErrorModel = new ImportErrorModel(currentRow, entity.getTypinv().toString(),"TYPE INVENTORY NOT EXISTS");
                 importErrorModelList.add(importErrorModel);
             }

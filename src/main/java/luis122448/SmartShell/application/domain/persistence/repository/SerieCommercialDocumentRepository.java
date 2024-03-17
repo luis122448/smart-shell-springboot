@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import luis122448.SmartShell.application.domain.persistence.entity.SerieCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
 
 public interface SerieCommercialDocumentRepository extends JpaRepository<SerieCommercialDocumentEntity, SerieCommercialDocumentPK> {
     
-	@Query("SELECT sdc FROM SerieCommercialDocumentEntity sdc WHERE sdc.typcomdoc = :typcomdoc AND sdc.status ='Y'")
-    List<SerieCommercialDocumentEntity> findByTypcomdoc(@Param("typcomdoc") Integer typcomdoc);
+	@Query("SELECT sdc FROM SerieCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany AND sdc.typcomdoc = :typcomdoc AND sdc.status ='Y'")
+    List<SerieCommercialDocumentEntity> findByIdcompanyAndTypcomdoc(@Param("idcompany") Integer idcompany, @Param("typcomdoc") Integer typcomdoc);
+
+    List<SerieCommercialDocumentEntity> findByIdcompany(Integer idcompany);
 
 }

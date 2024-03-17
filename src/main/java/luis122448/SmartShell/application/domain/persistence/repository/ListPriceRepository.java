@@ -1,7 +1,11 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ListPricePK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ListPriceRepository extends JpaRepository<ListPriceEntity, Integer> {
+import java.util.List;
+
+public interface ListPriceRepository extends JpaRepository<ListPriceEntity, ListPricePK> {
+    List<ListPriceEntity> findByIdcompany(Integer idcompany);
 }

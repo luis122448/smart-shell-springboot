@@ -23,6 +23,7 @@ public class TypeInventoryCache {
         List<TypeInventoryEntity> typeInventoryEntityList = this.typeInventoryRepository.findAll();
         for (TypeInventoryEntity typeInventoryEntity : typeInventoryEntityList) {
             TypeInventoryRedis typeInventoryRedis = TypeInventoryRedis.builder()
+                    .idcompany(typeInventoryEntity.getIdcompany())
                     .typinv(typeInventoryEntity.getTypinv())
                     .abrevi(typeInventoryEntity.getAbrevi())
                     .descri(typeInventoryEntity.getDescri())

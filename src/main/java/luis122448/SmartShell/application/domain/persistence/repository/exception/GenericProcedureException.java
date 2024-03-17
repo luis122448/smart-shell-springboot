@@ -7,10 +7,14 @@ import lombok.Setter;
 @Setter
 public class GenericProcedureException extends Exception {
 
+	private Integer status;
+	private String message;
 	private String logMessage;
 	public GenericProcedureException() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.status = 400;
+		this.message = message;
+		this.logMessage = message;
 	}
 
 	public GenericProcedureException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
@@ -25,21 +29,27 @@ public class GenericProcedureException extends Exception {
 
 	public GenericProcedureException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
+		this.status = 400;
+		this.message = message;
+		this.logMessage = message;
 	}
 
 	public GenericProcedureException(String message ,String logMessage) {
 		super(message);
+		this.status = 400;
+		this.message = message;
 		this.logMessage = logMessage;
 	}
 
 	public GenericProcedureException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
+		this.status = 400;
 	}
 
 	public GenericProcedureException(String message ,String logMessage, Throwable cause) {
 		super(message, cause);
+		this.status = 400;
+		this.message = message;
 		this.logMessage = logMessage;
 	}
 

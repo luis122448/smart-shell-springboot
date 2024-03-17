@@ -1,7 +1,8 @@
 package luis122448.SmartShell.application.domain.domain.service.service;
 
-import luis122448.SmartShell.application.domain.domain.service.generic.GenericService;
+import luis122448.SmartShell.application.domain.domain.service.generic.GenericSearchService;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleSpecificationPK;
 
-public interface ArticleSpecificationService extends GenericService<ArticleSpecificationEntity> {
+public interface ArticleSpecificationService extends GenericSearchService<ArticleSpecificationEntity, ArticleSpecificationPK> {
 }

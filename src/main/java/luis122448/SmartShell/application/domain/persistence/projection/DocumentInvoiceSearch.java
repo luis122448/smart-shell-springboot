@@ -31,10 +31,14 @@ public interface DocumentInvoiceSearch {
     Long getNumint();
     Long getNumdoc();
     String getSerie();
+    Integer getTypcomdoc();
     String getDestypcomdoc();
+    Integer getSitcomdoc();
     String getDessitcomdoc();
     LocalDate getRegistdate();
+    Integer getIngsalcom();
     String getDesingsalcom();
+    Integer getReacomdoc();
     String getDesreacomdoc();
     String getCodbuspar();
     String getBusnam();

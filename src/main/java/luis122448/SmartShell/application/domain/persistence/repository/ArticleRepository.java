@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import java.util.List;
 
-import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,20 +12,20 @@ import org.springframework.data.repository.query.Param;
 
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 
-public interface ArticleRepository extends JpaRepository<ArticleEntity, String>{
+public interface ArticleRepository extends JpaRepository<ArticleEntity, ArticlePK>{
 	
-    @Query("SELECT a FROM ArticleEntity a WHERE a.codart LIKE CONCAT('%', :codart, '%') AND a.status = 'Y'")
-    List<ArticleEntity> findByCodart(@Param("codart") String codart);
+    @Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart LIKE CONCAT('%', :codart, '%') AND a.status = 'Y'")
+    List<ArticleEntity> findByCodart(@Param("idcompany") Integer idcompany, @Param("codart") String codart);
 
-    @Query("SELECT a FROM ArticleEntity a WHERE UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%') AND a.status = 'Y'")
-    List<ArticleEntity> findByDescri(@Param("descri") String descri);
+    @Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%') AND a.status = 'Y'")
+    List<ArticleEntity> findByDescri(@Param("idcompany") Integer idcompany, @Param("descri") String descri);
 
-	@Query("SELECT a FROM ArticleEntity a WHERE a.codart LIKE CONCAT('%', :codart, '%') AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%')")
-	Page<ArticleEntity> findByPage(@Param("codart") String codart, @Param("descri") String descri, Pageable pageable);
+	@Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart LIKE CONCAT('%', :codart, '%') AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%')")
+	Page<ArticleEntity> findByPage(@Param("idcompany") Integer idcompany, @Param("codart") String codart, @Param("descri") String descri, Pageable pageable);
 
-    @Query(value = "SELECT a FROM ArticleEntity a WHERE a.codart NOT IN (SELECT l.codart FROM ListPriceArticleEntity l WHERE l.codlistprice = :codlistprice) AND a.status = 'Y'")
-    List<ArticleEntity> findByArticleNotExistsListPrice(@Param(value = "codlistprice") Integer codlistprice) throws GenericListServiceException;
+    @Query(value = "SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart NOT IN (SELECT l.codart FROM ListPriceArticleEntity l WHERE l.codlistprice = :codlistprice) AND a.status = 'Y'")
+    List<ArticleEntity> findByArticleNotExistsListPrice(@Param("idcompany") Integer idcompany, @Param(value = "codlistprice") Integer codlistprice) throws GenericListServiceException;
 
-    List<ArticleEntity> findByTypinv(@Param("typinv") Integer typinv);
+    List<ArticleEntity> findByIdcompanyAndTypinv(@Param("idcompany") Integer idcompany, @Param("typinv") Integer typinv);
 
 }

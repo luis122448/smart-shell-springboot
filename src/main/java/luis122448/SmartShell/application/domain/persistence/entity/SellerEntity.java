@@ -2,12 +2,10 @@ package luis122448.SmartShell.application.domain.persistence.entity;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.key.SellerPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -15,9 +13,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
+@IdClass(SellerPK.class)
 @Table(schema = "smart_shell", name= "TBL_SELLER")
 @Entity
 public class SellerEntity extends AuditingEntity {
+    @Id
+    private Integer idcompany;
     @Id
     private String codsel;
     private String abrevi;
