@@ -37,7 +37,6 @@ build/
 .env
 
 ### SSH ###
-**/src/main/resorces/key
 *.cert
 *.pem
 *.p12
