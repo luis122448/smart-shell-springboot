@@ -6,9 +6,9 @@ import luis122448.SmartShell.application.domain.domain.component.SecurityContext
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleAttachedEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleAttachedPK;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleSpecificationPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleAttachedPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleSpecificationPK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleAttachedRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleSpecificationRepository;

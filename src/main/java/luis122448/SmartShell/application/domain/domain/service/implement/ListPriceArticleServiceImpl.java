@@ -6,7 +6,7 @@ import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ListPriceArticleService;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ListPriceArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ListPriceArticlePK;
 import luis122448.SmartShell.application.domain.persistence.repository.ListPriceArticleRepository;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;

@@ -1,4 +1,4 @@
-package luis122448.SmartShell.application.domain.persistence.entity.key;
+package luis122448.SmartShell.application.domain.persistence.entity.primary;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentHeaderPK implements Serializable {
+public class ArticleAttachedPK implements Serializable {
     private Integer idcompany;
-    private Long numint;
+    private String codart;
+    private Integer typspe;
 }

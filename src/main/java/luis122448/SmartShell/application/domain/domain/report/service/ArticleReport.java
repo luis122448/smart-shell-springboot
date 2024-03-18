@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.TypeInventoryPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.TypeInventoryPK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.TypeInventoryRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;

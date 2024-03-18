@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchFilterDTO;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;

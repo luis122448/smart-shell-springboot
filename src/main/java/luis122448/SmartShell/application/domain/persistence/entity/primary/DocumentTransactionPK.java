@@ -1,6 +1,5 @@
-package luis122448.SmartShell.application.domain.persistence.entity.key;
+package luis122448.SmartShell.application.domain.persistence.entity.primary;
 
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

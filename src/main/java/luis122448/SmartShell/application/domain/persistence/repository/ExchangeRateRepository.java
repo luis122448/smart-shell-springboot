@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import luis122448.SmartShell.application.domain.persistence.entity.ExchangeRateEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ExchangeRatePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ExchangeRatePK;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity, ExchangeRatePK>{
 

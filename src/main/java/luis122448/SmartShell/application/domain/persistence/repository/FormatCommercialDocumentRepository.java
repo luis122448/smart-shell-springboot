@@ -1,7 +1,7 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.FormatCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.FormatCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

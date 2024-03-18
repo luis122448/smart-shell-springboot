@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import org.springframework.cache.annotation.Cacheable;

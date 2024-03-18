@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import luis122448.SmartShell.application.domain.persistence.entity.SerieCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
 
 public interface SerieCommercialDocumentRepository extends JpaRepository<SerieCommercialDocumentEntity, SerieCommercialDocumentPK> {
     

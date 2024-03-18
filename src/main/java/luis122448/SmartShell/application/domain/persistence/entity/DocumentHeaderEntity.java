@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 //@NamedStoredProcedureQueries({

@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import java.util.List;
 
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

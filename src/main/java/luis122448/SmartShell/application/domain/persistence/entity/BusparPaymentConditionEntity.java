@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.*;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.BusparPaymentConditionPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.BusparPaymentConditionPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter

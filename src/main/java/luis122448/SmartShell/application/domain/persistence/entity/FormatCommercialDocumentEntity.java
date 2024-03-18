@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.FormatCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter

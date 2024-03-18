@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 import java.util.Optional;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.BusinessPartnerPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.BusinessPartnerPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.application.domain.persistence.repository.constants.LIMITConstants;

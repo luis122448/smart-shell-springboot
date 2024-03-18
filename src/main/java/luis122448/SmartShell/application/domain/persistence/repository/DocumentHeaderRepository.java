@@ -1,6 +1,6 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
-import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;

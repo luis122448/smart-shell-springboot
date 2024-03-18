@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ListPriceArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ListPriceArticlePK;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

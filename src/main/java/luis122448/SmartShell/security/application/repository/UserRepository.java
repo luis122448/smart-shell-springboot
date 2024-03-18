@@ -1,7 +1,7 @@
 package luis122448.SmartShell.security.application.repository;
 
 import luis122448.SmartShell.security.application.entity.UserEntity;
-import luis122448.SmartShell.security.application.entity.key.UserKey;
+import luis122448.SmartShell.security.application.entity.primary.UserKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

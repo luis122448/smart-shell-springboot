@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleSpecificationService;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleSpecificationPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleSpecificationPK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleSpecificationRepository;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;

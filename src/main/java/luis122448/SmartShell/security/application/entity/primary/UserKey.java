@@ -1,4 +1,4 @@
-package luis122448.SmartShell.security.application.entity.key;
+package luis122448.SmartShell.security.application.entity.primary;
 
 import lombok.*;
 

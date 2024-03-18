@@ -1,7 +1,7 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ListPricePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ListPricePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ListPriceService;

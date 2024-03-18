@@ -1,13 +1,9 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
-import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import luis122448.SmartShell.application.domain.persistence.entity.SerieCommercialDocumentEntity;

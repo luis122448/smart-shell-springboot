@@ -1,7 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.usecase;
 
 import luis122448.SmartShell.application.domain.domain.model.*;
-import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentHeaderPK;
 import luis122448.SmartShell.application.domain.persistence.mapper.DocumentInvoiceMapper;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

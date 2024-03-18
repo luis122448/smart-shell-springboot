@@ -10,7 +10,7 @@ import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.stereotype.Service;
 
 import luis122448.SmartShell.application.domain.persistence.entity.ExchangeRateEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ExchangeRatePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ExchangeRatePK;
 import luis122448.SmartShell.application.domain.persistence.repository.ExchangeRateRepository;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ExchangeRateService;

@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 import java.util.Optional;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.entity.key.BusparPaymentConditionPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.BusparPaymentConditionPK;
 import org.springframework.stereotype.Service;
 
 import luis122448.SmartShell.application.domain.persistence.entity.BusparPaymentConditionEntity;

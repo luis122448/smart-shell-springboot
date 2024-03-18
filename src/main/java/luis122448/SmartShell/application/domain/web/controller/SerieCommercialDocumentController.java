@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.web.controller;
 
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 
-import luis122448.SmartShell.application.domain.persistence.entity.key.SerieCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.SerieCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;

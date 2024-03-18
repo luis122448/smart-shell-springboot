@@ -1,6 +1,6 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
-import luis122448.SmartShell.application.domain.persistence.entity.key.TypeInventoryPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.TypeInventoryPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.TypeInventoryEntity;

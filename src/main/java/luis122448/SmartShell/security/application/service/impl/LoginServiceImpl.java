@@ -2,7 +2,7 @@ package luis122448.SmartShell.security.application.service.impl;
 
 import luis122448.SmartShell.security.application.entity.CompanyInfoEntity;
 import luis122448.SmartShell.security.application.entity.UserEntity;
-import luis122448.SmartShell.security.application.entity.key.UserKey;
+import luis122448.SmartShell.security.application.entity.primary.UserKey;
 import luis122448.SmartShell.security.application.repository.CompanyInfoRepository;
 import luis122448.SmartShell.security.application.repository.UserRepository;
 import luis122448.SmartShell.security.application.service.model.UserModel;

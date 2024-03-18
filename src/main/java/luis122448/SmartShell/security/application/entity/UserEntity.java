@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import luis122448.SmartShell.security.application.entity.key.UserKey;
+import luis122448.SmartShell.security.application.entity.primary.UserKey;
 
 import java.time.LocalDate;
 

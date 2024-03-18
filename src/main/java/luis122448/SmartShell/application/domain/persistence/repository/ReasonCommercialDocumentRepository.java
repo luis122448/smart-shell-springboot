@@ -2,10 +2,8 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.persistence.entity.ReasonCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ReasonCommercialDocumentPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ReasonCommercialDocumentPK;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

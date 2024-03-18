@@ -1,4 +1,4 @@
-package luis122448.SmartShell.application.domain.persistence.entity.key;
+package luis122448.SmartShell.application.domain.persistence.entity.primary;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusparPaymentConditionPK implements Serializable {
+public class TypeInventoryPK implements Serializable {
     private Integer idcompany;
-    private String codbuspar;
-	private Short typpaycon;
+    private Integer typinv;
 }

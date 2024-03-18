@@ -5,7 +5,7 @@ import luis122448.SmartShell.application.domain.domain.component.SecurityContext
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.ListPriceArticleEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
 import luis122448.SmartShell.application.domain.persistence.repository.ArticleRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.ListPriceArticleRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;

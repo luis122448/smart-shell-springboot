@@ -1,7 +1,7 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentDetailEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.DocumentDetailPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentDetailPK;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;

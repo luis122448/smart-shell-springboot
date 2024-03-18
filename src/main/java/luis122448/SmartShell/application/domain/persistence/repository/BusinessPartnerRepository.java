@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import java.util.List;
 
-import luis122448.SmartShell.application.domain.persistence.entity.key.BusinessPartnerPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.BusinessPartnerPK;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

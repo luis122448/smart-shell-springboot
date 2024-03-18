@@ -1,14 +1,15 @@
-package luis122448.SmartShell.application.domain.persistence.entity.key;
+package luis122448.SmartShell.application.domain.persistence.entity.primary;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticlePK implements Serializable {
+public class TypeBusinessPartnerPK implements Serializable {
     private Integer idcompany;
-    private String codart;
+    private Short typbuspar;
 }

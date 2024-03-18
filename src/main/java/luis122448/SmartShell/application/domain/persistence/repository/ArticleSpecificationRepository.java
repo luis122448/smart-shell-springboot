@@ -1,7 +1,7 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.key.ArticleSpecificationPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticleSpecificationPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
