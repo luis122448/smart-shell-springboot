@@ -21,7 +21,7 @@ COPY dev-install.sh /home/app
 RUN chmod +x /home/app/dev-install.sh
 RUN /home/app/dev-install.sh
 
-RUN mvn -f /home/app/pom.xml clean package -D spring.profiles.active=pdn
+RUN mvn -f /home/app/pom.xml clean package -Dspring.profiles.active=pdn
 
 # Package stage
 FROM openjdk:21
