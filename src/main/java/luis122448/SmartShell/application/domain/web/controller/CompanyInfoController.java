@@ -19,9 +19,9 @@ public class CompanyInfoController {
         this.companyInfoService = companyInfoService;
     }
 
-    @GetMapping("/by-all")
-    public ResponseEntity<?> findAll() throws GenericListServiceException{
-        ApiResponseList<CompanyInfoEntity> obj = this.companyInfoService.findAll();
+    @GetMapping("/by-idcompany")
+    public ResponseEntity<?> findByIdcompany() throws GenericListServiceException{
+        ApiResponseObject<CompanyInfoEntity> obj = this.companyInfoService.findByIdcompany();
         return ResponseEntity.ok(obj);
     }
 

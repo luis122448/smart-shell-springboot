@@ -5,6 +5,7 @@ import luis122448.SmartShell.security.application.entity.UserEntity;
 import luis122448.SmartShell.security.application.entity.primary.UserKey;
 import luis122448.SmartShell.security.application.repository.CompanyInfoRepository;
 import luis122448.SmartShell.security.application.repository.UserRepository;
+import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.application.service.model.UserModel;
 import luis122448.SmartShell.security.application.service.service.LoginService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,9 +23,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public UserModel login(String company, String coduser) throws Exception {
-        CompanyInfoEntity companyEntity = this.companyInfoRepository.findByCompany(company).orElseThrow(() -> new Exception("COMPANY SSN INVALID!"));
-        UserEntity userEntity = this.usuarioRepository.findById(new UserKey(companyEntity.getIdcompany(), coduser)).orElseThrow(() -> new Exception("USERNAME NOT EXISTS!"));
+    public UserModel login(String company, String coduser) throws GenericAuthServiceException {
+        CompanyInfoEntity companyEntity = this.companyInfoRepository.findByCompany(company).orElseThrow(() -> new GenericAuthServiceException("COMPANY SSN INVALID!"));
+        UserEntity userEntity = this.usuarioRepository.findById(new UserKey(companyEntity.getIdcompany(), coduser)).orElseThrow(() -> new GenericAuthServiceException("USERNAME NOT EXISTS!"));
         return UserModel.builder()
                 .idcompany(companyEntity.getIdcompany())
                 .company(companyEntity.getCompany())

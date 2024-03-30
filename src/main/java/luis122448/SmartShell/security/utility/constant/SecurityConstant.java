@@ -25,9 +25,8 @@ public class SecurityConstant {
  //https://www.allkeysgenerator.com/ Encryption key 512-bit
  
  public static final String SUPER_SECRET_KEY = "r4u7x!A%D*G-KaP"; //123
- 
- 
- public static final long 	TOKEN_EXPIRATION_TIME_TOKEN = 15_000_000_00; // 1 day  86_400_000
+
+ public static final long 	TOKEN_EXPIRATION_TIME_TOKEN = 36_000_000; // 1 day  86_400_000
 
  public static final long 	TOKEN_EXPIRATION_TIME_REFRESH_TOKEN = 600_000; // 1 day  86_400_000
 

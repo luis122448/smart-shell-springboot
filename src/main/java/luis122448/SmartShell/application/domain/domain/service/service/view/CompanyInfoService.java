@@ -8,6 +8,6 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 
 public interface CompanyInfoService{
-    ApiResponseList<CompanyInfoEntity> findAll() throws GenericListServiceException;
+    ApiResponseObject<CompanyInfoEntity> findByIdcompany() throws GenericListServiceException;
     ApiResponseObject<CompanyInfoEntity> update(CompanyInfoEntity companyInfoEntity) throws GenericObjectServiceException;
 }

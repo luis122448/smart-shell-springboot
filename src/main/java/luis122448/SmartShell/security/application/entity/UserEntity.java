@@ -39,4 +39,6 @@ public class UserEntity {
     private String email;
     private LocalDate registdate;
     private LocalDate expiredate;
+    private byte[] image;
+    private byte[] gloss;
 }

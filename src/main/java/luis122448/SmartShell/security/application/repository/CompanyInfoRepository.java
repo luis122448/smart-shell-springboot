@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CompanyInfoRepository extends JpaRepository<CompanyInfoEntity, Integer> {
 
     Optional<CompanyInfoEntity> findByCompany(@Param("company") String company);
+
 }

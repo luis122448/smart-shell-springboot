@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
 import luis122448.SmartShell.security.auth.user.UserDetailsServiceCustom;
 import luis122448.SmartShell.security.utility.constant.SecurityConstant;
@@ -54,18 +57,26 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			else {
 				log.info("No Token");
 			}
-		} catch (SecurityException e){
+		} catch (SecurityException | GenericAuthServiceException e){
+			log.info("SecurityException | GenericAuthServiceException {}", e.getMessage());
 			handleAuthenticationException(response, e);
 		} finally {
 			filterChain.doFilter(request, response);
 		}
 	}
 
-	private void handleAuthenticationException(HttpServletResponse response, SecurityException e) throws IOException {
+	private void handleAuthenticationException(HttpServletResponse response, Exception e) throws IOException {
 		log.info("handleAuthenticationException {}", e.getMessage());
-		ApiResponseObject<?> apiResponseObject = new ApiResponseObject<Object>(-401, e.getMessage(), e.getCause().getMessage(), Optional.empty());
+		String logMessage = e.getMessage();
+		if (e.getCause() != null){
+			logMessage = e.getCause().getMessage();
+		}
+		ApiResponseObject<?> apiResponseObject = new ApiResponseObject<>(-401, e.getMessage(), logMessage, Optional.empty());
 
 		// Convert apiResponseObject a JSON
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.registerModule(new Jdk8Module());
 		String jsonResponse = objectMapper.writeValueAsString(apiResponseObject);
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

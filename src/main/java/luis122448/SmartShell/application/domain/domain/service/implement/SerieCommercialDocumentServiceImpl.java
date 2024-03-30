@@ -57,7 +57,6 @@ public class SerieCommercialDocumentServiceImpl implements SerieCommercialDocume
 		if (list.isEmpty()) {
 			throw new GenericListServiceException(404);
 		}
-
 		return new ApiResponseList<>(Optional.of(list));
 	}
 
@@ -73,6 +72,8 @@ public class SerieCommercialDocumentServiceImpl implements SerieCommercialDocume
 
 	@Override
 	public ApiResponseObject<SerieCommercialDocumentEntity> findById(SerieCommercialDocumentPK serieCommercialDocumentPK) throws GenericObjectServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		serieCommercialDocumentPK.setIdcompany(idcompany);
 		return new ApiResponseObject<>(serieCommercialDocumentRepository.findById(serieCommercialDocumentPK));
 	}
 

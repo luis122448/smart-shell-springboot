@@ -1,6 +1,7 @@
 package luis122448.SmartShell.security.auth.user;
 
 import lombok.extern.slf4j.Slf4j;
+import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.application.service.model.UserModel;
 import luis122448.SmartShell.security.application.service.service.LoginService;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,27 +46,23 @@ public class UserDetailsServiceCustom implements UserDetailsService {
         }
     }
 
-    public UserDetailsCustom loadUserByUsernameAndCompany(String company, String username) throws UsernameNotFoundException {
-        try{
-            UserModel userModel = this.loginService.login(company,username);
-            return UserDetailsCustom.builder()
-                    .idcompany(userModel.getIdcompany())
-                    .company(userModel.getCompany())
-                    .appellation(userModel.getAppellation())
-                    .coduser(userModel.getCoduser())
-                    .username(userModel.getUsername())
-                    .encode(userModel.getEncode())
-                    .nivel(userModel.getNivel())
-                    .code(userModel.getCode())
-                    .role(userModel.getRole())
-                    .authorities(getAuthorities(userModel.getRole()))
-                    .registdate(userModel.getRegistdate())
-                    .expiredate(userModel.getExpiredate())
-                    .status("Y")
-                    .build();
-        } catch (Exception e){
-            throw new UsernameNotFoundException("ERROR IN LOAD BY USERNAME", e);
-        }
+    public UserDetailsCustom loadUserByUsernameAndCompany(String company, String username) throws GenericAuthServiceException {
+        UserModel userModel = this.loginService.login(company,username);
+        return UserDetailsCustom.builder()
+                .idcompany(userModel.getIdcompany())
+                .company(userModel.getCompany())
+                .appellation(userModel.getAppellation())
+                .coduser(userModel.getCoduser())
+                .username(userModel.getUsername())
+                .encode(userModel.getEncode())
+                .nivel(userModel.getNivel())
+                .code(userModel.getCode())
+                .role(userModel.getRole())
+                .authorities(getAuthorities(userModel.getRole()))
+                .registdate(userModel.getRegistdate())
+                .expiredate(userModel.getExpiredate())
+                .status("Y")
+                .build();
     }
 
     private List<GrantedAuthority> getAuthorities(String role){

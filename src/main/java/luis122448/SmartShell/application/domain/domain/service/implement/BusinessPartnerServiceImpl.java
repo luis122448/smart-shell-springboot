@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
+import java.util.List;
 import java.util.Optional;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
@@ -49,13 +50,18 @@ public class BusinessPartnerServiceImpl implements BusinessPartnerService {
 			throws GenericListServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		Pageable p = PageRequest.of(0, LIMITConstants.LIMIT_STANDARD);
+		List<BusinessPartnerEntity> list = List.of();
 		if (!t.getCodbuspar().isEmpty()) {
-			return new ApiResponseList<BusinessPartnerEntity>(1,"Ok",Optional.ofNullable(this.businessPartnerRepository.findByCodbuspar(idcompany,t.getCodbuspar(),t.getStatus(),p)));
+			list = this.businessPartnerRepository.findByCodbuspar(idcompany,t.getCodbuspar(),t.getStatus(),p);
 		} else if(!t.getBusnam().isEmpty()) {
-			return new ApiResponseList<BusinessPartnerEntity>(1,"Ok",Optional.ofNullable(this.businessPartnerRepository.findByBusnam(idcompany,t.getBusnam(),t.getStatus(),p)));
+			list = this.businessPartnerRepository.findByBusnam(idcompany,t.getBusnam(),t.getStatus(),p);
 		} else {
-			return new ApiResponseList<BusinessPartnerEntity>(-2,"No Case",Optional.empty());
+			return new ApiResponseList<>(-2,"No Case",Optional.empty());
 		}
+		if (list.isEmpty()){
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<BusinessPartnerEntity>(Optional.of(list));
 	}
 
 	@Override

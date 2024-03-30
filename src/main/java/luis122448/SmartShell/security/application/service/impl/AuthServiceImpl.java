@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService{
 		return new ApiResponseAuth<>(this.createToken(userDetailsCustom));
 	}
 
-	private Optional<TokenModel> createToken(UserDetailsCustom userDetailsCustom) {
+	private Optional<TokenModel> createToken(UserDetailsCustom userDetailsCustom) throws GenericAuthServiceException {
 		String token = this.jwtUtils.generateJwtToken(userDetailsCustom.getCompany(), userDetailsCustom.getCoduser(), false);
 		String refreshToken = this.jwtUtils.generateJwtToken(userDetailsCustom.getCompany(), userDetailsCustom.getCoduser(), true);
 		return Optional.of(new TokenModel(userDetailsCustom.getCoduser(), userDetailsCustom.getRole(), token, refreshToken));

@@ -26,6 +26,7 @@ public class TypeBusinessPartnerEntity extends AuditingEntity {
     private String codext;
     private String observ;
     private String commen;
+    private String defaul;
     private String status;
 
 }

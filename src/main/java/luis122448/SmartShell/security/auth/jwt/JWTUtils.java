@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.jsonwebtoken.*;
+import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
 import luis122448.SmartShell.security.auth.user.UserDetailsServiceCustom;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class JWTUtils {
 		this.userDetailsServiceCustom = userDetailsServiceCustom;
 	}
 
-	public String generateJwtToken(String company, String usuario, Boolean swRefreshToken) throws SecurityException {
+	public String generateJwtToken(String company, String usuario, Boolean swRefreshToken) throws SecurityException, GenericAuthServiceException {
 		try {
 			UserDetailsCustom userDetailsCustom = userDetailsServiceCustom.loadUserByUsernameAndCompany(company, usuario);
 			long time= (!swRefreshToken)? SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN:SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN;
@@ -56,7 +57,7 @@ public class JWTUtils {
 					.builder()
 					.setSubject(coduser)
 					.setIssuedAt(new Date()).setIssuer(SecurityConstant.ISSUER_INFO)
-					.setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN))
+					.setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN +  SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN))
 					.signWith(SignatureAlgorithm.HS512, SecurityConstant.SUPER_SECRET_KEY)
 					.addClaims(tokenData)
 					.compact();

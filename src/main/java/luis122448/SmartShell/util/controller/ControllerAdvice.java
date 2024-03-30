@@ -13,6 +13,7 @@ import luis122448.SmartShell.util.object.api.ApiResponsePage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,8 +33,12 @@ public class ControllerAdvice {
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<?> ioExceptionHandler(Exception e){
-        ApiResponsePage<?> tmp = new ApiResponsePage<>(-2,ERROR_UNKNOWN,e.getMessage(),Optional.empty());
-        return new ResponseEntity<>(tmp, HttpStatus.OK);
+        String logMessage = e.getMessage();
+        if (e.getCause() != null){
+            logMessage = e.getCause().getMessage();
+        }
+        ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),logMessage,Optional.empty());
+        return new ResponseEntity<>(tmp, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = GenericObjectServiceException.class)
@@ -70,6 +75,16 @@ public class ControllerAdvice {
     public ResponseEntity<?> genericProcedureException(GenericProcedureException e){
         ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),e.getLogMessage(),Optional.empty());
         return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(e.getStatus()));
+    }
+
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    public ResponseEntity<?> usernameNotFoundException(UsernameNotFoundException e){
+        String logMessage = e.getMessage();
+        if (e.getCause() != null){
+            logMessage = e.getCause().getMessage();
+        }
+        ApiResponseObject<?> tmp = new ApiResponseObject<>(-2,e.getMessage(),logMessage,Optional.empty());
+        return new ResponseEntity<>(tmp, HttpStatusCode.valueOf(401));
     }
 
 }
