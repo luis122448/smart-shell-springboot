@@ -27,15 +27,16 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
     }
 
     @Override
-    public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDetailEntity t) throws GenericObjectServiceException {
+public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDetailEntity t) throws GenericObjectServiceException {
         try {
+            System.out.println("Json: " + t.toJson());
             Integer idcompany = securityContextInitializer.getIdCompany();
             String coduser = securityContextInitializer.getCodUser();
-            Map<String, Object> obj = this.documentDetailRepository.registerDocumentHeader(idcompany,coduser,t.toJson(), 0L,0,"","");
-//			for (String key : obj.keySet()) {
-//				Object value = obj.get(key);
-//				System.out.println("Clave: " + key + ", Valor: " + value);
-//			}
+            Map<String, Object> obj = this.documentDetailRepository.registerDocumentDetail(idcompany,coduser,t.toJson(), 0L,0,"","");
+			for (String key : obj.keySet()) {
+				Object value = obj.get(key);
+				System.out.println("Clave: " + key + ", Valor: " + value);
+			}
 //            if ((Integer) obj.get("out_code") >= 0) {
 //                Optional<DocumentHeaderEntity> tmp = this.documentDetailRepository.findById((Long) obj.get("out_numite"));
 //                return new ApiResponseObject<DocumentDetailEntity>((Integer) obj.get("out_code"), obj.get("out_message").toString(), obj.get("out_log").toString(),tmp);

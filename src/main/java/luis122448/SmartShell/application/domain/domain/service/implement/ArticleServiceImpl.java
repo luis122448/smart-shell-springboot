@@ -49,6 +49,16 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public ApiResponseList<ArticleEntity> findByName(String name) throws GenericListServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		List<ArticleEntity> list = this.articleRepository.findByDName(idcompany,name);
+		if (list.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<ArticleEntity>(Optional.of(list));
+	}
+
+	@Override
 	public ApiResponseObject<ArticleEntity> findById(ArticleEntity t) throws GenericObjectServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		Optional<ArticleEntity> articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart()));

@@ -57,6 +57,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 	@Override
 	public ApiResponseObject<ExchangeRateEntity> save(ExchangeRateEntity t) throws GenericObjectServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
+		t.setIdcompany(idcompany);
 		ExchangeRatePK tmp =  new ExchangeRatePK(idcompany,t.getRegistdate(),t.getOrigen(),t.getDestin());
 		if (this.exchangeRateRepository.existsById(tmp)){
 			throw new GenericObjectServiceException(ID_EXISTS(tmp.toString()));

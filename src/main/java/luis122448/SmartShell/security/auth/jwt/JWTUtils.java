@@ -28,7 +28,7 @@ public class JWTUtils {
 	public String generateJwtToken(String company, String usuario, Boolean swRefreshToken) throws SecurityException, GenericAuthServiceException {
 		try {
 			UserDetailsCustom userDetailsCustom = userDetailsServiceCustom.loadUserByUsernameAndCompany(company, usuario);
-			long time= (!swRefreshToken)? SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN:SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN;
+			long time= (!swRefreshToken)? SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN:( SecurityConstant.TOKEN_EXPIRATION_TIME_TOKEN + SecurityConstant.TOKEN_EXPIRATION_TIME_REFRESH_TOKEN);
 			Map<String, Object> tokenData = new HashMap<>();
 			tokenData.put(SecurityConstant.AUTHORITIES, userDetailsCustom.getAuthorities());
 			tokenData.put(SecurityConstant.IDCOMPANY, userDetailsCustom.getIdcompany());

@@ -20,6 +20,10 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, ArticleP
     @Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%') AND a.status = 'Y'")
     List<ArticleEntity> findByDescri(@Param("idcompany") Integer idcompany, @Param("descri") String descri);
 
+    @Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND UPPER(CONCAT(a.codart ,a.descri)) LIKE CONCAT('%', UPPER(:name), '%') AND a.status = 'Y' O" +
+            "RDER BY a.codart ASC LIMIT 25")
+    List<ArticleEntity> findByDName(@Param("idcompany") Integer idcompany, @Param("name") String name);
+
 	@Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart LIKE CONCAT('%', :codart, '%') AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%')")
 	Page<ArticleEntity> findByPage(@Param("idcompany") Integer idcompany, @Param("codart") String codart, @Param("descri") String descri, Pageable pageable);
 

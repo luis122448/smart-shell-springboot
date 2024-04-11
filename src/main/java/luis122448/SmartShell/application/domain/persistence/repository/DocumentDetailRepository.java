@@ -17,7 +17,7 @@ public interface DocumentDetailRepository extends JpaRepository<DocumentDetailEn
     List<DocumentDetailEntity> findByIdcompanyAndNumint(Integer idcompany, Long numint);
 
     @Query(value = "CALL PR_CREATE_DOCUMENT_DETAIL(:IN_IDCOMPANY,:IN_CODUSER,:IN_DOCUMENT,:OUT_NUMITE,:OUT_CODE,:OUT_MESSAGE,:OUT_LOG);", nativeQuery = true)
-    Map<String, Object> registerDocumentHeader(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+    Map<String, Object> registerDocumentDetail(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                @Param("IN_CODUSER") String IN_CODUSER,
                                                @Param("IN_DOCUMENT") String IN_DOCUMENT,
                                                @Param("OUT_NUMITE") Long OUT_NUMITE,

@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.usecase;
 
+import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.model.*;
 import luis122448.SmartShell.application.domain.persistence.mapper.DocumentInvoiceMapper;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class DocumentInvoiceUseCase {
 
     private final DocumentHeaderService documentHeaderService;
@@ -48,6 +50,7 @@ public class DocumentInvoiceUseCase {
         }
         Long numint = responseHeader.getObject().orElseThrow().getNumint();
         List<DocumentDetailEntity> listDetail = this.documentDetailMapper.toListDocumentDetailEntity(t.getDetails());
+        log.info("List Detail: {}",listDetail);
         for ( DocumentDetailEntity tmp : listDetail ){
             tmp.setNumint(numint);
             tmp.setNumite(0L);

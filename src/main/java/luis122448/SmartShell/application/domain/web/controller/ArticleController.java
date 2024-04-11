@@ -83,7 +83,13 @@ public class ArticleController {
 		ApiResponseList<ArticleEntity> lst = this.articleService.findByLike(ori);
 		return ResponseEntity.ok(lst);
 	}
-	
+
+	@GetMapping("/by-name")
+	public ResponseEntity<?> findByName (@RequestParam(name = "name", defaultValue = "") String name) throws GenericListServiceException {
+		ApiResponseList<ArticleEntity> lst = this.articleService.findByName(name);
+		return ResponseEntity.ok(lst);
+	}
+
 	@GetMapping("/by-page")
 	public ResponseEntity<?> findByPage (@RequestParam(name = "codart", defaultValue = "") String codart,
 			@RequestParam(name = "descri", defaultValue = "") String descri, Pageable p) throws GenericPageServiceException {
