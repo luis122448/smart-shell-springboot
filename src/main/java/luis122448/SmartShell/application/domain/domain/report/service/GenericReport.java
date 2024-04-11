@@ -50,18 +50,18 @@ public class GenericReport {
 
     public void genericValidExtensionArchive(String originalName, String extension) throws GenericByteServiceException {
         if (!extension.equalsIgnoreCase("all")) {
-            List<String> allowedExtensions = List.of(extension.split(","));
+            List<String> allowedExtensions = List.of(extension.toLowerCase().split(","));
             String fileExtension = getFileExtension(originalName);
             if (!allowedExtensions.contains(fileExtension.toLowerCase())) {
-                throw new GenericByteServiceException("INCORRECT FILE, ONLY FILES WITH A [ " + extension + " ] EXTENSION ARE ACCEPTED");
+                throw new GenericByteServiceException("INCORRECT FILE, ONLY FILES WITH A [ " + extension + " ] EXTENSION ARE ACCEPTED, NOT [ " + fileExtension + " ]");
             }
         }
     }
 
     public void genericValidNameArchive(String originalName, String name) throws GenericByteServiceException {
         if (!name.equalsIgnoreCase("all")) {
-            if (!originalName.startsWith(name)) {
-                throw new GenericByteServiceException("INCORRECT FILE, VERIFY THE NAME IS [ " + name + " ]");
+            if (!originalName.toLowerCase().startsWith(name.toLowerCase())) {
+                throw new GenericByteServiceException("INCORRECT FILE, VERIFY THE NAME WITH [ " + name + " ]");
             }
         }
     }
