@@ -72,6 +72,7 @@ public class ArticleAttachedArchive {
     }
 
     public ApiResponseObject<ArticleAttachedEntity> save(ArticleAttachedEntity articleAttachedEntity,  List<ArchiveEntity> archiveEntityList, List<MultipartFile> multipartFileList) throws GenericObjectServiceException, GenericByteServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
         String coduser = securityContextInitializer.getCodUser();
         ArticleSpecificationEntity articleSpecificationEntity = validateSave(articleAttachedEntity);
         if (articleSpecificationEntity.getMultip().equals("N")){
@@ -100,6 +101,8 @@ public class ArticleAttachedArchive {
             articleAttachedEntity.setArchive(articleSpecificationEntity.getTitle()+".zip");
             articleAttachedEntity.setIdMongo(apiResponseObject.getObject().orElseThrow().getId());
         }
+        articleAttachedEntity.setIdcompany(idcompany);
+        articleAttachedEntity.setStatus("Y");
         articleAttachedEntity.setCreateat(LocalDateTime.now());
         articleAttachedEntity.setUpdateat(LocalDateTime.now());
         articleAttachedEntity.setCreateby(coduser);
