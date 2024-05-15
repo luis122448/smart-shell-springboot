@@ -110,6 +110,10 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		String coduser = securityContextInitializer.getCodUser();
 		Map<String, Object> obj = this.documentHeaderRepository.calculateImportDocument(idcompany,coduser,numint,0,"","");
+		for (String key : obj.keySet()) {
+			Object value = obj.get(key);
+			System.out.println("Clave: " + key + ", Valor: " + value);
+		}
 		if ( (Integer) obj.get("out_code") < 0 ){
 			throw new GenericProcedureException(obj.get("out_message").toString(),obj.get("out_log").toString());
 		}
