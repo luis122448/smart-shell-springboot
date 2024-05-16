@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.util.ResourceUtils;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "SMART SHELL API",
@@ -19,21 +20,14 @@ public class SmartShellApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmartShellApplication.class, args);
-//		try {
-//			// Obtener el PATH relativo a tu proyecto
-//			String projectPath = ResourceUtils.getFile("classpath:").getAbsolutePath();
-//
-//			// Imprimir el PATH
-//			System.out.println("PATH del proyecto: " + projectPath);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 		try {
 			// Obtener el directorio raíz del proyecto
 			String projectRoot = System.getProperty("user.dir");
+			String projectPath = ResourceUtils.getFile("classpath:").getAbsolutePath();
 
 			// Imprimir el directorio raíz
 			System.out.println("Directorio raíz del proyecto: " + projectRoot);
+			System.out.println("PATH del proyecto: " + projectPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
