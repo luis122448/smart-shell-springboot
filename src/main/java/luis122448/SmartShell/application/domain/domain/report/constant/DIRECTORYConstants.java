@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 public class DIRECTORYConstants {
 
 //    public static Path projectRoot = Paths.get(System.getProperty("user.dir"));
-    public static final String projectRoot = "/home/app/";
+    public static final String projectRoot = "./home/app/";
     public static final String REPORT_DIRECTORY = projectRoot + "src/main/resources/archive/jasper/";
     public static final String EXCEL_DIRECTORY = projectRoot + "src/main/resources/archive/excel/";
 
