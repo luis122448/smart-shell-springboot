@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ private final DocumentInvoiceReport documentInvoiceReport;
     }
 
     @GetMapping("/print")
-    public ResponseEntity<?> printDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericListServiceException, JRException {
+    public ResponseEntity<?> printDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
         ApiResponseReport<?> tmp = this.documentInvoiceReport.invoicePrintDocument(numint);
         JasperPrint jasperPrint = tmp.getJasperPrint().orElseThrow();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
