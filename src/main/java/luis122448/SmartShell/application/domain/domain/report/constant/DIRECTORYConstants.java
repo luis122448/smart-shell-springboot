@@ -7,8 +7,8 @@ public class DIRECTORYConstants {
 
     private static final String EXTERNAL_REPORT_DIR = System.getenv("REPORT_DIR");
 
-    public static final Path JASPER_DIRECTORY = Paths.get(EXTERNAL_REPORT_DIR, "jasper");
-    public static final Path EXCEL_DIRECTORY = Paths.get(EXTERNAL_REPORT_DIR, "excel");
+    public static final Path JASPER_DIRECTORY = Paths.get(EXTERNAL_REPORT_DIR, "archive/jasper");
+    public static final Path EXCEL_DIRECTORY = Paths.get(EXTERNAL_REPORT_DIR, "archive/excel");
 
     public static final String REPORT_INVOICE_A4_HORIZONTAL = JASPER_DIRECTORY.resolve("invoice-a4-horizontal.jasper").toString();
     public static final String REPORT_INVOICE_A4_VERTICAL = JASPER_DIRECTORY.resolve("invoice-a4-vertical.jasper").toString();
