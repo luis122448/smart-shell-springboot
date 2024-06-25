@@ -2,6 +2,7 @@
 FROM maven:3.9.6-amazoncorretto-21 AS build
 COPY ./src /home/app/src
 COPY pom.xml /home/app
+COPY ./src/main/resources /home/reports
 
 # Specify the variable you need
 ARG POSTGRES_HOST
@@ -26,5 +27,14 @@ RUN mvn -f /home/app/pom.xml clean package -Dspring.profiles.active=pdn
 # Package stage
 FROM openjdk:21
 COPY --from=build /home/app/target/smart-shell-1.0.0.jar /usr/local/lib/smart-shell.jar
+
+# Crear un directorio para los archivos externos
+COPY --from=build /home/reports /urs/local/reports
+
+# Establecer la variable de entorno para el directorio de informes
+ENV REPORT_DIR=/usr/local/reports
+
+# Exponer el puerto
 EXPOSE 8080
+
 ENTRYPOINT ["java","-jar","/usr/local/lib/smart-shell.jar"]
