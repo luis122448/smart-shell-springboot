@@ -317,7 +317,7 @@ public class ListPriceArticleReport {
         return validateAndImportList(listPriceArticleEntityList, startRow, lastRow);
     }
 
-    public ApiResponseReport<?> validateAndImportList(List<ListPriceArticleEntity> listPriceArticleEntityList, Integer startRow, Integer lastRow) throws JRException, GenericByteServiceException {
+    public ApiResponseReport<?> validateAndImportList(List<ListPriceArticleEntity> listPriceArticleEntityList, Integer startRow, Integer lastRow) throws JRException, GenericByteServiceException, FileNotFoundException {
         Integer idcompany = securityContextInitializer.getIdCompany();
         List<ImportErrorModel> importErrorModelList = new ArrayList<>();
         Integer currentRow = startRow;

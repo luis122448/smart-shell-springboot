@@ -1,5 +1,9 @@
 package luis122448.SmartShell.application.domain.domain.report.constant;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -18,5 +22,13 @@ public class DIRECTORYConstants {
     public static final String REPORT_SUCCESS_IMPORT_A4_HORIZONTAL = JASPER_DIRECTORY.resolve("success-import-a4-horizontal.jasper").toString();
     public static final String FORMAT_PRICE_LIST_ARTICLE = EXCEL_DIRECTORY.resolve("list-price-article.xlsx").toString();
     public static final String FORMAT_ARTICLE = EXCEL_DIRECTORY.resolve("format-article.xlsx").toString();
+
+    public static InputStream getJasperInputStream(String filePath) throws FileNotFoundException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("File not found: " + filePath);
+        }
+        return new FileInputStream(file);
+    }
 
 }

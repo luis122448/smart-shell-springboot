@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
+import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.application.domain.persistence.entity.CompanyInfoEntity;
 import luis122448.SmartShell.application.domain.persistence.repository.constants.CompanyInfoRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -96,16 +98,16 @@ public class GenericReport {
         return params;
     }
 
-    public ApiResponseReport<?> genericResponseReport(List<ImportErrorModel> importErrorModelList,String title, Integer numberRow) throws JRException, GenericByteServiceException {
+    public ApiResponseReport<?> genericResponseReport(List<ImportErrorModel> importErrorModelList,String title, Integer numberRow) throws JRException, GenericByteServiceException, FileNotFoundException {
         if (importErrorModelList.isEmpty()){
             Map<String, Object> params = this.genericResponseInfo(title,IMPORT_SUCCESS,numberRow,0);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(REPORT_SUCCESS_IMPORT_A4_HORIZONTAL,params, new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(REPORT_SUCCESS_IMPORT_A4_HORIZONTAL),params, new JREmptyDataSource());
             return new ApiResponseReport<>(1,IMPORT_SUCCESS, Optional.of(jasperPrint));
         } else {
             JRDataSource dataSource = new JRBeanCollectionDataSource(importErrorModelList);
             Integer numberError = importErrorModelList.size();
             Map<String, Object> params = this.genericResponseInfo(title,IMPORT_FAILED,numberRow,numberError);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(REPORT_ERROR_IMPORT_A4_HORIZONTAL,params, dataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(REPORT_ERROR_IMPORT_A4_HORIZONTAL),params, dataSource);
             return new ApiResponseReport<>(-1,IMPORT_FAILED, Optional.of(jasperPrint));
         }
     }

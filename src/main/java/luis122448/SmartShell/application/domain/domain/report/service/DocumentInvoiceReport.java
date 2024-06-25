@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
 import luis122448.SmartShell.application.domain.domain.model.DocumentInvoicePrintDTO;
+import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.usecase.DocumentInvoiceUseCase;
 import luis122448.SmartShell.util.object.api.ApiResponseReport;
@@ -11,6 +12,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class DocumentInvoiceReport {
         this.documentInvoiceUseCase = documentInvoiceUseCase;
     }
 
-    public ApiResponseReport<?> invoicePrintDocument(Long numint) throws GenericListServiceException, JRException {
+    public ApiResponseReport<?> invoicePrintDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
         List<DocumentInvoicePrintDTO> obj = this.documentInvoiceUseCase.printDocument(numint).getList().orElseThrow();
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
         String report = "";
@@ -42,7 +44,7 @@ public class DocumentInvoiceReport {
             report = REPORT_INVOICE_A4_HORIZONTAL;
         }
         System.out.println(report);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(report,new HashMap<>(), dataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
         return new ApiResponseReport<>(1,"Ok", Optional.of(jasperPrint));
     }
 }
