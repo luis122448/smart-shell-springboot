@@ -24,18 +24,8 @@ touch .env
 # Mover certificado generado, al directorio al proyecto
 #cp ./key/luis122448.p12 ./src/main/resources/key/luis122448.p12
 
-# Definir las variables de entorno
-#export POSTGRES_HOST=
-#export POSTGRES_DATABASE=
-#export POSTGRES_USERNAME=
-#export POSTGRES_PASSWORD=
-#export MONGO_HOST=
-#export MONGO_DATABASE=
-#export MONGO_USERNAME=
-#export MONGO_PASSWORD=
-#export REDIS_HOST=
-#export REDIS_USERNAME=
-#export REDIS_PASSWORD=
+# Configuracion de variables de entorno
+export $(grep -v '^#' .env | xargs)
 
 # Archivo de propiedades
 archivo="./src/main/resources/application-pdn.properties"

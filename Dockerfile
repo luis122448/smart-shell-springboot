@@ -17,10 +17,10 @@ ENV REDIS_HOST $REDIS_HOST
 ENV REDIS_USERNAME $REDIS_USERNAME
 ENV REDIS_PASSWORD $REDIS_PASSWORD
 
-COPY dev-install.sh /home/app
-
-RUN chmod +x /home/app/dev-install.sh
-RUN /home/app/dev-install.sh
+# COPY ./.env /home/app
+# COPY ./dev-install.sh /home/app
+# RUN chmod +x /home/app/dev-install.sh
+# RUN /home/app/dev-install.sh
 
 RUN mvn -f /home/app/pom.xml clean package -Dspring.profiles.active=pdn
 
