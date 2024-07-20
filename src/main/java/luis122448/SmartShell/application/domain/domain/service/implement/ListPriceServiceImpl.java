@@ -45,6 +45,7 @@ public class ListPriceServiceImpl implements ListPriceService {
         if(this.listPriceRepository.existsById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice()))){
             throw new GenericObjectServiceException(ID_EXISTS(listPriceEntity.getCodlistprice().toString()));
         }
+        listPriceEntity.setIdcompany(idcompany);
         return new ApiResponseObject<ListPriceEntity>(Optional.of(this.listPriceRepository.save(listPriceEntity)));
     }
 
@@ -54,6 +55,7 @@ public class ListPriceServiceImpl implements ListPriceService {
         if(!this.listPriceRepository.existsById(new ListPricePK(idcompany,listPriceEntity.getCodlistprice()))){
             throw new GenericObjectServiceException(ID_NOT_EXISTS(listPriceEntity.getCodlistprice().toString()));
         }
+        listPriceEntity.setIdcompany(idcompany);
         return new ApiResponseObject<ListPriceEntity>(Optional.of(this.listPriceRepository.save(listPriceEntity)));
     }
 
