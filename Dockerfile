@@ -39,11 +39,6 @@ ENV REDIS_PORT $REDIS_PORT
 ENV REDIS_USERNAME $REDIS_USERNAME
 ENV REDIS_PASSWORD $REDIS_PASSWORD
 
-# COPY ./.env /home/app
-#COPY ./dev-install.sh /home/app
-#RUN chmod +x /home/app/dev-install.sh
-#RUN /home/app/dev-install.sh
-
 # Build
 RUN mvn -f /home/app/pom.xml clean package -Dspring.profiles.active=pdn
 
@@ -51,13 +46,11 @@ RUN mvn -f /home/app/pom.xml clean package -Dspring.profiles.active=pdn
 FROM openjdk:21
 COPY --from=build /home/app/target/smart-shell-1.0.0.jar /usr/local/lib/smart-shell.jar
 
-# Crear un directorio para los archivos externos
+# Create directory for reports
 COPY --from=build /home/reports /usr/local/reports
 
-# Establecer la variable de entorno para el directorio de informes
 ENV REPORT_DIR=/usr/local/reports
 
-# Exponer el puerto
 EXPOSE 8080
 
 ENTRYPOINT ["java","-jar","/usr/local/lib/smart-shell.jar"]
