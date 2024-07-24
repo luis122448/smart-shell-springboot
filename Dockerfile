@@ -6,7 +6,7 @@ WORKDIR /home/app
 COPY ./src /home/app/src
 COPY pom.xml /home/app
 COPY ./src/main/resources /home/reports
-COPY ./key /home/key
+COPY ./resources/key /home/key
 
 # Set build arguments
 ARG POSTGRES_HOST

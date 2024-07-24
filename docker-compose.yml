@@ -44,6 +44,9 @@ services:
       KEYSTORE_DOMAIN: $KEYSTORE_DOMAIN
     ports:
       - "8080:8080"
+    volumes:
+      - ./resources/key/keystore.p12:/usr/local/key/keystore.p12
+      - ./resources:/usr/local/reports
     networks:
       - smart-shell-net  # Conexión a la red smart-shell-net
 

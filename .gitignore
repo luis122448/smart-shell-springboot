@@ -1,5 +1,7 @@
+### JAVA ###
 HELP.md
 target/
+key/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -41,5 +43,5 @@ build/
 *.pem
 *.p12
 
-# DEPLOY ###
+### DEPLOY ###
 **/src/main/resources/application-dev.properties

@@ -23,11 +23,11 @@ public class SmartShellApplication {
 		try {
 			// Obtener el directorio raíz del proyecto
 			String projectRoot = System.getProperty("user.dir");
-			String projectPath = ResourceUtils.getFile("classpath:").getAbsolutePath();
+			// String projectPath = ResourceUtils.getFile("classpath:").getAbsolutePath();
 
 			// Imprimir el directorio raíz
 			System.out.println("Directorio raíz del proyecto: " + projectRoot);
-			System.out.println("PATH del proyecto: " + projectPath);
+			// System.out.println("PATH del proyecto: " + projectPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
