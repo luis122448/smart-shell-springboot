@@ -6,6 +6,7 @@ WORKDIR /home/app
 COPY ./src /home/app/src
 COPY pom.xml /home/app
 COPY ./src/main/resources /home/reports
+COPY ./key /home/key
 
 # Set build arguments
 ARG POSTGRES_HOST
@@ -54,8 +55,10 @@ COPY --from=build /home/app/target/smart-shell-1.0.0.jar /usr/local/lib/smart-sh
 
 # Create directory for reports
 COPY --from=build /home/reports /usr/local/reports
+COPY --from=build /home/key /usr/local/key
 
 ENV REPORT_DIR=/usr/local/reports
+ENV KEYSTORE_FILE=/usr/local/key/keystore.p12
 
 EXPOSE 8080
 
