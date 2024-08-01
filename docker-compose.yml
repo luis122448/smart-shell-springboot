@@ -43,7 +43,7 @@ services:
       KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
       KEYSTORE_DOMAIN: $KEYSTORE_DOMAIN
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
       - smart-shell-net  # Conexión a la red smart-shell-net
 

@@ -60,6 +60,6 @@ COPY --from=build /home/key /usr/local/key
 ENV REPORT_DIR=/usr/local/reports
 ENV KEYSTORE_FILE=/usr/local/key/keystore.p12
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java","-jar","/usr/local/lib/smart-shell.jar"]
