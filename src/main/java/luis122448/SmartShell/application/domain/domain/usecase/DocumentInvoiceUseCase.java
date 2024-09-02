@@ -96,17 +96,7 @@ public class DocumentInvoiceUseCase {
         return new ApiResponseObject<>(Optional.of(obj));
     }
 
-    public ApiResponseList<DocumentGenericPrintDTO> printDocument(Long numint) throws GenericListServiceException {
-        List<DocumentGenericPrintDTO> obj =  this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
-        return new ApiResponseList<>(Optional.of(obj));
-    }
-
-    public ApiResponseList<DocumentGenericSearchDTO> searchDocument(DocumentGenericSearchFilterDTO t) throws GenericListServiceException {
-        List<DocumentGenericSearchDTO> obj = this.documentGenericMapper.toListDocumentGenericSearchDTO(this.documentHeaderService.searchDocumentGeneric(t).getList().orElseThrow());
-        return new ApiResponseList<>(Optional.of(obj));
-    }
-
-    public ApiResponsePage<DocumentGenericSearchDTO> pageDocument(DocumentGenericSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
+    public ApiResponsePage<DocumentGenericSearchDTO> searchPageDocument(DocumentGenericSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
         Page<DocumentGenericSearchDTO> obj = this.documentGenericMapper.toPageDocumentGenericSearchDTO(this.documentHeaderService.pageDocumentGeneric(t,pageable).getPage().orElseThrow());
         return new ApiResponsePage<>(Optional.of(obj));
     }

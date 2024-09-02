@@ -23,6 +23,21 @@ public class ApiResponseReport<T> {
     private String logMessage;
     private String logUser;
     private LocalDateTime logTime;
+
+    public ApiResponseReport(Optional<JasperPrint> list) {
+        this.status = (short) 1;
+        this.message = "Success";
+        this.jasperPrint = list;
+        this.logMessage = message;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            this.logUser = authentication.getName();
+        } else {
+            this.logUser = "Unknown";
+        }
+        this.logTime = LocalDateTime.now();
+    }
+
     public ApiResponseReport(int status, String message, Optional<JasperPrint> list) {
         this.status = (short) status;
         this.message = message;
@@ -36,6 +51,7 @@ public class ApiResponseReport<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+
     public ApiResponseReport(int status, String message, String logMessage, Optional<JasperPrint> list) {
         this.status = (short) status;
         this.message = message;
@@ -49,4 +65,5 @@ public class ApiResponseReport<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+
 }

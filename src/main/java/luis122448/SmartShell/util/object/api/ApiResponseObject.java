@@ -22,6 +22,7 @@ public class ApiResponseObject<T> {
     private String logMessage;
     private String logUser;
     private LocalDateTime logTime;
+
     public ApiResponseObject(Optional<T> object) {
         this.status = (short) 1;
         this.message = "OK";
@@ -35,6 +36,7 @@ public class ApiResponseObject<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+
     public ApiResponseObject(int status, String message, Optional<T> object) {
         this.status = (short) status;
         this.message = message;
@@ -48,6 +50,7 @@ public class ApiResponseObject<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+
     public ApiResponseObject(int status, String message, String logMessage, Optional<T> object) {
         this.status = (short) status;
         this.message = message;

@@ -34,7 +34,7 @@ public class DocumentInvoiceController {
 
     @GetMapping("/print")
     public ResponseEntity<?> printDocument(@RequestParam(name = "numint", defaultValue = "0") Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
-        ApiResponseByte<?> obj = new ApiResponseByte<>(this.documentInvoiceReport.invoicePrintDocument(numint),"application/pdf");
+        ApiResponseByte<?> obj = new ApiResponseByte<>(this.documentInvoiceReport.printDocument(numint),"application/pdf");
         return ResponseEntity.ok(obj);
     }
 
@@ -53,7 +53,7 @@ public class DocumentInvoiceController {
                                           @RequestParam(name = "codbuspar", defaultValue = "-1") String codbuspar,
                                           Pageable pageable) throws GenericPageServiceException {
         DocumentGenericSearchFilterDTO obj = new DocumentGenericSearchFilterDTO(typcomdoc,startat,finalat,sitdomco,reacomdoc,serie,typpaycon,codbuspar);
-        ApiResponsePage<DocumentGenericSearchDTO> tmp = this.documentInvoiceUseCase.pageDocument(obj, pageable);
+        ApiResponsePage<DocumentGenericSearchDTO> tmp = this.documentInvoiceUseCase.searchPageDocument(obj, pageable);
         return ResponseEntity.ok(tmp);
     }
 

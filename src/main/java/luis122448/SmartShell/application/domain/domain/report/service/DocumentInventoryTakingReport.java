@@ -67,11 +67,7 @@ public class DocumentInventoryTakingReport {
     public ApiResponseReport<?> printDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
         List<DocumentGenericPrintDTO> obj = this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
-        String report = "";
-        Integer typformat = obj.get(0).getTypformat();
-        Integer typcomdoc = obj.get(0).getTypcomdoc();
-        report = REPORT_INVOICE_A4_VERTICAL;
-        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(REPORT_INVOICE_A4_VERTICAL),new HashMap<>(), dataSource);
         return new ApiResponseReport<>(1,"Ok", Optional.of(jasperPrint));
     }
 
