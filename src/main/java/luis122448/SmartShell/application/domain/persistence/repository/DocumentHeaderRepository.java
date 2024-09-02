@@ -2,8 +2,8 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericSearch;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericPrint;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericFunctionException;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public interface DocumentHeaderRepository extends JpaRepository<DocumentHeaderEn
 
     @Query(value = "SELECT * FROM FN_SEARCH_DOCUMENT(:IN_IDCOMPANY,:IN_TYPCOMDOC,:IN_STARTAT,:IN_FINALAT," +
             ":IN_SITCOMDOC,:IN_REACOMDOC,:IN_SERIE,:IN_TYPPAYCOM,:IN_CODBUSCAR);", nativeQuery = true)
-    List<DocumentInvoiceSearch> searchDocumentInvoice(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+    List<DocumentGenericSearch> searchDocumentGeneric(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                       @Param("IN_TYPCOMDOC") Integer IN_TYPCOMDOC,
                                                       @Param("IN_STARTAT") LocalDate IN_STARTAT,
                                                       @Param("IN_FINALAT") LocalDate IN_FINALAT,
@@ -33,7 +33,7 @@ public interface DocumentHeaderRepository extends JpaRepository<DocumentHeaderEn
 
     @Query(value = "SELECT * FROM FN_SEARCH_DOCUMENT(:IN_IDCOMPANY,:IN_TYPCOMDOC,:IN_STARTAT,:IN_FINALAT," +
             ":IN_SITCOMDOC,:IN_REACOMDOC,:IN_SERIE,:IN_TYPPAYCOM,:IN_CODBUSCAR);", nativeQuery = true)
-    Page<DocumentInvoiceSearch> pageDocumentInvoice(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+    Page<DocumentGenericSearch> pageDocumentGeneric(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                     @Param("IN_TYPCOMDOC") Integer IN_TYPCOMDOC,
                                                     @Param("IN_STARTAT") LocalDate IN_STARTAT,
                                                     @Param("IN_FINALAT") LocalDate IN_FINALAT,
@@ -96,7 +96,7 @@ public interface DocumentHeaderRepository extends JpaRepository<DocumentHeaderEn
                                              @Param("OUT_LOG") String OUT_LOG) throws GenericProcedureException;
 
     @Query(value = "SELECT * FROM FN_PRINT_DOCUMENT_INVOCE(:IN_IDCOMPANY,:IN_CODUSER,:IN_NUMINT)", nativeQuery = true)
-    List<DocumentInvoicePrint> printDocumentInvoice(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+    List<DocumentGenericPrint> printDocumentGeneric(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                     @Param("IN_CODUSER") String IN_CODUSER,
                                                     @Param("IN_NUMINT") Long IN_NUMINT) throws GenericListServiceException;
 

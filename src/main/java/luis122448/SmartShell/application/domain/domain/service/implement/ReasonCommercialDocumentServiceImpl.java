@@ -31,9 +31,9 @@ public class ReasonCommercialDocumentServiceImpl implements ReasonCommercialDocu
     }
 
     @Override
-    public ApiResponseList<ReasonCommercialDocumentEntity> findByTypcomdocAndIngsalcom(ReasonCommercialDocumentEntity t) throws GenericListServiceException {
+    public ApiResponseList<ReasonCommercialDocumentEntity> findByTypcomdocAndinout(ReasonCommercialDocumentEntity t) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        List<ReasonCommercialDocumentEntity> list = this.reasonCommercialDocumentRepository.findByIdcompanyAndTypcomdocAndIngsalcom(idcompany,t.typcomdoc,t.ingsalcom);
+        List<ReasonCommercialDocumentEntity> list = this.reasonCommercialDocumentRepository.findByIdcompanyAndTypcomdocAndInout(idcompany,t.typcomdoc,t.inout);
         if (list.isEmpty()){
             throw new GenericListServiceException(404);
         }

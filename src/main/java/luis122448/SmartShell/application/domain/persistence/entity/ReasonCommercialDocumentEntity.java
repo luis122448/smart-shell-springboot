@@ -23,7 +23,7 @@ public class ReasonCommercialDocumentEntity extends AuditingEntity {
     @Id
     public Integer typcomdoc;
     @Id
-    public Integer ingsalcom;
+    public Integer inout;
     @Id
     public Integer reacomdoc;
     public String abrevi;

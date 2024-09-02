@@ -35,7 +35,7 @@ public class DocumentTransactionEntity extends AuditingEntity{
     private LocalDate registdate;
     private Integer codbranch;
     private Integer codplaiss;
-    private Integer ingsalcom;
+    private Integer inout;
     private Integer reacomdoc;
     private String busnam;
     private String addres;

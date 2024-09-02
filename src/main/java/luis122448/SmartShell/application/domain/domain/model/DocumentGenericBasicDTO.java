@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.springframework.data.annotation.Immutable;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentInvoiceRegisterDTO {
-    private DocumentHeaderDTO header;
-    private List<DocumentDetailDTO> details;
+@Immutable
+public class DocumentGenericBasicDTO {
+    private Long numint;
+    private String serie;
+    private Long numdoc;
 }

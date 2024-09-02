@@ -1,23 +1,22 @@
 package luis122448.SmartShell.application.domain.persistence.mapper;
 
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceDetailModifyDTO;
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoicePrintDTO;
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchDTO;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericDetailModifyDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericPrintDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericSearchDTO;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericDetailModify;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericPrint;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericSearch;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
 import java.io.ByteArrayInputStream;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface DocumentInvoiceMapper {
+public interface DocumentGenericMapper {
 
-    public default DocumentInvoicePrintDTO toDocumentInvoicePrintDTO(DocumentInvoicePrint source){
-        DocumentInvoicePrintDTO target = new DocumentInvoicePrintDTO();
+    public default DocumentGenericPrintDTO toDocumentGenericPrintDTO(DocumentGenericPrint source){
+        DocumentGenericPrintDTO target = new DocumentGenericPrintDTO();
         target.setTypformat(source.getTypformat());
         target.setTypcomdoc(source.getTypcomdoc());
         target.setComdestypidedoc(source.getComdestypidedoc());
@@ -32,7 +31,7 @@ public interface DocumentInvoiceMapper {
         target.setDesdoccom(source.getDesdoccom());
         target.setDessitcomdoc(source.getDessitcomdoc());
         target.setRegistdate(source.getRegistDate());
-        target.setDesingsalcom(source.getDesingsalcom());
+        target.setDesinout(source.getDesinout());
         target.setDesreacomdoc(source.getDesreacomdoc());
         target.setCodbuspar(source.getCodbuspar());
         target.setDestypidedoc(source.getDestypidedoc());
@@ -72,12 +71,12 @@ public interface DocumentInvoiceMapper {
         return target;
     }
 
-    public default List<DocumentInvoicePrintDTO> toListDocumentInvoicePrintDTO(List<DocumentInvoicePrint> t){
-        return t.stream().map(this::toDocumentInvoicePrintDTO).toList();
+    public default List<DocumentGenericPrintDTO> toListDocumentGenericPrintDTO(List<DocumentGenericPrint> t){
+        return t.stream().map(this::toDocumentGenericPrintDTO).toList();
     }
 
-    public default DocumentInvoiceSearchDTO toDocumentInvoiceSearchDTO(DocumentInvoiceSearch source){
-        DocumentInvoiceSearchDTO target = new DocumentInvoiceSearchDTO();
+    public default DocumentGenericSearchDTO toDocumentGenericSearchDTO(DocumentGenericSearch source){
+        DocumentGenericSearchDTO target = new DocumentGenericSearchDTO();
         target.setNumint(source.getNumint());
         target.setNumdoc(source.getNumdoc());
         target.setSerie(source.getSerie());
@@ -86,8 +85,8 @@ public interface DocumentInvoiceMapper {
         target.setSitcomdoc(source.getSitcomdoc());
         target.setDessitcomdoc(source.getDessitcomdoc());
         target.setRegistdate(source.getRegistdate());
-        target.setIngsalcom(source.getIngsalcom());
-        target.setDesingsalcom(source.getDesingsalcom());
+        target.setInout(source.getInout());
+        target.setDesinout(source.getDesinout());
         target.setReacomdoc(source.getReacomdoc());
         target.setDesreacomdoc(source.getDesreacomdoc());
         target.setCodbuspar(source.getCodbuspar());
@@ -102,16 +101,16 @@ public interface DocumentInvoiceMapper {
         return target;
     }
 
-    public default List<DocumentInvoiceSearchDTO> toListDocumentInvoiceSearchDTO(List<DocumentInvoiceSearch> t){
-        return t.stream().map(this::toDocumentInvoiceSearchDTO).toList();
+    public default List<DocumentGenericSearchDTO> toListDocumentGenericSearchDTO(List<DocumentGenericSearch> t){
+        return t.stream().map(this::toDocumentGenericSearchDTO).toList();
     }
 
-    public default Page<DocumentInvoiceSearchDTO> toPageDocumentInvoiceSearchDTO(Page<DocumentInvoiceSearch> t){
-        return t.map(this::toDocumentInvoiceSearchDTO);
+    public default Page<DocumentGenericSearchDTO> toPageDocumentGenericSearchDTO(Page<DocumentGenericSearch> t){
+        return t.map(this::toDocumentGenericSearchDTO);
     }
 
-    public default DocumentInvoiceDetailModifyDTO toDocumentInvoiceDetailModifyDTO(DocumentInvoiceDetailModify source){
-        DocumentInvoiceDetailModifyDTO target = new DocumentInvoiceDetailModifyDTO();
+    public default DocumentGenericDetailModifyDTO toDocumentGenericDetailModifyDTO(DocumentGenericDetailModify source){
+        DocumentGenericDetailModifyDTO target = new DocumentGenericDetailModifyDTO();
         target.setNumint(source.getNumint());
         target.setNumite(source.getNumite());
         target.setTypinv(source.getTypinv());
@@ -143,7 +142,7 @@ public interface DocumentInvoiceMapper {
         return target;
     }
 
-    public default List<DocumentInvoiceDetailModifyDTO> toListDocumentInvoiceDetailModifyDTO(List<DocumentInvoiceDetailModify> t){
-        return t.stream().map(this::toDocumentInvoiceDetailModifyDTO).toList();
+    public default List<DocumentGenericDetailModifyDTO> toListDocumentGenericDetailModifyDTO(List<DocumentGenericDetailModify> t){
+        return t.stream().map(this::toDocumentGenericDetailModifyDTO).toList();
     }
 }

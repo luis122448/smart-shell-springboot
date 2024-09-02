@@ -78,6 +78,20 @@ public class Utils {
 		}
 	}
 
+	public static Long getLongCellValue(Cell cell) {
+		try {
+			if (cell != null) {
+				if (cell.getCellType() == CellType.STRING) {
+					return Long.getLong(cell.getStringCellValue());
+				} else if (cell.getCellType() == CellType.NUMERIC) {
+					return (long) cell.getNumericCellValue();
+				}
+			}
+			return 0L;
+		} catch ( NumberFormatException e) {
+			return 0L;
+		}
+	}
 
 	public static BigDecimal getBigDecimalCellValue(Cell cell) {
 		try {

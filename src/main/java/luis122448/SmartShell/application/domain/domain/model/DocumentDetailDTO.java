@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,6 +22,10 @@ public class DocumentDetailDTO {
     private Long etiqueta;
     private BigDecimal quantity;
     private BigDecimal price;
+    private LocalDate registdate;
+    private Integer codbranch;
+    private Integer oriwarehouse;
+    private Integer deswarehouse;
     private BigDecimal impafecto;
     private BigDecimal impinafecto;
     private BigDecimal impexonerado;

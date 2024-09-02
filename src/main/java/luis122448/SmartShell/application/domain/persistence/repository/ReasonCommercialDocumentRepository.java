@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReasonCommercialDocumentRepository extends JpaRepository<ReasonCommercialDocumentEntity, ReasonCommercialDocumentPK> {
-    List<ReasonCommercialDocumentEntity> findByIdcompanyAndTypcomdocAndIngsalcom(Integer idcompany, Integer typcomdoc, Integer ingsalcom) throws GenericListServiceException;
+    List<ReasonCommercialDocumentEntity> findByIdcompanyAndTypcomdocAndInout(Integer idcompany, Integer typcomdoc, Integer inout) throws GenericListServiceException;
     List<ReasonCommercialDocumentEntity> findByIdcompany(Integer idcompany) throws GenericListServiceException;
 }

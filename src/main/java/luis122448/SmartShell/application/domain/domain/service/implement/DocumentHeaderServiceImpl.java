@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchFilterDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericSearchFilterDTO;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceSearch;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoicePrint;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericSearch;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericPrint;
 import luis122448.SmartShell.application.domain.persistence.repository.DocumentHeaderRepository;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericFunctionException;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
@@ -67,10 +67,10 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 	}
 
 	@Override
-	public ApiResponseList<DocumentInvoicePrint> printDocumentInvoice(Long numint) throws GenericListServiceException {
+	public ApiResponseList<DocumentGenericPrint> printDocumentGeneric(Long numint) throws GenericListServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		String coduser = securityContextInitializer.getCodUser();
-		List<DocumentInvoicePrint> list = this.documentHeaderRepository.printDocumentInvoice(idcompany,coduser,numint);
+		List<DocumentGenericPrint> list = this.documentHeaderRepository.printDocumentGeneric(idcompany,coduser,numint);
 		if (list.isEmpty()){
 			throw new GenericListServiceException(404);
 		}
@@ -78,10 +78,10 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 	}
 
 	@Override
-	public ApiResponseList<DocumentInvoiceSearch> searchDocumentInvoice(DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException {
+	public ApiResponseList<DocumentGenericSearch> searchDocumentGeneric(DocumentGenericSearchFilterDTO t) throws GenericListServiceException {
 		try {
 			Integer idcompany = securityContextInitializer.getIdCompany();
-			List<DocumentInvoiceSearch> list = this.documentHeaderRepository.searchDocumentInvoice(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar());
+			List<DocumentGenericSearch> list = this.documentHeaderRepository.searchDocumentGeneric(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar());
 			if (list.isEmpty()){
 				throw new GenericListServiceException(404);
 			}
@@ -92,14 +92,14 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 	}
 
 	@Override
-	public ApiResponsePage<DocumentInvoiceSearch> pageDocumentInvoice(DocumentInvoiceSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
+	public ApiResponsePage<DocumentGenericSearch> pageDocumentGeneric(DocumentGenericSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
 		try {
 			Integer idcompany = securityContextInitializer.getIdCompany();
-			Page<DocumentInvoiceSearch> obj = this.documentHeaderRepository.pageDocumentInvoice(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar(),pageable);
+			Page<DocumentGenericSearch> obj = this.documentHeaderRepository.pageDocumentGeneric(idcompany,t.getTypcomdoc(),t.getStartat(),t.getFinalat(),t.getSitcomdoc(),t.getReacomdoc(),t.getSerie(),t.getTyppaycon(),t.getCodbuspar(),pageable);
 			if (obj.isEmpty()){
 				throw new GenericPageServiceException(404);
 			}
-			return new ApiResponsePage<DocumentInvoiceSearch>(Optional.of(obj));
+			return new ApiResponsePage<DocumentGenericSearch>(Optional.of(obj));
 		} catch (GenericFunctionException e) {
 			throw new GenericPageServiceException(e);
 		}

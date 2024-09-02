@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericDetailModify;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentDetailService;
@@ -27,7 +27,7 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
     }
 
     @Override
-public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDetailEntity t) throws GenericObjectServiceException {
+    public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDetailEntity t) throws GenericObjectServiceException {
         try {
             System.out.println("Json: " + t.toJson());
             Integer idcompany = securityContextInitializer.getIdCompany();
@@ -37,10 +37,6 @@ public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDe
 				Object value = obj.get(key);
 				System.out.println("Clave: " + key + ", Valor: " + value);
 			}
-//            if ((Integer) obj.get("out_code") >= 0) {
-//                Optional<DocumentHeaderEntity> tmp = this.documentDetailRepository.findById((Long) obj.get("out_numite"));
-//                return new ApiResponseObject<DocumentDetailEntity>((Integer) obj.get("out_code"), obj.get("out_message").toString(), obj.get("out_log").toString(),tmp);
-//            }
             return new ApiResponseObject<DocumentDetailEntity>((Integer) obj.get("out_code"), obj.get("out_message").toString(), obj.get("out_log").toString(),Optional.empty());
         } catch (GenericProcedureException | JsonProcessingException e) {
             throw new GenericObjectServiceException(e);
@@ -55,9 +51,9 @@ public ApiResponseObject<DocumentDetailEntity> registerDocumentDetail(DocumentDe
         return new ApiResponseList<>(Optional.of(detailEntityList));
     }
 
-    public ApiResponseList<DocumentInvoiceDetailModify> searchDocumentInvoiceDetail(Long numint) throws GenericListServiceException {
+    public ApiResponseList<DocumentGenericDetailModify> searchDocumentGenericDetail(Long numint) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        List<DocumentInvoiceDetailModify> detailEntityList = this.documentDetailRepository.searchDocumentInvoiceDetail(idcompany,numint);
+        List<DocumentGenericDetailModify> detailEntityList = this.documentDetailRepository.searchDocumentGenericDetail(idcompany,numint);
         if (detailEntityList.isEmpty()){
             throw new GenericListServiceException(404);
         }

@@ -3,10 +3,16 @@ package luis122448.SmartShell.util.object.api;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -70,4 +76,29 @@ public class ApiResponseByte<T> {
         }
         this.logTime = LocalDateTime.now();
     }
+
+    public ApiResponseByte(ApiResponseReport<?> apiResponseReport, String format) throws JRException {
+        JasperPrint jasperPrint = apiResponseReport.getJasperPrint().orElseThrow();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+        exporter.exportReport();
+        byte[] pdfBytes = outputStream.toByteArray();
+        this.status = apiResponseReport.getStatus();
+        this.message = apiResponseReport.getMessage();
+        this.bytes = Optional.of(pdfBytes);
+//        this.name = name;
+        this.format = format;
+//        this.extension = extension;
+        this.logMessage = apiResponseReport.getMessage();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            this.logUser = authentication.getName();
+        } else {
+            this.logUser = "Unknown";
+        }
+        this.logTime = LocalDateTime.now();
+    }
+
 }

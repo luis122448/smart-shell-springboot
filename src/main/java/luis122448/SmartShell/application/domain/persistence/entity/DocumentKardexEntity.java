@@ -8,8 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import luis122448.SmartShell.application.domain.persistence.entity.auditing.AuditingEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentDetailPK;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentKardexPK;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -20,44 +19,50 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
-@IdClass(DocumentDetailPK.class)
-@Table(schema = "smart_shell",name = "TBL_DOCUMENT_DETAIL")
+@IdClass(DocumentKardexPK.class)
+@Table(schema = "smart_shell",name = "TBL_DOCUMENT_KARDEX")
 @Entity
-public class DocumentDetailEntity extends AuditingEntity {
+public class DocumentKardexEntity {
     @Id
     private Integer idcompany;
     @Id
+    private Long locali;
     private Long numint;
-    @Id
     private Long numite;
     private Integer typinv;
     private String codart;
     private Long etiqueta;
     private BigDecimal quantity;
     private BigDecimal price;
-    private LocalDate registdate;
+    private Integer typdoccom;
+    private Integer inout;
+    private Integer reacomdoc;
     private Integer codbranch;
     private Integer oriwarehouse;
     private Integer deswarehouse;
-    private BigDecimal impafecto;
-    private BigDecimal impinafecto;
-    private BigDecimal impexonerado;
-    private BigDecimal impgratuito;
-    private BigDecimal impigv;
-    private BigDecimal impisc;
-    private BigDecimal imptribadd01;
-    private BigDecimal imptribadd02;
-    private BigDecimal imptribadd03;
-    private BigDecimal imptribadd04;
-    private BigDecimal impdesc01;
-    private BigDecimal impdesc02;
-    private BigDecimal impdesc03;
-    private BigDecimal impdesc04;
-    private BigDecimal implistprice;
-    private BigDecimal impdesctotal;
-    private BigDecimal impsaleprice;
-    private BigDecimal imptribtotal;
-    private BigDecimal imptotal;
+    private LocalDate registdate;
+    private Integer year;
+    private Integer month;
+    private BigDecimal implistprice01;
+    private BigDecimal implistprice02;
+    private BigDecimal impdesctotal01;
+    private BigDecimal impdesctotal02;
+    private BigDecimal impsaleprice01;
+    private BigDecimal impsaleprice02;
+    private BigDecimal imptribtotal01;
+    private BigDecimal imptribtotal02;
+    private BigDecimal imptotal01;
+    private BigDecimal imptotal02;
+    private BigDecimal cosrawmaterial01;
+    private BigDecimal cosrawmaterial02;
+    private BigDecimal cosmanufacturing01;
+    private BigDecimal cosmanufacturing02;
+    private BigDecimal coslabour01;
+    private BigDecimal coslabour02;
+    private BigDecimal costransport01;
+    private BigDecimal costransport02;
+    private BigDecimal costotal01;
+    private BigDecimal costotal02;
 
     public String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

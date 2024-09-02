@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.projection;
 
 import java.math.BigDecimal;
 
-public interface DocumentInvoiceDetailModify {
+public interface DocumentGenericDetailModify {
 
     public Long getNumint();
     public Long getNumite();

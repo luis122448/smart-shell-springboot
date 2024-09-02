@@ -2,44 +2,47 @@ package luis122448.SmartShell.application.domain.domain.usecase;
 
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.model.*;
-import luis122448.SmartShell.application.domain.persistence.mapper.DocumentGenericMapper;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericDetailModify;
-import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.util.exception.GenericObjectServiceException;
-import luis122448.SmartShell.application.domain.persistence.mapper.DocumentDetailMapper;
-import luis122448.SmartShell.application.domain.persistence.mapper.DocumentHeaderMapper;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentDetailService;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentHeaderService;
+import luis122448.SmartShell.application.domain.domain.service.service.DocumentKardexService;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentDetailEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentDetailMapper;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentHeaderMapper;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentGenericMapper;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericDetailModify;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
+import luis122448.SmartShell.util.exception.GenericListServiceException;
+import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import luis122448.SmartShell.util.object.api.ApiResponsePage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
-public class DocumentInvoiceUseCase {
+public class DocumentInventoryTakingUseCase {
 
     private final DocumentHeaderService documentHeaderService;
     private final DocumentHeaderMapper documentHeaderMapper;
     private final DocumentDetailService documentDetailService;
     private final DocumentDetailMapper documentDetailMapper;
     private final DocumentGenericMapper documentGenericMapper;
+    private final DocumentKardexService documentKardexService;
 
-    public DocumentInvoiceUseCase(DocumentHeaderService documentHeaderService, DocumentHeaderMapper documentHeaderMapper, DocumentDetailService documentDetailService, DocumentDetailMapper documentDetailMapper, DocumentGenericMapper documentGenericMapper) {
+    public DocumentInventoryTakingUseCase(DocumentHeaderService documentHeaderService, DocumentHeaderMapper documentHeaderMapper, DocumentDetailService documentDetailService, DocumentDetailMapper documentDetailMapper, DocumentGenericMapper documentGenericMapper, DocumentKardexService documentKardexService) {
         this.documentHeaderService = documentHeaderService;
         this.documentHeaderMapper = documentHeaderMapper;
         this.documentDetailService = documentDetailService;
         this.documentDetailMapper = documentDetailMapper;
         this.documentGenericMapper = documentGenericMapper;
+        this.documentKardexService = documentKardexService;
     }
 
     public ApiResponseObject<DocumentGenericBasicDTO> registerDocument(DocumentGenericRegisterDTO t) throws GenericObjectServiceException, GenericProcedureException {
@@ -51,7 +54,6 @@ public class DocumentInvoiceUseCase {
         }
         Long numint = responseHeader.getObject().orElseThrow().getNumint();
         List<DocumentDetailEntity> listDetail = this.documentDetailMapper.toListDocumentDetailEntity(t.getDetails());
-        log.info("List Detail: {}",listDetail);
         for ( DocumentDetailEntity tmp : listDetail ){
             tmp.setNumint(numint);
             tmp.setNumite(0L);
@@ -96,34 +98,18 @@ public class DocumentInvoiceUseCase {
         return new ApiResponseObject<>(Optional.of(obj));
     }
 
-    public ApiResponseList<DocumentGenericPrintDTO> printDocument(Long numint) throws GenericListServiceException {
-        List<DocumentGenericPrintDTO> obj =  this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
-        return new ApiResponseList<>(Optional.of(obj));
-    }
-
-    public ApiResponseList<DocumentGenericSearchDTO> searchDocument(DocumentGenericSearchFilterDTO t) throws GenericListServiceException {
-        List<DocumentGenericSearchDTO> obj = this.documentGenericMapper.toListDocumentGenericSearchDTO(this.documentHeaderService.searchDocumentGeneric(t).getList().orElseThrow());
-        return new ApiResponseList<>(Optional.of(obj));
-    }
-
-    public ApiResponsePage<DocumentGenericSearchDTO> pageDocument(DocumentGenericSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException {
-        Page<DocumentGenericSearchDTO> obj = this.documentGenericMapper.toPageDocumentGenericSearchDTO(this.documentHeaderService.pageDocumentGeneric(t,pageable).getPage().orElseThrow());
+    public ApiResponsePage<DocumentGenericSearchDTO> searchPageDocument(Integer typcomdoc, LocalDate startat, LocalDate finalat, String sitcomdoc, Pageable pageable) throws GenericPageServiceException {
+        DocumentGenericSearchFilterDTO filterDTO = new DocumentGenericSearchFilterDTO(typcomdoc,startat,finalat,sitcomdoc,"-1","-1",-1,"-1");
+        Page<DocumentGenericSearchDTO> obj = this.documentGenericMapper.toPageDocumentGenericSearchDTO(this.documentHeaderService.pageDocumentGeneric(filterDTO,pageable).getPage().orElseThrow());
         return new ApiResponsePage<>(Optional.of(obj));
     }
 
-    public ApiResponseObject<?> approvedDocument(Long numint) throws GenericProcedureException {
-        return this.documentHeaderService.approvedImportDocument(numint);
-    }
-
-    public ApiResponseObject<?> onAccountDocument(Long numint) throws GenericProcedureException {
-        return this.documentHeaderService.onAccountImportDocument(numint);
+    public ApiResponseObject<?> sentDocumentKardex(Long numint) throws GenericProcedureException {
+        return this.documentKardexService.sentDocumentKardex(numint);
     }
 
     public ApiResponseObject<?> cancelDocument(Long numint, String commen) throws GenericProcedureException {
         return this.documentHeaderService.cancelImportDocument(numint,commen);
     }
 
-    public ApiResponseObject<?> deleteDocument(Long numint, String commen) throws GenericProcedureException {
-        return this.documentHeaderService.deleteImportDocument(numint,commen);
-    }
 }

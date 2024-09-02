@@ -39,7 +39,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 //                        @ColumnResult(name = "DESTYPCOMDOC", type = String.class),
 //                        @ColumnResult(name = "DESSITCOMDOC", type = String.class),
 //                        @ColumnResult(name = "FREGIS", type = LocalDate.class),
-//                        @ColumnResult(name = "DESINGSALCOM", type = String.class),
+//                        @ColumnResult(name = "DESinout", type = String.class),
 //                        @ColumnResult(name = "DESREACOMDOC", type = String.class),
 //                        @ColumnResult(name = "CODBUSPAR", type = String.class),
 //                        @ColumnResult(name = "RAZSOC", type = String.class),
@@ -63,7 +63,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 //                        @ColumnResult(name = "DESDOCCOM", type = String.class),
 //                        @ColumnResult(name = "DESSITCOM", type = String.class),
 //                        @ColumnResult(name = "FREGIS", type = LocalDate.class),
-//                        @ColumnResult(name = "DESINGSALCOM", type = String.class),
+//                        @ColumnResult(name = "DESinout", type = String.class),
 //                        @ColumnResult(name = "DESMOTCOM", type = String.class),
 //                        @ColumnResult(name = "CODBUSPAR", type = String.class),
 //                        @ColumnResult(name = "RAZSOC", type = String.class),
@@ -110,19 +110,23 @@ public class DocumentHeaderEntity extends AuditingEntity {
     private String serie;
     private Long numdoc;
     private LocalDate registdate;
-    private Long codbranch;
-    private Long codplaiss;
-    private Long ingsalcom;
-    private Long reacomdoc;
+    private Integer codbranch;
+    private Integer oriwarehouse;
+    private Integer deswarehouse;
+    private Integer codplaiss;
+    private Integer inout;
+    private Integer reacomdoc;
     private String codcur;
     private BigDecimal exchangerate;
+    private BigDecimal exchangerate01;
+    private BigDecimal exchangerate02;
     private String codbuspar;
     private String busnam;
     private String addres;
     private String poscod;
     private String codsel;
     private Long typpaycon;
-    private Long incigv;
+    private Integer incigv;
     private BigDecimal tasigv;
     private BigDecimal impafecto;
     private BigDecimal impinafecto;

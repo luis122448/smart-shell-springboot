@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentInvoiceModifyDTO {
+public class DocumentGenericRegisterDTO {
     private DocumentHeaderDTO header;
-    private List<DocumentInvoiceDetailModifyDTO> details;
+    private List<DocumentDetailDTO> details;
 }

@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReasonCommercialDocumentPK implements Serializable {
+public class DocumentKardexPK {
     private Integer idcompany;
-    private Integer typcomdoc;
-    private Integer inout;
-    private Integer reacomdoc;
+    private Long locali;
 }

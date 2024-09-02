@@ -4,7 +4,7 @@ import static luis122448.SmartShell.application.domain.web.constant.APIConstants
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoiceSearchFilterDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericSearchFilterDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +40,8 @@ public class DocumentHeaderController {
 	}
 
 	@GetMapping("/by-summary")
-	public ResponseEntity<?> findDocumentHeaderSummary(@RequestBody DocumentInvoiceSearchFilterDTO t) throws GenericListServiceException {
-		return ResponseEntity.ok(this.documentHeaderService.searchDocumentInvoice(t));
+	public ResponseEntity<?> findDocumentHeaderSummary(@RequestBody DocumentGenericSearchFilterDTO t) throws GenericListServiceException {
+		return ResponseEntity.ok(this.documentHeaderService.searchDocumentGeneric(t));
 	}
 
 	@PostMapping()

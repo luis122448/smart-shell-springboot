@@ -7,5 +7,5 @@ import luis122448.SmartShell.util.object.api.ApiResponseList;
 
 public interface ReasonCommercialDocumentService{
     ApiResponseList<ReasonCommercialDocumentEntity> findAll() throws GenericListServiceException;
-    ApiResponseList<ReasonCommercialDocumentEntity> findByTypcomdocAndIngsalcom(ReasonCommercialDocumentEntity t) throws GenericListServiceException;
+    ApiResponseList<ReasonCommercialDocumentEntity> findByTypcomdocAndinout(ReasonCommercialDocumentEntity t) throws GenericListServiceException;
 }

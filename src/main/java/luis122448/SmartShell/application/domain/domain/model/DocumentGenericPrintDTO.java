@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
-public class DocumentInvoicePrintDTO {
+public class DocumentGenericPrintDTO {
 
     private Integer typformat;
     private Integer typcomdoc;
@@ -31,7 +31,7 @@ public class DocumentInvoicePrintDTO {
     private String desdoccom;
     private String dessitcomdoc;
     private LocalDate registdate;
-    private String desingsalcom;
+    private String desinout;
     private String desreacomdoc;
     private String codbuspar;
     private String destypidedoc;

@@ -1,6 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.report.service;
 
-import luis122448.SmartShell.application.domain.domain.model.DocumentInvoicePrintDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentGenericPrintDTO;
 import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.usecase.DocumentInvoiceUseCase;
@@ -27,7 +27,7 @@ public class DocumentInvoiceReport {
     }
 
     public ApiResponseReport<?> invoicePrintDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
-        List<DocumentInvoicePrintDTO> obj = this.documentInvoiceUseCase.printDocument(numint).getList().orElseThrow();
+        List<DocumentGenericPrintDTO> obj = this.documentInvoiceUseCase.printDocument(numint).getList().orElseThrow();
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
         String report = "";
         Integer typformat = obj.get(0).getTypformat();
@@ -43,8 +43,8 @@ public class DocumentInvoiceReport {
         } else {
             report = REPORT_INVOICE_A4_HORIZONTAL;
         }
-        System.out.println(report);
         JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
         return new ApiResponseReport<>(1,"Ok", Optional.of(jasperPrint));
     }
+
 }

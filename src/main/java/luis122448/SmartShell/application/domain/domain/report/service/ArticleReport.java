@@ -212,4 +212,5 @@ public class ArticleReport {
         }
         return this.genericReport.genericResponseReport(importErrorModelList,TITLE_ARTICLE, numberRow);
     }
+
 }

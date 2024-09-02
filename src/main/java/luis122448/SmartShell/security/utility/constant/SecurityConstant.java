@@ -3,7 +3,7 @@ package luis122448.SmartShell.security.utility.constant;
 public class SecurityConstant {
 
 //Spring Security
- public static final String API_AUTH = "/v1/auth";
+ public static final String API_AUTH = "/auth";
  public static final String LOGIN_URL = "/login";
  public static final String REFRESH_TOKEN_URL = "/refreshtoken";
  

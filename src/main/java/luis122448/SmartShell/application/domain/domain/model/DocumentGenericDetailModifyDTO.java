@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DocumentInvoiceDetailModifyDTO {
+public class DocumentGenericDetailModifyDTO {
     private Long numint;
     private Long numite;
     private Integer typinv;

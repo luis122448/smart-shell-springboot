@@ -2,7 +2,8 @@ package luis122448.SmartShell.application.domain.persistence.projection;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-public interface DocumentInvoicePrint {
+
+public interface DocumentGenericPrint {
 
     Integer getTypformat();
     Integer getTypcomdoc();
@@ -18,7 +19,7 @@ public interface DocumentInvoicePrint {
     String getDesdoccom();
     String getDessitcomdoc();
     LocalDate getRegistDate();
-    String getDesingsalcom();
+    String getDesinout();
     String getDesreacomdoc();
     String getCodbuspar();
     String getBusnam();

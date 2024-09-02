@@ -59,6 +59,15 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public ApiResponseObject<ArticleEntity> exist(Integer typinv, String codart) throws GenericObjectServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		if (this.articleRepository.existsById(new ArticlePK(idcompany,codart))) {
+			return new ApiResponseObject<>(-2, ID_EXISTS(codart), Optional.empty());
+		}
+		return new ApiResponseObject<ArticleEntity>(Optional.empty());
+	}
+
+	@Override
 	public ApiResponseObject<ArticleEntity> findById(ArticleEntity t) throws GenericObjectServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		Optional<ArticleEntity> articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart()));

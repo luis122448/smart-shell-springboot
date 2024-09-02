@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
-public class DocumentInvoiceSearchDTO {
+public class DocumentGenericSearchDTO {
     private Long numint;
     private Long numdoc;
     private String serie;
@@ -23,8 +23,8 @@ public class DocumentInvoiceSearchDTO {
     private Integer sitcomdoc;
     private String dessitcomdoc;
     private LocalDate registdate;
-    private Integer ingsalcom;
-    private String desingsalcom;
+    private Integer inout;
+    private String desinout;
     private Integer reacomdoc;
     private String desreacomdoc;
     private String codbuspar;

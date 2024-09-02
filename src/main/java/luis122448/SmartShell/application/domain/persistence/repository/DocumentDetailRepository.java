@@ -2,7 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentDetailEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentDetailPK;
-import luis122448.SmartShell.application.domain.persistence.projection.DocumentInvoiceDetailModify;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericDetailModify;
 import luis122448.SmartShell.application.domain.persistence.repository.exception.GenericProcedureException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -60,7 +60,7 @@ public interface DocumentDetailRepository extends JpaRepository<DocumentDetailEn
             " WHERE" +
             " dd.idcompany = :IN_IDCOMPANY" +
             " AND dd.numint = :IN_NUMINT", nativeQuery = true)
-    List<DocumentInvoiceDetailModify> searchDocumentInvoiceDetail(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+    List<DocumentGenericDetailModify> searchDocumentGenericDetail(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                            @Param("IN_NUMINT") Long IN_NUMINT) throws GenericListServiceException;
 
 }

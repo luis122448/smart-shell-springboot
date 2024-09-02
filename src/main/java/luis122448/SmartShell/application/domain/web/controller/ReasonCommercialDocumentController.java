@@ -28,11 +28,11 @@ public class ReasonCommercialDocumentController {
 
     @GetMapping("/by-like")
     public ResponseEntity<?> findByLike(@RequestParam(name = "typcomdoc", defaultValue = "") Integer typcomdoc,
-                                        @RequestParam(name = "ingsalcom", defaultValue = "") Integer ingsalcom) throws GenericListServiceException{
+                                        @RequestParam(name = "inout", defaultValue = "") Integer inout) throws GenericListServiceException{
         ReasonCommercialDocumentEntity tmp = new ReasonCommercialDocumentEntity();
         tmp.setTypcomdoc(typcomdoc);
-        tmp.setIngsalcom(ingsalcom);
-        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findByTypcomdocAndIngsalcom(tmp);
+        tmp.setInout(inout);
+        ApiResponseList<ReasonCommercialDocumentEntity> obj =  this.reasonCommercialDocumentService.findByTypcomdocAndinout(tmp);
         return ResponseEntity.ok(obj);
     }
 
