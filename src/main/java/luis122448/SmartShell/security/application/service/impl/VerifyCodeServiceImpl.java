@@ -5,6 +5,7 @@ import luis122448.SmartShell.security.application.repository.UserRepository;
 import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.application.service.model.VerifyCodeModel;
 import luis122448.SmartShell.security.application.service.service.VerifyCodeService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class VerifyCodeServiceImpl implements VerifyCodeService{
+	@Qualifier("UserSecurityRepository")
 	private final UserRepository userRepository;
 	private final TOTPUtil tOTPUtil;
 	public VerifyCodeServiceImpl(UserRepository userRepository, TOTPUtil tOTPUtil) {

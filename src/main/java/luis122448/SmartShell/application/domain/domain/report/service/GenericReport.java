@@ -3,14 +3,12 @@ package luis122448.SmartShell.application.domain.domain.report.service;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.application.domain.persistence.entity.CompanyInfoEntity;
-import luis122448.SmartShell.application.domain.persistence.repository.constants.CompanyInfoRepository;
+import luis122448.SmartShell.application.domain.persistence.repository.CompanyInfoRepository;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.object.ImportErrorModel;
 import luis122448.SmartShell.util.object.api.ApiResponseReport;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

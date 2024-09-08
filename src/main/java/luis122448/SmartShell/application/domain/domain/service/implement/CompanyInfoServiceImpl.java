@@ -1,21 +1,21 @@
-package luis122448.SmartShell.application.domain.domain.service.implement.view;
+package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
-import luis122448.SmartShell.application.domain.domain.service.service.view.CompanyInfoService;
+import luis122448.SmartShell.application.domain.domain.service.service.CompanyInfoService;
 import luis122448.SmartShell.application.domain.persistence.entity.CompanyInfoEntity;
-import luis122448.SmartShell.application.domain.persistence.repository.constants.CompanyInfoRepository;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
+import luis122448.SmartShell.application.domain.persistence.repository.CompanyInfoRepository;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import luis122448.SmartShell.util.constant.MESSAGEConstants;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CompanyInfoServiceImpl implements CompanyInfoService {
+    @Qualifier("CompanyInfoRepository")
     private final CompanyInfoRepository companyInfoRepository;
     private final SecurityContextInitializer securityContextInitializer;
     public CompanyInfoServiceImpl(CompanyInfoRepository companyInfoRepository, SecurityContextInitializer securityContextInitializer) {

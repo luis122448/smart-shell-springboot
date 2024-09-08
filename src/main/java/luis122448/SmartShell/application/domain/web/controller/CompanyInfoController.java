@@ -4,9 +4,8 @@ import static luis122448.SmartShell.application.domain.web.constant.APIConstants
 
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
-import luis122448.SmartShell.application.domain.domain.service.service.view.CompanyInfoService;
+import luis122448.SmartShell.application.domain.domain.service.service.CompanyInfoService;
 import luis122448.SmartShell.application.domain.persistence.entity.CompanyInfoEntity;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

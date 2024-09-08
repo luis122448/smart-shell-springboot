@@ -3,9 +3,9 @@ package luis122448.SmartShell.application.domain.domain.service.implement;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.domain.service.service.UserService;
-import luis122448.SmartShell.security.application.entity.UserEntity;
-import luis122448.SmartShell.security.application.entity.primary.UserKey;
-import luis122448.SmartShell.security.application.repository.UserRepository;
+import luis122448.SmartShell.application.domain.persistence.entity.UserEntity;
+import luis122448.SmartShell.application.domain.persistence.entity.primary.UserKey;
+import luis122448.SmartShell.application.domain.persistence.repository.UserRepository;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Qualifier("UserSecurityRepository")
+    @Qualifier("UserRepository")
     private final UserRepository userRepository;
     private final SecurityContextInitializer securityContextInitializer;
     public UserServiceImpl(UserRepository userRepository, SecurityContextInitializer securityContextInitializer) {
