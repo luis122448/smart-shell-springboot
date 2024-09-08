@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.persistence.repository;
 
 import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentKardexPrint;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericSearch;
 import luis122448.SmartShell.application.domain.persistence.projection.DocumentGenericPrint;
@@ -99,6 +100,11 @@ public interface DocumentHeaderRepository extends JpaRepository<DocumentHeaderEn
     List<DocumentGenericPrint> printDocumentGeneric(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
                                                     @Param("IN_CODUSER") String IN_CODUSER,
                                                     @Param("IN_NUMINT") Long IN_NUMINT) throws GenericListServiceException;
+
+    @Query(value = "SELECT * FROM FN_PRINT_DOCUMENT_KARDEX(:IN_IDCOMPANY,:IN_CODUSER,:IN_NUMINT)", nativeQuery = true)
+    List<DocumentKardexPrint> printDocumentKardex(@Param("IN_IDCOMPANY") Integer IN_IDCOMPANY,
+                                                  @Param("IN_CODUSER") String IN_CODUSER,
+                                                  @Param("IN_NUMINT") Long IN_NUMINT) throws GenericListServiceException;
 
     boolean existsByIdcompanyAndRegistdateAndCodcur(Integer idcompany, LocalDate registdate, String codcur);
 

@@ -21,7 +21,7 @@ public interface BusinessPartnerRepository extends JpaRepository<BusinessPartner
     
     @Query("SELECT ic FROM BusinessPartnerEntity ic WHERE"
             + " ic.idcompany = :idcompany"
-    		+ " AND ic.typbuspar = :typbuspar"
+    		+ " AND ( :typbuspar = -1 OR ic.typbuspar = :typbuspar )"
     		+ " AND UPPER(ic.codbuspar) LIKE CONCAT('%', UPPER(:codbuspar), '%')"
     		+ " AND UPPER(ic.busnam) LIKE CONCAT('%', UPPER(:busnam), '%')"
     		+ " AND ( :status = '' OR ic.status = :status )")

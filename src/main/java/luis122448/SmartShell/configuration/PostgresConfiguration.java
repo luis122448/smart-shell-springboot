@@ -27,13 +27,6 @@ import javax.sql.DataSource;
 )
 public class PostgresConfiguration {
 
-//    @Primary
-//    @Bean(name="postgresDataSource")
-//    @ConfigurationProperties(prefix = "spring.datasource.postgresql")
-//    public DataSource postgresDataSource(){
-//        return DataSourceBuilder.create().build();
-//    }
-
     @Bean(name = "postgresPropertiesDataSource")
     @ConfigurationProperties(prefix="spring.datasource.postgresql")
     public DataSourceProperties dataSourceProperties() {

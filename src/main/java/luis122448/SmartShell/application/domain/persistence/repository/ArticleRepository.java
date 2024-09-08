@@ -2,6 +2,7 @@ package luis122448.SmartShell.application.domain.persistence.repository;
 
 import java.util.List;
 
+import luis122448.SmartShell.application.domain.persistence.entity.BusinessPartnerEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,13 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, ArticleP
             "RDER BY a.codart ASC LIMIT 25")
     List<ArticleEntity> findByDName(@Param("idcompany") Integer idcompany, @Param("name") String name);
 
-	@Query("SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart LIKE CONCAT('%', :codart, '%') AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%')")
-	Page<ArticleEntity> findByPage(@Param("idcompany") Integer idcompany, @Param("codart") String codart, @Param("descri") String descri, Pageable pageable);
+	@Query("SELECT a FROM ArticleEntity a WHERE"
+            + " a.idcompany = :idcompany"
+            + " AND ( :typinv = -1 OR a.typinv = :typinv )"
+            + " AND UPPER(a.codart) LIKE CONCAT('%', :codart, '%')"
+            + " AND UPPER(a.descri) LIKE CONCAT('%', UPPER(:descri), '%')"
+            + " AND ( :status = '' OR a.status = :status )")
+	Page<ArticleEntity> findByPage(@Param("idcompany") Integer idcompany, @Param("typinv") Integer typinv, @Param("codart") String codart, @Param("descri") String descri, @Param("status") String status, Pageable pageable);
 
     @Query(value = "SELECT a FROM ArticleEntity a WHERE a.idcompany = :idcompany AND a.codart NOT IN (SELECT l.codart FROM ListPriceArticleEntity l WHERE l.codlistprice = :codlistprice) AND a.status = 'Y'")
     List<ArticleEntity> findByArticleNotExistsListPrice(@Param("idcompany") Integer idcompany, @Param(value = "codlistprice") Integer codlistprice) throws GenericListServiceException;

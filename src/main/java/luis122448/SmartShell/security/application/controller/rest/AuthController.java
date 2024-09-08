@@ -6,6 +6,7 @@ import luis122448.SmartShell.security.application.service.model.RefreshTokenMode
 import luis122448.SmartShell.security.application.service.model.VerifyCodeModel;
 import luis122448.SmartShell.security.application.service.service.AuthService;
 import luis122448.SmartShell.security.application.utility.ApiResponseAuth;
+import luis122448.SmartShell.security.application.utility.ApiResponseMetadata;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +25,13 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginModel loginModel) throws GenericAuthServiceException {
-		ApiResponseAuth<?> response = this.authService.login(loginModel);
+		ApiResponseMetadata<?,?> response = this.authService.login(loginModel);
 		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping("/verify-code")
 	public ResponseEntity<?> verifyCode(@RequestBody VerifyCodeModel verifyCodeModel) throws GenericAuthServiceException {
-		ApiResponseAuth<?> response = this.authService.verifyCode(verifyCodeModel);
+		ApiResponseMetadata<?,?> response = this.authService.verifyCode(verifyCodeModel);
 		return ResponseEntity.ok(response);
 	}
 	

@@ -2,9 +2,11 @@ package luis122448.SmartShell.application.domain.domain.report.service;
 
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.model.DocumentGenericPrintDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentKardexPrintDTO;
 import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentHeaderService;
 import luis122448.SmartShell.application.domain.persistence.mapper.DocumentGenericMapper;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentPrintMapper;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseReport;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -25,18 +27,22 @@ import static luis122448.SmartShell.application.domain.domain.report.constant.DI
 @Service
 public class DocumentInternalGuideReport {
 
-    private final DocumentGenericMapper documentGenericMapper;
+    private final DocumentPrintMapper documentPrintMapper;
     private final DocumentHeaderService documentHeaderService;
 
-    public DocumentInternalGuideReport(DocumentGenericMapper documentGenericMapper, DocumentHeaderService documentHeaderService) {
-        this.documentGenericMapper = documentGenericMapper;
+    public DocumentInternalGuideReport(DocumentPrintMapper documentPrintMapper, DocumentHeaderService documentHeaderService) {
+        this.documentPrintMapper = documentPrintMapper;
         this.documentHeaderService = documentHeaderService;
     }
 
     public ApiResponseReport<?> printDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
-        List<DocumentGenericPrintDTO> obj = this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
+        List<DocumentKardexPrintDTO> obj = this.documentPrintMapper.toListDocumentKardexPrintDTO(this.documentHeaderService.printDocumentKardex(numint).getList().orElseThrow());
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(REPORT_INVOICE_A4_VERTICAL),new HashMap<>(), dataSource);
+        if (obj.isEmpty()) {
+            throw new GenericListServiceException(404);
+        }
+        String report = JASPER_DIRECTORY.resolve(obj.get(0).getFormat()).toString();
+        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
         return new ApiResponseReport<>(Optional.of(jasperPrint));
     }
 

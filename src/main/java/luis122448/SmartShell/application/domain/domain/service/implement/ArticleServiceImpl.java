@@ -111,7 +111,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ApiResponsePage<ArticleEntity> findByPage(ArticleEntity t, Pageable p) throws GenericPageServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
-		return new ApiResponsePage<ArticleEntity>(Optional.ofNullable(this.articleRepository.findByPage(idcompany,t.getCodart(), t.getDescri(), p)));
+		return new ApiResponsePage<ArticleEntity>(Optional.ofNullable(this.articleRepository.findByPage(idcompany,t.getTypinv(), t.getCodart(), t.getDescri(), t.getStatus(), p)));
 	}
 
 	@Override

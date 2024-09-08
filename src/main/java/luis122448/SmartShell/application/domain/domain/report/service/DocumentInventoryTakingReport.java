@@ -3,13 +3,14 @@ package luis122448.SmartShell.application.domain.domain.report.service;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.model.ColumnInfo;
 import luis122448.SmartShell.application.domain.domain.model.DocumentGenericPrintDTO;
+import luis122448.SmartShell.application.domain.domain.model.DocumentKardexPrintDTO;
 import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleService;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentDetailService;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentHeaderService;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentDetailEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
-import luis122448.SmartShell.application.domain.persistence.mapper.DocumentGenericMapper;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentPrintMapper;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
@@ -52,23 +53,27 @@ public class DocumentInventoryTakingReport {
     private final DocumentHeaderService documentHeaderService;
     private final DocumentDetailService documentDetailService;
     private final ArticleService articleService;
-    private final DocumentGenericMapper documentGenericMapper;
+    private final DocumentPrintMapper documentPrintMapper;
     public static final String NAME_DOCUMENT_INVENTORY = "DOCUMENT INVENTORY TAKING IMPORT";
     public static final String TITLE_DOCUMENT_INVENTORY = "REPORT OF IMPORT ERROR OF DOCUMENT INVENTORY TAKING";
 
-    public DocumentInventoryTakingReport(GenericReport genericReport, DocumentHeaderService documentHeaderService, DocumentDetailService documentDetailService, ArticleService articleService, DocumentGenericMapper documentGenericMapper) {
+    public DocumentInventoryTakingReport(GenericReport genericReport, DocumentHeaderService documentHeaderService, DocumentDetailService documentDetailService, ArticleService articleService, DocumentPrintMapper documentPrintMapper) {
         this.genericReport = genericReport;
         this.documentHeaderService = documentHeaderService;
         this.documentDetailService = documentDetailService;
         this.articleService = articleService;
-        this.documentGenericMapper = documentGenericMapper;
+        this.documentPrintMapper = documentPrintMapper;
     }
 
     public ApiResponseReport<?> printDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
-        List<DocumentGenericPrintDTO> obj = this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
+        List<DocumentKardexPrintDTO> obj = this.documentPrintMapper.toListDocumentKardexPrintDTO(this.documentHeaderService.printDocumentKardex(numint).getList().orElseThrow());
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(REPORT_INVOICE_A4_VERTICAL),new HashMap<>(), dataSource);
-        return new ApiResponseReport<>(1,"Ok", Optional.of(jasperPrint));
+        if (obj.isEmpty()) {
+            throw new GenericListServiceException(404);
+        }
+        String report = JASPER_DIRECTORY.resolve(obj.get(0).getFormat()).toString();
+        JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
+        return new ApiResponseReport<>(Optional.of(jasperPrint));
     }
 
     public ApiResponseByte<?> importDetails(Long numint, MultipartFile multipartFile) throws GenericByteServiceException {

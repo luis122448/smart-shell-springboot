@@ -1,6 +1,5 @@
 package luis122448.SmartShell.security.application.utility;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

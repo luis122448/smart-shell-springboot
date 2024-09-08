@@ -3,7 +3,7 @@ package luis122448.SmartShell.application.domain.persistence.projection;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public interface DocumentGenericPrint {
+public interface DocumentKardexPrint {
 
     String getFormat();
     String getComdestypidedoc();
@@ -27,6 +27,8 @@ public interface DocumentGenericPrint {
     String getAddres();
     String getPosCod();
     String getDesplaiss();
+    String getDesoriwarehouse();
+    String getDesdeswarehouse();
     String getCodcur();
     String getCursymbol();
     BigDecimal getExchangerate();

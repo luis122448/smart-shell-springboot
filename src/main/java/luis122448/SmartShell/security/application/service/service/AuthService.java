@@ -6,11 +6,12 @@ import luis122448.SmartShell.security.application.service.model.RefreshTokenMode
 import luis122448.SmartShell.security.application.service.model.UserModel;
 import luis122448.SmartShell.security.application.service.model.VerifyCodeModel;
 import luis122448.SmartShell.security.application.utility.ApiResponseAuth;
+import luis122448.SmartShell.security.application.utility.ApiResponseMetadata;
 
 public interface AuthService {
-	ApiResponseAuth<?> login(LoginModel loginModel) throws GenericAuthServiceException;
+	ApiResponseMetadata<?,?> login(LoginModel loginModel) throws GenericAuthServiceException;
 
-	ApiResponseAuth<?> verifyCode(VerifyCodeModel verifyCodeModel) throws GenericAuthServiceException;
+	ApiResponseMetadata<?,?> verifyCode(VerifyCodeModel verifyCodeModel) throws GenericAuthServiceException;
 
 	ApiResponseAuth<?> refreshToken(RefreshTokenModel refreshTokenModel) throws GenericAuthServiceException;
 }

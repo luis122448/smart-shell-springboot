@@ -23,9 +23,9 @@ public class TypeInventoryServiceImpl implements TypeInventoryService {
 	}
 
 	@Override
-	public ApiResponseList<TypeInventoryEntity> findAll() throws GenericListServiceException {
+	public ApiResponseList<TypeInventoryEntity> findAll(String status) throws GenericListServiceException {
 		Integer idcompany = securityContextInitializer.getIdCompany();
-		List<TypeInventoryEntity> list = typeInventoryRepository.findByIdcompany(idcompany);
+		List<TypeInventoryEntity> list = typeInventoryRepository.findByIdcompany(idcompany,status);
 		if (list.isEmpty()) {
 			throw new GenericListServiceException(404);
 		}

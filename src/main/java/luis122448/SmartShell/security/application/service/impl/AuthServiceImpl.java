@@ -4,8 +4,10 @@ import luis122448.SmartShell.security.application.repository.CompanyInfoReposito
 import luis122448.SmartShell.security.application.repository.UserRepository;
 import luis122448.SmartShell.security.application.service.exception.GenericAuthServiceException;
 import luis122448.SmartShell.security.application.service.model.*;
+import luis122448.SmartShell.security.application.service.service.MetadataService;
 import luis122448.SmartShell.security.application.service.service.VerifyCodeService;
 import luis122448.SmartShell.security.application.utility.ApiResponseAuth;
+import luis122448.SmartShell.security.application.utility.ApiResponseMetadata;
 import luis122448.SmartShell.security.auth.jwt.JWTUtils;
 import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
 import luis122448.SmartShell.security.auth.user.UserDetailsServiceCustom;
@@ -25,25 +27,22 @@ import static luis122448.SmartShell.security.utility.constant.SecurityConstant.C
 @Service
 public class AuthServiceImpl implements AuthService{
 
-	@Qualifier("UserSecurityRepository")
-	private final UserRepository usuarioRepository;
-	@Qualifier("CompanyInfoSecurityRepository")
-	private final CompanyInfoRepository companyInfoRepository;
 	private final UserDetailsServiceCustom userDetailsServiceCustom;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final VerifyCodeService verifyCodeService;
+	private final MetadataService metadataService;
 	private final JWTUtils jwtUtils;
-	public AuthServiceImpl(UserRepository usuarioRepository, CompanyInfoRepository companyInfoRepository, UserDetailsServiceCustom userDetailsServiceCustom, BCryptPasswordEncoder bCryptPasswordEncoder, VerifyCodeService verifyCodeService, JWTUtils jwtUtils) {
-		this.usuarioRepository = usuarioRepository;
-		this.companyInfoRepository = companyInfoRepository;
+
+	public AuthServiceImpl(UserDetailsServiceCustom userDetailsServiceCustom, BCryptPasswordEncoder bCryptPasswordEncoder, VerifyCodeService verifyCodeService, MetadataService metadataService, JWTUtils jwtUtils) {
 		this.userDetailsServiceCustom = userDetailsServiceCustom;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.verifyCodeService = verifyCodeService;
+		this.metadataService = metadataService;
 		this.jwtUtils = jwtUtils;
 	}
 
 	@Override
-	public ApiResponseAuth<?> login(LoginModel loginModel) throws GenericAuthServiceException {
+	public ApiResponseMetadata<?,?> login(LoginModel loginModel) throws GenericAuthServiceException {
 		UserDetailsCustom userDetailsCustom = this.userDetailsServiceCustom.loadUserByUsernameAndCompany(loginModel.getCompany(), loginModel.getCoduser());
 		if(isNull(userDetailsCustom)){
 			throw new GenericAuthServiceException("USER OR COMPANY NOT EXISTS!");
@@ -52,18 +51,23 @@ public class AuthServiceImpl implements AuthService{
 			throw new GenericAuthServiceException("PASSWORD INCORRECT!");
 		}
 		if(userDetailsCustom.getNivel()==0){
-			return new ApiResponseAuth<>(this.createToken(userDetailsCustom));
+			Optional<TokenModel> tokenModel = this.createToken(userDetailsCustom);
+			Optional<MetadataModel> metadataModel = this.metadataService.initMetadata();
+			return new ApiResponseMetadata<>(tokenModel,metadataModel);
 		}
-		return new ApiResponseAuth<>(0,"SUCCESS",this.verifyCodeService.createCode(userDetailsCustom.getIdcompany(),userDetailsCustom.getCompany(),userDetailsCustom.getCoduser()));
+		Optional<VerifyCodeModel> verifyCodeModel = this.verifyCodeService.createCode(userDetailsCustom.getIdcompany(),userDetailsCustom.getCompany(),userDetailsCustom.getCoduser());
+		return new ApiResponseMetadata<>(0,"VERIFY",verifyCodeModel,Optional.empty());
 	}
 
 	@Override
-	public ApiResponseAuth<?> verifyCode(VerifyCodeModel verifyCodeModel) throws GenericAuthServiceException {
+	public ApiResponseMetadata<?,?> verifyCode(VerifyCodeModel verifyCodeModel) throws GenericAuthServiceException {
 		UserEntity userEntity = this.verifyCodeService.verifyCode(verifyCodeModel.getCompany(), verifyCodeModel.getCoduser(), verifyCodeModel.getVerifyCode()).orElseThrow(
 				() -> new GenericAuthServiceException("INVALID VERIFY CODE!")
 		);
 		UserDetailsCustom userDetailsCustom = this.userDetailsServiceCustom.loadUserByUsernameAndCompany(verifyCodeModel.getCompany(), verifyCodeModel.getCoduser());
-		return new ApiResponseAuth<>(this.createToken(userDetailsCustom));
+		Optional<TokenModel> tokenModel = this.createToken(userDetailsCustom);
+		Optional<MetadataModel> metadataModel = this.metadataService.initMetadata();
+		return new ApiResponseMetadata<>(tokenModel,metadataModel);
 	}
 
 	@Override

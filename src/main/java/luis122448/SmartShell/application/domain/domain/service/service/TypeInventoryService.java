@@ -6,5 +6,5 @@ import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 
 public interface TypeInventoryService{
-    ApiResponseList<TypeInventoryEntity> findAll() throws GenericListServiceException;
+    ApiResponseList<TypeInventoryEntity> findAll(String status) throws GenericListServiceException;
 }

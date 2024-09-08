@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.DocumentHeaderPK;
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentKardexPrint;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.application.domain.domain.model.DocumentGenericSearchFilterDTO;
 import luis122448.SmartShell.application.domain.persistence.entity.DocumentHeaderEntity;
@@ -71,6 +72,17 @@ public class DocumentHeaderServiceImpl implements DocumentHeaderService {
 		Integer idcompany = securityContextInitializer.getIdCompany();
 		String coduser = securityContextInitializer.getCodUser();
 		List<DocumentGenericPrint> list = this.documentHeaderRepository.printDocumentGeneric(idcompany,coduser,numint);
+		if (list.isEmpty()){
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(list));
+	}
+
+	@Override
+	public ApiResponseList<DocumentKardexPrint> printDocumentKardex(Long numint) throws GenericListServiceException {
+		Integer idcompany = securityContextInitializer.getIdCompany();
+		String coduser = securityContextInitializer.getCodUser();
+		List<DocumentKardexPrint> list = this.documentHeaderRepository.printDocumentKardex(idcompany,coduser,numint);
 		if (list.isEmpty()){
 			throw new GenericListServiceException(404);
 		}

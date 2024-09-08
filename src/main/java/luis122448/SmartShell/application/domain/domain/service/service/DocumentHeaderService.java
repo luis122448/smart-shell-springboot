@@ -1,5 +1,6 @@
 package luis122448.SmartShell.application.domain.domain.service.service;
 
+import luis122448.SmartShell.application.domain.persistence.projection.DocumentKardexPrint;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.model.DocumentGenericSearchFilterDTO;
@@ -20,6 +21,7 @@ public interface DocumentHeaderService{
     ApiResponsePage<DocumentGenericSearch> pageDocumentGeneric(DocumentGenericSearchFilterDTO t, Pageable pageable) throws GenericPageServiceException;
     ApiResponseObject<DocumentHeaderEntity> registerDocumentHeader(DocumentHeaderEntity t) throws GenericObjectServiceException;
     ApiResponseList<DocumentGenericPrint> printDocumentGeneric(Long numint) throws GenericListServiceException;
+    ApiResponseList<DocumentKardexPrint> printDocumentKardex(Long numint) throws GenericListServiceException;
 
     ApiResponseObject<?> calculateImportDocument(Long numint) throws GenericProcedureException;
     ApiResponseObject<?> approvedImportDocument(Long numint) throws GenericProcedureException;

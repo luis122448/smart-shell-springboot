@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 
-import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_INVENTORY;
-import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_DOCUMENT;
+import static luis122448.SmartShell.application.domain.web.constant.APIConstants.*;
 
 @RestController
-@RequestMapping(PATH_INVENTORY + PATH_DOCUMENT + "/inventory-taking")
+@RequestMapping(PATH_BILLING + PATH_DOCUMENT + "/inventory-taking")
 public class DocumentInventoryTakingController {
 
     private final DocumentInventoryTakingUseCase documentInventoryTakingUseCase;

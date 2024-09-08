@@ -4,9 +4,8 @@ import luis122448.SmartShell.application.domain.domain.model.DocumentGenericPrin
 import luis122448.SmartShell.application.domain.domain.report.constant.DIRECTORYConstants;
 import luis122448.SmartShell.application.domain.domain.service.service.DocumentHeaderService;
 import luis122448.SmartShell.application.domain.persistence.mapper.DocumentGenericMapper;
+import luis122448.SmartShell.application.domain.persistence.mapper.DocumentPrintMapper;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.application.domain.domain.usecase.DocumentInvoiceUseCase;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseReport;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -24,31 +23,21 @@ import static luis122448.SmartShell.application.domain.domain.report.constant.DI
 @Service
 public class DocumentInvoiceReport {
 
-    private final DocumentGenericMapper documentGenericMapper;
+    private final DocumentPrintMapper documentPrintMapper;
     private final DocumentHeaderService documentHeaderService;
 
-    public DocumentInvoiceReport(DocumentGenericMapper documentGenericMapper, DocumentHeaderService documentHeaderService) {
-        this.documentGenericMapper = documentGenericMapper;
+    public DocumentInvoiceReport(DocumentPrintMapper documentPrintMapper, DocumentHeaderService documentHeaderService) {
+        this.documentPrintMapper = documentPrintMapper;
         this.documentHeaderService = documentHeaderService;
     }
 
     public ApiResponseReport<?> printDocument(Long numint) throws GenericListServiceException, JRException, FileNotFoundException {
-        List<DocumentGenericPrintDTO> obj = this.documentGenericMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
+        List<DocumentGenericPrintDTO> obj = this.documentPrintMapper.toListDocumentGenericPrintDTO(this.documentHeaderService.printDocumentGeneric(numint).getList().orElseThrow());
         JRDataSource dataSource = new JRBeanCollectionDataSource(obj);
-        String report = "";
-        Integer typformat = obj.get(0).getTypformat();
-        Integer typcomdoc = obj.get(0).getTypcomdoc();
-        if (typcomdoc == 1 && typformat == 1 ) {
-            report = REPORT_INVOICE_A4_HORIZONTAL;
-        } else if (typcomdoc == 1 && typformat == 2) {
-            report = REPORT_INVOICE_A4_VERTICAL;
-        } else if (typcomdoc == 2 && typformat == 1) {
-            report = REPORT_RECEIPT_A4_HORIZONTAL;
-        } else if (typcomdoc == 2 && typformat == 2) {
-            report = REPORT_RECEIPT_A4_VERTICAL;
-        } else {
-            report = REPORT_INVOICE_A4_HORIZONTAL;
+        if (obj.isEmpty()) {
+            throw new GenericListServiceException(404);
         }
+        String report = JASPER_DIRECTORY.resolve(obj.get(0).getFormat()).toString();
         JasperPrint jasperPrint = JasperFillManager.fillReport(DIRECTORYConstants.getJasperInputStream(report),new HashMap<>(), dataSource);
         return new ApiResponseReport<>(Optional.of(jasperPrint));
     }

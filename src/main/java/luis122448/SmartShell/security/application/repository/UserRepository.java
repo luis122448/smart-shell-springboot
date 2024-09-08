@@ -21,4 +21,5 @@ public interface UserRepository extends JpaRepository<UserEntity, UserKey>{
     @Modifying
     @Query(value = "UPDATE TBL_USER SET code=:code WHERE idcompany = :idcompany AND coduser = :coduser", nativeQuery = true)
     void updateVerifyCode(@Param("idcompany") Integer idcompany, @Param("coduser") String coduser , @Param("code") String code);
+
 }

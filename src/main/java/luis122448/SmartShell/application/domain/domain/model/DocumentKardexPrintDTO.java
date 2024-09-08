@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
-public class DocumentGenericPrintDTO {
+public class DocumentKardexPrintDTO {
 
     private String format;
     private String comdestypidedoc;
@@ -39,6 +39,8 @@ public class DocumentGenericPrintDTO {
     private String addres;
     private String poscod;
     private String desplaiss;
+    private String desoriwarehouse;
+    private String desdeswarehouse;
     private String codcur;
     private String cursymbol;
     private BigDecimal exchangerate;

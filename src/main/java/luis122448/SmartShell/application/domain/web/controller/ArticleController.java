@@ -91,11 +91,16 @@ public class ArticleController {
 	}
 
 	@GetMapping("/by-page")
-	public ResponseEntity<?> findByPage (@RequestParam(name = "codart", defaultValue = "") String codart,
-			@RequestParam(name = "descri", defaultValue = "") String descri, Pageable p) throws GenericPageServiceException {
+	public ResponseEntity<?> findByPage (@RequestParam(name = "typinv", defaultValue = "1") Integer typinv,
+										 @RequestParam(name = "codart", defaultValue = "") String codart,
+										 @RequestParam(name = "descri", defaultValue = "") String descri,
+										 @RequestParam(name = "status", defaultValue = "") String status,
+										 Pageable p) throws GenericPageServiceException {
 		ArticleEntity ori = new ArticleEntity();
+		ori.setTypinv(typinv);
 		ori.setCodart(codart);
 		ori.setDescri(descri);
+		ori.setStatus(status);
 		ApiResponsePage<ArticleEntity> lst = this.articleService.findByPage(ori, p);
 		return ResponseEntity.ok(lst);
 	}
