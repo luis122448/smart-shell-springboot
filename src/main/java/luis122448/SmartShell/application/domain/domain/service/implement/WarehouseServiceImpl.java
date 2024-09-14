@@ -4,7 +4,7 @@ import luis122448.SmartShell.application.domain.domain.component.SecurityContext
 import luis122448.SmartShell.application.domain.domain.service.generic.WarehouseService;
 import luis122448.SmartShell.application.domain.persistence.entity.WarehouseEntity;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.WarehousePK;
-import luis122448.SmartShell.application.domain.persistence.projection.WarehouseRepository;
+import luis122448.SmartShell.application.domain.persistence.repository.WarehouseRepository;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.object.api.ApiResponseList;

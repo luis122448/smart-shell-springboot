@@ -16,8 +16,8 @@ import static luis122448.SmartShell.security.application.entity.constant.Databas
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "UserEntitySecurity")
 @IdClass(UserKey.class)
+@Entity(name = "UserEntitySecurity")
 @Table(schema = SCHEMA_SMART_SHELL, name = "TBL_USER")
 public class UserEntity implements Serializable {
     @Id

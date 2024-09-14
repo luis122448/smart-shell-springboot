@@ -12,5 +12,6 @@ import java.io.Serializable;
 public class WarehousePK implements Serializable {
     private Integer idcompany;
     private Integer typinv;
+    private Integer codwarehouse;
 }
 
