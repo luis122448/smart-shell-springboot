@@ -1,5 +1,5 @@
 services:
-  smart-shell-springboot:
+  app:
     container_name: smart-shell-springboot
     env_file:
       - ./.env
