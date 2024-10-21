@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create environment variables file
+touch .env
+
 # Archivo de propiedades
 archivo="./src/main/resources/application-pdn.properties"
 
