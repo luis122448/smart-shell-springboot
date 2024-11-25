@@ -10,9 +10,13 @@ import java.util.List;
 
 public interface FormatCommercialDocumentRepository extends JpaRepository<FormatCommercialDocumentEntity,FormatCommercialDocumentPK> {
 
-    List<FormatCommercialDocumentEntity> findByIdcompany(@Param("idcompany") Integer idcompany);
+    @Query("SELECT sdc FROM FormatCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany AND " +
+            "(sdc.status = :status OR :status = '')")
+    List<FormatCommercialDocumentEntity> findByIdcompany(@Param("idcompany") Integer idcompany, @Param("status") String status);
 
-    @Query("SELECT sdc FROM FormatCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany AND sdc.typcomdoc = :typcomdoc AND sdc.status ='Y'")
-    List<FormatCommercialDocumentEntity> findByIdcompanyAndTypcomdoc(Integer idcompany, Integer typcomdoc);
+    @Query("SELECT sdc FROM FormatCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany " +
+            "AND sdc.typcomdoc = :typcomdoc " +
+            "AND (sdc.status = :status OR :status = '')")
+    List<FormatCommercialDocumentEntity> findByIdcompanyAndTypcomdoc(@Param("idcompany") Integer idcompany,@Param("typcomdoc") Integer typcomdoc, @Param("status") String status);
 
 }

@@ -37,7 +37,7 @@ services:
       REDIS_USERNAME: $SMART_SHELL_REDIS_USERNAME
       REDIS_PASSWORD: $SMART_SHELL_REDIS_PASSWORD
     ports:
-      - "${SMART_SHELL_SPRINGBOOT_PORT}:8081"
+      - "${SMART_SHELL_SPRINGBOOT_PORT}:8080"
     networks:
       - smart-shell-net
     restart: unless-stopped

@@ -1,7 +1,6 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleSpecificationService;
-import luis122448.SmartShell.application.domain.persistence.entity.ArticleSpecificationEntity;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +17,9 @@ public class ArticleSpecificationController {
     }
 
     @GetMapping("/by-all")
-    public ResponseEntity<?> findByAll(@RequestParam(value = "typinv", defaultValue = "0") Integer typinv) throws GenericListServiceException{
-        ArticleSpecificationEntity articleSpecificationEntity = new ArticleSpecificationEntity();
-        articleSpecificationEntity.setTypinv(typinv);
-        return ResponseEntity.ok(this.articleSpecificationService.findByLike(articleSpecificationEntity));
+    public ResponseEntity<?> findByAll(@RequestParam(value = "typinv") Integer typinv,
+                                       @RequestParam(value = "status") String status) throws GenericListServiceException{
+        return ResponseEntity.ok(this.articleSpecificationService.findByTypinv(typinv,status));
     }
 
 }

@@ -1,14 +1,13 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
+import luis122448.SmartShell.application.domain.domain.model.ListPriceDTO;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ListPriceService;
-import luis122448.SmartShell.application.domain.persistence.entity.ListPriceEntity;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
-import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
+
 @RestController
 @RequestMapping(PATH_BILLING + "/list-price")
 public class ListPriceController {
@@ -19,38 +18,31 @@ public class ListPriceController {
     }
 
     @GetMapping("/by-all")
-    public ResponseEntity<?> findAll() throws GenericListServiceException {
-        ApiResponseList<ListPriceEntity> obj = this.listPriceService.findAll();
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> findAll(@RequestParam(name = "status", defaultValue = "") String status) throws GenericListServiceException {
+        return ResponseEntity.ok(this.listPriceService.findAll(status));
     }
 
     @GetMapping("/by-id")
-    public ResponseEntity<?> findById(@RequestParam(name = "codlistprice", defaultValue = "0") Integer codlistprice) throws GenericObjectServiceException{
-        ListPriceEntity tmp = new ListPriceEntity();
-        tmp.setCodlistprice(codlistprice);
-        ApiResponseObject<ListPriceEntity> obj = this.listPriceService.findById(tmp);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> findById(@RequestParam(name = "codlistprice") Integer codlistprice) throws GenericObjectServiceException{
+        ListPriceDTO dto = new ListPriceDTO();
+        dto.setCodlistprice(codlistprice);
+        return ResponseEntity.ok(this.listPriceService.findById(dto));
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        ApiResponseObject<ListPriceEntity> obj = this.listPriceService.save(listPriceEntity);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> save(@RequestBody ListPriceDTO dto) throws GenericObjectServiceException {
+        return ResponseEntity.ok(this.listPriceService.save(dto));
     }
 
     @PutMapping("")
-    public ResponseEntity<?> update(@RequestParam(name = "codlistprice", defaultValue = "0") Integer codlistprice,
-                                    @RequestBody ListPriceEntity listPriceEntity) throws GenericObjectServiceException {
-        listPriceEntity.setCodlistprice(codlistprice);
-        ApiResponseObject<ListPriceEntity> obj = this.listPriceService.update(listPriceEntity);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> update(@RequestBody ListPriceDTO dto) throws GenericObjectServiceException {
+        return ResponseEntity.ok(this.listPriceService.update(dto));
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> delete(@RequestParam(name = "codlistprice", defaultValue = "0") Integer codlistprice) throws GenericObjectServiceException {
-        ListPriceEntity tmp = new ListPriceEntity();
-        tmp.setCodlistprice(codlistprice);
-        ApiResponseObject<ListPriceEntity> obj = this.listPriceService.delete(tmp);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> delete(@RequestParam(name = "codlistprice") Integer codlistprice) throws GenericObjectServiceException {
+        ListPriceDTO dto = new ListPriceDTO();
+        dto.setCodlistprice(codlistprice);
+        return ResponseEntity.ok(this.listPriceService.delete(dto));
     }
 }

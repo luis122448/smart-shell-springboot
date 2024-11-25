@@ -1,8 +1,7 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
+import luis122448.SmartShell.application.domain.domain.model.FormatCommercialDocumentDTO;
 import luis122448.SmartShell.application.domain.domain.service.service.FormatCommercialDocumentService;
-import luis122448.SmartShell.application.domain.persistence.entity.FormatCommercialDocumentEntity;
-import luis122448.SmartShell.application.domain.persistence.entity.primary.FormatCommercialDocumentPK;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +23,23 @@ public class FormatCommercialDocumentController {
     }
 
     @GetMapping("/by-all")
-    public ResponseEntity<?> findAll() throws GenericListServiceException {
-        return ResponseEntity.ok(this.formatCommercialDocumentService.findAll());
+    public ResponseEntity<?> findAll(@RequestParam(name = "status", defaultValue = "") String status) throws GenericListServiceException {
+        return ResponseEntity.ok(this.formatCommercialDocumentService.findAll(status));
     }
 
-    @GetMapping("/by-like")
-    public ResponseEntity<?> findByLike(@RequestParam(name = "typcomdoc", defaultValue = "0") Integer typcomdoc) throws GenericListServiceException {
-        FormatCommercialDocumentEntity tmp = new FormatCommercialDocumentEntity();
-        tmp.setTypcomdoc(typcomdoc);
-        return ResponseEntity.ok(this.formatCommercialDocumentService.findByLike(tmp));
+    @GetMapping("/by-typcomdoc")
+    public ResponseEntity<?> findByTypcomdoc(@RequestParam(name = "typcomdoc") Integer typcomdoc,
+                                        @RequestParam(name = "status", defaultValue = "") String status) throws GenericListServiceException {
+        return ResponseEntity.ok(this.formatCommercialDocumentService.findByTypcomdoc(typcomdoc, status));
     }
 
     @GetMapping("/by-id")
-    public ResponseEntity<?> findById(@RequestParam(name = "typcomdoc", defaultValue = "0") Integer typcomdoc,
-                                      @RequestParam(name = "typformat", defaultValue = "0") Integer typformat) throws GenericObjectServiceException {
-        FormatCommercialDocumentPK tmp = new FormatCommercialDocumentPK();
-        tmp.setTypcomdoc(typcomdoc);
-        tmp.setTypformat(typformat);
-        return ResponseEntity.ok(this.formatCommercialDocumentService.findById(tmp));
+    public ResponseEntity<?> findById(@RequestParam(name = "typcomdoc") Integer typcomdoc,
+                                      @RequestParam(name = "typformat") Integer typformat) throws GenericObjectServiceException {
+        FormatCommercialDocumentDTO dto = new FormatCommercialDocumentDTO();
+        dto.setTypcomdoc(typcomdoc);
+        dto.setTypformat(typformat);
+        return ResponseEntity.ok(this.formatCommercialDocumentService.findById(dto));
     }
 
 

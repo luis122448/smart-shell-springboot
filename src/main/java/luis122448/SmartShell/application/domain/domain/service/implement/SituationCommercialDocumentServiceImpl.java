@@ -21,23 +21,23 @@ public class SituationCommercialDocumentServiceImpl implements SituationCommerci
     }
 
     @Override
-    public ApiResponseList<SituationCommercialDocumentEntity> findAll() throws GenericListServiceException {
+    public ApiResponseList<SituationCommercialDocumentEntity> findAll(String status) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        List<SituationCommercialDocumentEntity> lst = this.situationCommercialDocumentRepository.findByIdcompany(idcompany);
-        if (lst.isEmpty()){
+        List<SituationCommercialDocumentEntity> entityList = this.situationCommercialDocumentRepository.findByIdcompany(idcompany,status);
+        if (entityList.isEmpty()){
             throw new GenericListServiceException(404);
         }
-        return new ApiResponseList<>(Optional.of(lst));
+        return new ApiResponseList<>(Optional.of(entityList));
     }
 
     @Override
-    public ApiResponseList<SituationCommercialDocumentEntity> findByTypcomdoc(SituationCommercialDocumentEntity t) throws GenericListServiceException {
+    public ApiResponseList<SituationCommercialDocumentEntity> findByTypcomdoc(Integer typcomdoc, String status) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        List<SituationCommercialDocumentEntity> lst = this.situationCommercialDocumentRepository.findByIdcompanyAndTypcomdoc(idcompany,t.getTypcomdoc());
-        if (lst.isEmpty()){
+        List<SituationCommercialDocumentEntity> entityList = this.situationCommercialDocumentRepository.findByIdcompanyAndTypcomdoc(idcompany,typcomdoc,status);
+        if (entityList.isEmpty()){
             throw new GenericListServiceException(404);
         }
-        return new ApiResponseList<>(Optional.of(lst));
+        return new ApiResponseList<>(Optional.of(entityList));
     }
 
 }

@@ -1,15 +1,17 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
-import static luis122448.SmartShell.util.code.Utils.copyNonNullProperties;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
+import luis122448.SmartShell.application.domain.domain.model.ArticleDTO;
 import luis122448.SmartShell.application.domain.persistence.entity.primary.ArticlePK;
+import luis122448.SmartShell.application.domain.persistence.mapper.ArticleMapper;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,117 +22,110 @@ import luis122448.SmartShell.application.domain.domain.service.service.ArticleSe
 import luis122448.SmartShell.util.object.api.ApiResponseList;
 import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import luis122448.SmartShell.util.object.api.ApiResponsePage;
+import static luis122448.SmartShell.util.code.Utils.*;
 import static luis122448.SmartShell.util.constant.MESSAGEConstants.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 	private final ArticleRepository articleRepository;
+	private final ArticleMapper articleMapper;
 	private final SecurityContextInitializer securityContextInitializer;
-	public ArticleServiceImpl(ArticleRepository articleRepository, SecurityContextInitializer securityContextInitializer) {
+	public ArticleServiceImpl(ArticleRepository articleRepository, ArticleMapper articleMapper, SecurityContextInitializer securityContextInitializer) {
 		this.articleRepository = articleRepository;
-		this.securityContextInitializer = securityContextInitializer;
-	}
-
-	@Override
-	public ApiResponseList<ArticleEntity> findByLike(ArticleEntity t) throws GenericListServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		List<ArticleEntity> list = List.of();
-		if (!t.getCodart().isEmpty()) {
-			list = this.articleRepository.findByCodart(idcompany,t.getCodart());
-		} else if (!t.getDescri().isEmpty()) {
-			list = this.articleRepository.findByDescri(idcompany,t.getDescri());
-		} else {
-			return new ApiResponseList<>(-2, "No Case", Optional.empty());
-		}
-		if (list.isEmpty()) {
-			throw new GenericListServiceException(404);
-		}
-		return new ApiResponseList<ArticleEntity>(Optional.of(list));
-	}
-
-	@Override
-	public ApiResponseList<ArticleEntity> findByName(String name) throws GenericListServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		List<ArticleEntity> list = this.articleRepository.findByDName(idcompany,name);
-		if (list.isEmpty()) {
-			throw new GenericListServiceException(404);
-		}
-		return new ApiResponseList<ArticleEntity>(Optional.of(list));
+        this.articleMapper = articleMapper;
+        this.securityContextInitializer = securityContextInitializer;
 	}
 
 	@Override
 	public ApiResponseObject<ArticleEntity> exist(Integer typinv, String codart) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		if (this.articleRepository.existsById(new ArticlePK(idcompany,codart))) {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		if (this.articleRepository.existsById(new ArticlePK(idCompany,codart))) {
 			return new ApiResponseObject<>(-2, ID_EXISTS(codart), Optional.empty());
 		}
-		return new ApiResponseObject<ArticleEntity>(Optional.empty());
-	}
-
-	@Override
-	public ApiResponseObject<ArticleEntity> findById(ArticleEntity t) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		Optional<ArticleEntity> articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart()));
-		if (articleEntity.isEmpty()) {
-			throw new GenericObjectServiceException(ID_NOT_EXISTS(t.getCodart()));
-		}
-		return new ApiResponseObject<ArticleEntity>(articleEntity);
-	}
-
-	@Override
-	public ApiResponseObject<ArticleEntity> save(ArticleEntity t) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		if (this.articleRepository.existsById(new ArticlePK(idcompany,t.getCodart()))) {
-			throw new GenericObjectServiceException(ID_EXISTS(t.getCodart()));
-		}
-		t.setStatus("S");
-		return new ApiResponseObject<ArticleEntity>(1,"Ok",Optional.of(this.articleRepository.save(t)));
-	}
-
-	@Override
-	public ApiResponseObject<ArticleEntity> update(ArticleEntity t) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		ArticleEntity articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart())).orElseThrow(
-				() -> new GenericObjectServiceException(ID_NOT_EXISTS(t.getCodart()))
-		);
-		t.setStatus("Y");
-		copyNonNullProperties(t, articleEntity);
-		return new ApiResponseObject<ArticleEntity>(Optional.of(this.articleRepository.save(articleEntity)));
-	}
-
-	@Override
-	public ApiResponseObject<ArticleEntity> delete(ArticleEntity t) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		ArticleEntity articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart())).orElseThrow(
-				() -> new GenericObjectServiceException(ID_NOT_EXISTS(t.getCodart()))
-		);
-		articleEntity.setStatus("N");
-		return new ApiResponseObject<ArticleEntity>(Optional.of(this.articleRepository.save(articleEntity)));
-	}
-
-	@Override
-	public ApiResponsePage<ArticleEntity> findByPage(ArticleEntity t, Pageable p) throws GenericPageServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		return new ApiResponsePage<ArticleEntity>(Optional.ofNullable(this.articleRepository.findByPage(idcompany,t.getTypinv(), t.getCodart(), t.getDescri(), t.getStatus(), p)));
-	}
-
-	@Override
-	public ApiResponseObject<ArticleEntity> undelete(ArticleEntity t) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		ArticleEntity articleEntity = this.articleRepository.findById(new ArticlePK(idcompany,t.getCodart())).orElseThrow(
-				() -> new GenericObjectServiceException(ID_NOT_EXISTS(t.getCodart()))
-		);
-		articleEntity.setStatus("Y");
-		return new ApiResponseObject<ArticleEntity>(Optional.of(articleEntity));
+		return new ApiResponseObject<>(Optional.empty());
 	}
 
 	@Override
 	@Cacheable(value="shortTime")
-	public ApiResponseObject<ArticleEntity> isAvailable(ArticleEntity articleEntity) throws GenericObjectServiceException {
-		Integer idcompany = securityContextInitializer.getIdCompany();
-		if (this.articleRepository.existsById(new ArticlePK(idcompany,articleEntity.getCodart()))){
-			throw new GenericObjectServiceException(ID_EXISTS(articleEntity.getCodart()));
+	public ApiResponseObject<ArticleEntity> isAvailable(ArticleDTO dto) throws GenericObjectServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		ArticlePK id = new ArticlePK(idCompany,dto.getCodart());
+		if (this.articleRepository.existsById(id)){
+			throw new GenericObjectServiceException(ID_EXISTS(id.toString()));
 		}
-		return new ApiResponseObject<ArticleEntity>(Optional.empty());
+		return new ApiResponseObject<>(Optional.empty());
 	}
+
+	@Override
+	public ApiResponseList<ArticleEntity> findByName(String name) throws GenericListServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		List<ArticleEntity> listEntity = this.articleRepository.findByDName(idCompany,name);
+		if (listEntity.isEmpty()) {
+			throw new GenericListServiceException(404);
+		}
+		return new ApiResponseList<>(Optional.of(listEntity));
+	}
+
+	@Override
+	public ApiResponsePage<ArticleEntity> findByPage(ArticleDTO dto, Pageable p) throws GenericPageServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		Page<ArticleEntity> pageEntity = this.articleRepository.findByPage(idCompany,dto.getTypinv(), dto.getCodart(), dto.getDescri(), dto.getStatus(), p);
+		if (pageEntity.isEmpty()) {
+			throw new GenericPageServiceException(404);
+		}
+		return new ApiResponsePage<>(Optional.of(pageEntity));
+	}
+
+	@Override
+	public ApiResponseObject<ArticleEntity> findById(ArticleDTO dto) throws GenericObjectServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		ArticlePK id = new ArticlePK(idCompany,dto.getCodart());
+		Optional<ArticleEntity> searchEntity = this.articleRepository.findById(id);
+		if (searchEntity.isEmpty()) {
+			throw new GenericObjectServiceException(ID_NOT_EXISTS(id.toString()));
+		}
+		return new ApiResponseObject<>(searchEntity);
+	}
+
+	@Override
+	public ApiResponseObject<ArticleEntity> save(ArticleDTO dto) throws GenericObjectServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		String codUser = securityContextInitializer.getCodUser();
+		ArticlePK id = new ArticlePK(idCompany,dto.getCodart());
+		if (this.articleRepository.existsById(id)) {
+			throw new GenericObjectServiceException(ID_EXISTS(dto.toString()));
+		}
+		ArticleEntity newEntity = this.articleMapper.toArticleEntity(dto);
+		newEntity.setIdcompany(idCompany);
+		newEntity.setCreateby(codUser);
+		newEntity.setCreateat(LocalDateTime.now());
+		ArticleEntity savedEntity = this.articleRepository.save(newEntity);
+		return new ApiResponseObject<>(Optional.of(savedEntity));
+	}
+
+	@Override
+	public ApiResponseObject<ArticleEntity> update(ArticleDTO dto) throws GenericObjectServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		String codUser = securityContextInitializer.getCodUser();
+		ArticlePK id = new ArticlePK(idCompany,dto.getCodart());
+		ArticleEntity existingEntity = this.articleRepository.findById(id).orElseThrow(
+				() -> new GenericObjectServiceException(ID_NOT_EXISTS(id.toString()))
+		);
+		ArticleEntity updateEntity = this.articleMapper.toArticleEntity(dto);
+		updateEntity.setIdcompany(idCompany);
+		updateEntity.setUpdateby(codUser);
+		updateEntity.setUpdateat(LocalDateTime.now());
+		copyNonNullProperties(existingEntity, updateEntity);
+		ArticleEntity savedEntity = this.articleRepository.save(updateEntity);
+		return new ApiResponseObject<>(Optional.of(savedEntity));
+	}
+
+	@Override
+	public ApiResponseObject<ArticleEntity> delete(ArticleDTO dto) throws GenericObjectServiceException {
+		Integer idCompany = securityContextInitializer.getIdCompany();
+		ArticlePK id = new ArticlePK(idCompany,dto.getCodart());
+		this.articleRepository.deleteById(id);
+		return new ApiResponseObject<>(Optional.empty());
+	}
+
 }

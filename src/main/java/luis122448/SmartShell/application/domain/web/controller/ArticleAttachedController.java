@@ -2,6 +2,7 @@ package luis122448.SmartShell.application.domain.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import luis122448.SmartShell.application.archive.persistence.entity.ArchiveEntity;
+import luis122448.SmartShell.application.domain.domain.model.ArticleAttachedDTO;
 import luis122448.SmartShell.application.domain.domain.report.service.ArticleAttachedArchive;
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleAttachedService;
 import luis122448.SmartShell.application.domain.persistence.entity.ArticleAttachedEntity;
@@ -32,19 +33,19 @@ public class ArticleAttachedController {
         this.articleAttachedService = articleAttachedService;
     }
 
-    @GetMapping("/by-all")
-    public ResponseEntity<?> findByAll(@RequestParam("codart") String codart) throws GenericListServiceException{
-        ArticleAttachedEntity articleAttachedEntity = new ArticleAttachedEntity();
-        articleAttachedEntity.setCodart(codart);
-        ApiResponseList<ArticleAttachedEntity> apiResponseList = this.articleAttachedService.findByLike(articleAttachedEntity);
-        return ResponseEntity.ok(apiResponseList);
+    @GetMapping("/by-codart")
+    public ResponseEntity<?> findByCodart(@RequestParam("codart") String codart,
+                                          @RequestParam(value = "status", defaultValue = "") String status) throws GenericListServiceException{
+        return ResponseEntity.ok(this.articleAttachedService.findByCodart(codart,status));
     }
 
     @GetMapping("/by-id")
     public ResponseEntity<?> findById(@RequestParam("codart") String codart,
                                       @RequestParam("typeps") Integer typeps) throws GenericObjectServiceException{
-        ArticleAttachedPK articleAttachedPK = new ArticleAttachedPK(0,codart,typeps);
-        return ResponseEntity.ok(this.articleAttachedService.findById(articleAttachedPK));
+        ArticleAttachedDTO dto = new ArticleAttachedDTO();
+        dto.setCodart(codart);
+        dto.setTypspe(typeps);
+        return ResponseEntity.ok(this.articleAttachedService.findById(dto));
     }
 
     @GetMapping("/by-downloader")

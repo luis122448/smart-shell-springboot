@@ -12,6 +12,9 @@ import luis122448.SmartShell.security.auth.jwt.JWTUtils;
 import luis122448.SmartShell.security.auth.user.UserDetailsCustom;
 import luis122448.SmartShell.security.auth.user.UserDetailsServiceCustom;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +54,10 @@ public class AuthServiceImpl implements AuthService{
 			throw new GenericAuthServiceException("PASSWORD INCORRECT!");
 		}
 		if(userDetailsCustom.getNivel()==0){
+			Authentication authentication = new UsernamePasswordAuthenticationToken(
+					userDetailsCustom, null, userDetailsCustom.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
 			Optional<TokenModel> tokenModel = this.createToken(userDetailsCustom);
 			Optional<MetadataModel> metadataModel = this.metadataService.initMetadata();
 			return new ApiResponseMetadata<>(tokenModel,metadataModel);
@@ -65,6 +72,11 @@ public class AuthServiceImpl implements AuthService{
 				() -> new GenericAuthServiceException("INVALID VERIFY CODE!")
 		);
 		UserDetailsCustom userDetailsCustom = this.userDetailsServiceCustom.loadUserByUsernameAndCompany(verifyCodeModel.getCompany(), verifyCodeModel.getCoduser());
+
+		Authentication authentication = new UsernamePasswordAuthenticationToken(
+				userDetailsCustom, null, userDetailsCustom.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
 		Optional<TokenModel> tokenModel = this.createToken(userDetailsCustom);
 		Optional<MetadataModel> metadataModel = this.metadataService.initMetadata();
 		return new ApiResponseMetadata<>(tokenModel,metadataModel);

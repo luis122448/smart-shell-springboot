@@ -33,6 +33,5 @@ public class FormatCommercialDocumentEntity extends AuditingEntity {
     private String observ;
     private String commen;
     private String defaul;
-    private String status;
 
 }

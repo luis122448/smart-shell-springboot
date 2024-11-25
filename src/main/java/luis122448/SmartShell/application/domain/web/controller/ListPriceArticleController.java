@@ -1,6 +1,7 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import luis122448.SmartShell.application.domain.domain.model.ListPriceArticleDTO;
 import luis122448.SmartShell.application.domain.domain.report.service.ListPriceArticleReport;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
@@ -52,63 +53,50 @@ public class ListPriceArticleController {
                                         @RequestParam(value = "codart", defaultValue = "") String codart,
                                         @RequestParam(value = "desart", defaultValue = "") String desart,
                                         Pageable pageable) throws GenericPageServiceException {
-        ListPriceArticleEntity tmp = new ListPriceArticleEntity();
-        tmp.setCodlistprice(codlistprice);
-        tmp.setCodart(codart);
-        tmp.setDesart(desart);
-        ApiResponsePage<ListPriceArticleEntity> obj = this.listPriceArticleService.findByPage(tmp,pageable);
-        return ResponseEntity.ok(obj);
+        ListPriceArticleDTO dto = new ListPriceArticleDTO();
+        dto.setCodlistprice(codlistprice);
+        dto.setCodart(codart);
+        dto.setDesart(desart);
+        return ResponseEntity.ok(this.listPriceArticleService.findByPage(dto, pageable));
     }
 
-    @GetMapping("/by-all")
-    public ResponseEntity<?> findAll(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice) throws GenericListServiceException {
-        ListPriceArticleEntity tmp = new ListPriceArticleEntity();
-        tmp.setCodlistprice(codlistprice);
-        ApiResponseList<ListPriceArticleEntity> obj = this.listPriceArticleService.findByCodlistprice(tmp);
-        return ResponseEntity.ok(obj);
+    @GetMapping("/by-codlistprice")
+    public ResponseEntity<?> findByCodlistprice(@RequestParam(value = "codlistprice") Integer codlistprice,
+                                     @RequestParam(value = "status", defaultValue = "") String status) throws GenericListServiceException {
+        return ResponseEntity.ok(this.listPriceArticleService.findByCodlistprice(codlistprice, status));
     }
 
-    @GetMapping("/by-like")
-    public ResponseEntity<?> findByLike(@RequestParam(value = "codart", defaultValue = "") String codart) throws GenericListServiceException {
-        ListPriceArticleEntity tmp = new ListPriceArticleEntity();
-        tmp.setCodart(codart);
-        ApiResponseList<ListPriceArticleEntity> obj = this.listPriceArticleService.findByLike(tmp);
-        return ResponseEntity.ok(obj);
+    @GetMapping("/by-codart")
+    public ResponseEntity<?> findByCodart(@RequestParam(value = "codart") String codart,
+                                          @RequestParam(value = "status", defaultValue = "") String status) throws GenericListServiceException {
+        return ResponseEntity.ok(this.listPriceArticleService.findByCodart(codart,status));
     }
 
     @GetMapping("/by-id")
     public ResponseEntity<?> findById(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
                                      @RequestParam(value = "codart", defaultValue = "") String codart) throws GenericObjectServiceException {
-        ListPriceArticleEntity tmp = new ListPriceArticleEntity();
-        tmp.setCodlistprice(codlistprice);
-        tmp.setCodart(codart);
-        ApiResponseObject<ListPriceArticleEntity> obj = this.listPriceArticleService.findById(tmp);
-        return ResponseEntity.ok(obj);
+        ListPriceArticleDTO dto = new ListPriceArticleDTO();
+        dto.setCodlistprice(codlistprice);
+        dto.setCodart(codart);
+        return ResponseEntity.ok(this.listPriceArticleService.findById(dto));
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        ApiResponseObject<ListPriceArticleEntity> obj = this.listPriceArticleService.save(listPriceArticleEntity);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> save(@RequestBody ListPriceArticleDTO dto) throws GenericObjectServiceException {
+        return ResponseEntity.ok(this.listPriceArticleService.save(dto));
     }
 
     @PutMapping("")
-    public ResponseEntity<?> update(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
-                                    @RequestParam(value = "codart", defaultValue = "") String codart,
-                                    @RequestBody ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        listPriceArticleEntity.setCodlistprice(codlistprice);
-        listPriceArticleEntity.setCodart(codart);
-        ApiResponseObject<ListPriceArticleEntity> obj = this.listPriceArticleService.update(listPriceArticleEntity);
-        return ResponseEntity.ok(obj);
+    public ResponseEntity<?> update(@RequestBody ListPriceArticleDTO dto) throws GenericObjectServiceException {
+        return ResponseEntity.ok(this.listPriceArticleService.update(dto));
     }
 
     @DeleteMapping("")
     public ResponseEntity<?> delete(@RequestParam(value = "codlistprice", defaultValue = "0") Integer codlistprice,
-                                    @RequestParam(value = "codart", defaultValue = "") String codart,
-                                    @RequestBody ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        listPriceArticleEntity.setCodlistprice(codlistprice);
-        listPriceArticleEntity.setCodart(codart);
-        ApiResponseObject<ListPriceArticleEntity> obj = this.listPriceArticleService.delete(listPriceArticleEntity);
-        return ResponseEntity.ok(obj);
+                                    @RequestParam(value = "codart", defaultValue = "") String codart) throws GenericObjectServiceException {
+        ListPriceArticleDTO dto = new ListPriceArticleDTO();
+        dto.setCodlistprice(codlistprice);
+        dto.setCodart(codart);
+        return ResponseEntity.ok(this.listPriceArticleService.delete(dto));
     }
 }

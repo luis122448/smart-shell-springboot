@@ -10,9 +10,13 @@ import luis122448.SmartShell.application.domain.persistence.entity.primary.Serie
 
 public interface SerieCommercialDocumentRepository extends JpaRepository<SerieCommercialDocumentEntity, SerieCommercialDocumentPK> {
     
-	@Query("SELECT sdc FROM SerieCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany AND sdc.typcomdoc = :typcomdoc AND sdc.status ='Y'")
-    List<SerieCommercialDocumentEntity> findByIdcompanyAndTypcomdoc(@Param("idcompany") Integer idcompany, @Param("typcomdoc") Integer typcomdoc);
+	@Query("SELECT sdc FROM SerieCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany " +
+            "AND sdc.typcomdoc = :typcomdoc " +
+            "AND ( :status = '' OR sdc.status = :status )")
+    List<SerieCommercialDocumentEntity> findByIdcompanyAndTypcomdoc(@Param("idcompany") Integer idcompany, @Param("typcomdoc") Integer typcomdoc, @Param("status") String status);
 
-    List<SerieCommercialDocumentEntity> findByIdcompany(Integer idcompany);
+    @Query("SELECT sdc FROM SerieCommercialDocumentEntity sdc WHERE sdc.idcompany = :idcompany " +
+            "AND ( :status = '' OR sdc.status = :status )")
+    List<SerieCommercialDocumentEntity> findByIdcompany(Integer idcompany, String status);
 
 }

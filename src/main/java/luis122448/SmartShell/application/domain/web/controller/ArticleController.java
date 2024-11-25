@@ -1,8 +1,8 @@
 package luis122448.SmartShell.application.domain.web.controller;
 
-import static java.util.Objects.isNull;
 import static luis122448.SmartShell.application.domain.web.constant.APIConstants.PATH_BILLING;
 
+import luis122448.SmartShell.application.domain.domain.model.ArticleDTO;
 import luis122448.SmartShell.application.domain.domain.report.service.ArticleReport;
 import luis122448.SmartShell.util.exception.GenericByteServiceException;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import luis122448.SmartShell.application.domain.persistence.entity.ArticleEntity;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ArticleService;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
-import luis122448.SmartShell.util.object.api.ApiResponseObject;
-import luis122448.SmartShell.util.object.api.ApiResponsePage;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -52,8 +47,6 @@ public class ArticleController {
 	@PostMapping("/by-import")
 	public ResponseEntity<?> importExcel(@RequestParam(value = "typinv", defaultValue = "0") Integer typinv,
 										 @RequestParam(name = "archive") MultipartFile multipartFile) throws GenericByteServiceException {
-		log.info("import archive");
-		log.info("typinv {}", typinv);
 		ApiResponseByte<?> obj = this.articleReport.importByExcel(typinv,multipartFile);
 		return ResponseEntity.ok(obj);
 	}
@@ -61,33 +54,9 @@ public class ArticleController {
 	@GetMapping("/is-available")
 	@Cacheable(value="shortTime")
 	public ResponseEntity<?> isAvailable(@RequestParam("codart") String codart) throws GenericObjectServiceException {
-		ArticleEntity tmp = new ArticleEntity();
-		tmp.setCodart(codart);
-		return ResponseEntity.ok(this.articleService.isAvailable(tmp));
-	}
-	
-	@GetMapping("/{codart}")
-	public ResponseEntity<?> findById (@PathVariable("codart") String codart) throws GenericObjectServiceException {
-		ArticleEntity tmp = new ArticleEntity();
-		tmp.setCodart(codart);
-		ApiResponseObject<ArticleEntity> obj = this.articleService.findById(tmp);
-		return ResponseEntity.ok(obj);
-	}
-	
-	@GetMapping("/by-like")
-	public ResponseEntity<?> findByLike (@RequestParam(name = "codart", defaultValue = "") String codart,
-			@RequestParam(name = "descri", defaultValue = "") String descri) throws GenericListServiceException {
-		ArticleEntity ori = new ArticleEntity();
-		ori.setCodart(codart);
-		ori.setDescri(descri);
-		ApiResponseList<ArticleEntity> lst = this.articleService.findByLike(ori);
-		return ResponseEntity.ok(lst);
-	}
-
-	@GetMapping("/by-name")
-	public ResponseEntity<?> findByName (@RequestParam(name = "name", defaultValue = "") String name) throws GenericListServiceException {
-		ApiResponseList<ArticleEntity> lst = this.articleService.findByName(name);
-		return ResponseEntity.ok(lst);
+		ArticleDTO dto = new ArticleDTO();
+		dto.setCodart(codart);
+		return ResponseEntity.ok(this.articleService.isAvailable(dto));
 	}
 
 	@GetMapping("/by-page")
@@ -96,50 +65,41 @@ public class ArticleController {
 										 @RequestParam(name = "descri", defaultValue = "") String descri,
 										 @RequestParam(name = "status", defaultValue = "") String status,
 										 Pageable p) throws GenericPageServiceException {
-		ArticleEntity ori = new ArticleEntity();
-		ori.setTypinv(typinv);
-		ori.setCodart(codart);
-		ori.setDescri(descri);
-		ori.setStatus(status);
-		ApiResponsePage<ArticleEntity> lst = this.articleService.findByPage(ori, p);
-		return ResponseEntity.ok(lst);
+		ArticleDTO dto = new ArticleDTO();
+		dto.setTypinv(typinv);
+		dto.setCodart(codart);
+		dto.setDescri(descri);
+		dto.setStatus(status);
+		return ResponseEntity.ok(this.articleService.findByPage(dto, p));
 	}
-	
+
+	@GetMapping("/by-name")
+	public ResponseEntity<?> findByName (@RequestParam(name = "name", defaultValue = "") String name) throws GenericListServiceException {
+		return ResponseEntity.ok(this.articleService.findByName(name));
+	}
+
+	@GetMapping("/by-id")
+	public ResponseEntity<?> findById (@RequestParam("codart") String codart) throws GenericObjectServiceException {
+		ArticleDTO dto = new ArticleDTO();
+		dto.setCodart(codart);
+		return ResponseEntity.ok(this.articleService.findById(dto));
+	}
+
 	@PostMapping
-	public ResponseEntity<?> save (@RequestBody ArticleEntity t) throws GenericObjectServiceException {
-		try {
-			ApiResponseObject<ArticleEntity> obj = this.articleService.save(t);
-			if (isNull(obj)) {
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.ok(obj);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return ResponseEntity.internalServerError().build();
-		}
+	public ResponseEntity<?> save (@RequestBody ArticleDTO dto) throws GenericObjectServiceException {
+		return ResponseEntity.ok(this.articleService.save(dto));
 	}
 	
-	@PutMapping("/{codart}")
-	public ResponseEntity<?> update (@PathVariable("codart") String codart, @RequestBody ArticleEntity t) throws GenericObjectServiceException {
-		t.setCodart(codart);
-		ApiResponseObject<ArticleEntity> obj = articleService.update(t);
-		return ResponseEntity.ok(obj);
+	@PutMapping()
+	public ResponseEntity<?> update (@RequestBody ArticleDTO dto) throws GenericObjectServiceException {
+		return ResponseEntity.ok(articleService.update(dto));
 	}
 	
-	@DeleteMapping("/{codart}")
-	public ResponseEntity<?> delete (@PathVariable("codart") String codart) throws GenericObjectServiceException {
-		ArticleEntity tmp = new ArticleEntity();
-		tmp.setCodart(codart);
-		ApiResponseObject<ArticleEntity> obj = articleService.delete(tmp);
-		return ResponseEntity.ok(obj);
-	}
-	
-	@PutMapping("/undelete/{codart}")
-	public ResponseEntity<?> undelete (@PathVariable("codart") String codart) throws GenericObjectServiceException {
-		ArticleEntity tmp = new ArticleEntity();
-		tmp.setCodart(codart);
-		ApiResponseObject<ArticleEntity> obj = articleService.undelete(tmp);
-		return ResponseEntity.ok(obj);
+	@DeleteMapping()
+	public ResponseEntity<?> delete (@RequestParam("codart") String codart) throws GenericObjectServiceException {
+		ArticleDTO dto = new ArticleDTO();
+		dto.setCodart(codart);
+		return ResponseEntity.ok(articleService.delete(dto));
 	}
 	
 }

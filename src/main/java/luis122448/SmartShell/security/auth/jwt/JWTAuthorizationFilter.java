@@ -37,7 +37,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		try {
 			String jwt = this.jwtUtils.parseJwt(request);
-			if (jwt!= null && this.jwtUtils.validateJwtToken(jwt)) {
+			if (jwt == null) {
+				log.info("Token is null");
+				return;
+			}
+
+			if (this.jwtUtils.validateJwtToken(jwt)) {
 				log.info("Token: {}",jwt);
 				Map<String, Object> tokenData = this.jwtUtils.getDataJwtToken(jwt);
 				String company = tokenData.get(SecurityConstant.COMPANY).toString();
@@ -55,7 +60,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 			else {
-				log.info("No Token");
+				log.info("Invalid Token");
+				handleAuthenticationException(response, new GenericAuthServiceException("Invalid Token, please login again"));
 			}
 		} catch (SecurityException | GenericAuthServiceException e){
 			log.info("SecurityException | GenericAuthServiceException {}", e.getMessage());

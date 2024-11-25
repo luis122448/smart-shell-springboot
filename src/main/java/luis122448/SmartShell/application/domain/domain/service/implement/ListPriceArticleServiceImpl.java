@@ -1,6 +1,8 @@
 package luis122448.SmartShell.application.domain.domain.service.implement;
 
 import luis122448.SmartShell.application.domain.domain.component.SecurityContextInitializer;
+import luis122448.SmartShell.application.domain.domain.model.ListPriceArticleDTO;
+import luis122448.SmartShell.application.domain.persistence.mapper.ListPriceArticleMapper;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.util.exception.GenericPageServiceException;
@@ -14,24 +16,30 @@ import luis122448.SmartShell.util.object.api.ApiResponsePage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import static luis122448.SmartShell.util.code.Utils.copyNonNullProperties;
 import static luis122448.SmartShell.util.constant.MESSAGEConstants.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ListPriceArticleServiceImpl implements ListPriceArticleService{
     private final ListPriceArticleRepository listPriceArticleRepository;
+    private final ListPriceArticleMapper listPriceArticleMapper;
     private final SecurityContextInitializer securityContextInitializer;
-    public ListPriceArticleServiceImpl(ListPriceArticleRepository listPriceArticleRepository, SecurityContextInitializer securityContextInitializer) {
+    public ListPriceArticleServiceImpl(ListPriceArticleRepository listPriceArticleRepository, ListPriceArticleMapper listPriceArticleMapper, SecurityContextInitializer securityContextInitializer) {
         this.listPriceArticleRepository = listPriceArticleRepository;
+        this.listPriceArticleMapper = listPriceArticleMapper;
         this.securityContextInitializer = securityContextInitializer;
     }
 
     @Override
-    public ApiResponsePage<ListPriceArticleEntity> findByPage(ListPriceArticleEntity listPriceArticleEntity, Pageable pageable) throws GenericPageServiceException {
+    public ApiResponsePage<ListPriceArticleEntity> findByPage(ListPriceArticleDTO dto, Pageable pageable) throws GenericPageServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        Page<ListPriceArticleEntity> page = this.listPriceArticleRepository.findByLike(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart(),listPriceArticleEntity.getDesart(),pageable);
+        Page<ListPriceArticleEntity> page = this.listPriceArticleRepository.findByLike(idcompany,dto.getCodlistprice(),dto.getCodart(),dto.getDesart(),pageable);
         if (page.getContent().isEmpty()) {
             throw new GenericPageServiceException(404);
         }
@@ -39,67 +47,77 @@ public class ListPriceArticleServiceImpl implements ListPriceArticleService{
     }
 
     @Override
-    public ApiResponseList<ListPriceArticleEntity> findByCodlistprice(ListPriceArticleEntity listPriceArticleEntity) throws GenericListServiceException {
+    public ApiResponseList<ListPriceArticleEntity> findByCodlistprice(Integer codlistprice, String status) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        return new ApiResponseList<>(Optional.of(this.listPriceArticleRepository.findByIdcompanyAndCodlistprice(idcompany,listPriceArticleEntity.getCodlistprice())));
-    }
-
-    @Override
-    public ApiResponseList<ListPriceArticleEntity> findByLike(ListPriceArticleEntity listPriceArticleEntity) throws GenericListServiceException {
-        Integer idcompany = securityContextInitializer.getIdCompany();
-        return new ApiResponseList<>(Optional.of(this.listPriceArticleRepository.findByIdcompanyAndCodart(idcompany,listPriceArticleEntity.getCodart())));
-    }
-
-    @Override
-    public ApiResponseObject<ListPriceArticleEntity> findById(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        Integer idcompany = securityContextInitializer.getIdCompany();
-        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
-        return new ApiResponseObject<>(this.listPriceArticleRepository.findById(tmp));
-    }
-
-    @Override
-    public ApiResponseObject<ListPriceArticleEntity> save(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        Integer idcompany = securityContextInitializer.getIdCompany();
-        ListPriceArticlePK pk = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
-        if (this.listPriceArticleRepository.existsById(pk)){
-           throw new GenericObjectServiceException(ID_EXISTS(pk.getClass().toString()));
+        List<ListPriceArticleEntity> listEntity = this.listPriceArticleRepository.findByIdcompanyAndCodlistprice(idcompany,codlistprice);
+        if (listEntity.isEmpty()) {
+            throw new GenericListServiceException(404);
         }
-        listPriceArticleEntity.setImplistprice(listPriceArticleEntity.getPrice());
-        BigDecimal totalDiscount = listPriceArticleEntity.getDesc01().add(listPriceArticleEntity.getDesc02()).add(listPriceArticleEntity.getDesc03()).add(listPriceArticleEntity.getDesc04());
-        if (totalDiscount.compareTo(listPriceArticleEntity.getDesmax()) > 0){
-            String.format("Total discount (%s) is greater than maximum allowed discount (%s).",
-                    totalDiscount, listPriceArticleEntity.getDesmax());
-        }
-        return new ApiResponseObject<ListPriceArticleEntity>(Optional.of(this.listPriceArticleRepository.save(calculateFields(listPriceArticleEntity))));
+        return new ApiResponseList<>(Optional.of(listEntity));
     }
 
     @Override
-    public ApiResponseObject<ListPriceArticleEntity> update(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
+    public ApiResponseList<ListPriceArticleEntity> findByCodart(String codart, String status) throws GenericListServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
-        if (!this.listPriceArticleRepository.existsById(tmp)){
-            throw new GenericObjectServiceException(ID_NOT_EXISTS(tmp.getClass().toString()));
+        List<ListPriceArticleEntity> listEntity = this.listPriceArticleRepository.findByIdcompanyAndCodart(idcompany,codart);
+        if (listEntity.isEmpty()) {
+            throw new GenericListServiceException(404);
         }
-        listPriceArticleEntity.setImplistprice(listPriceArticleEntity.getPrice());
-        BigDecimal totalDiscount = listPriceArticleEntity.getDesc01().add(listPriceArticleEntity.getDesc02()).add(listPriceArticleEntity.getDesc03()).add(listPriceArticleEntity.getDesc04());
-        if (totalDiscount.compareTo(listPriceArticleEntity.getDesmax()) > 0){
-            String.format("Total discount (%s) is greater than maximum allowed discount (%s).",
-                    totalDiscount, listPriceArticleEntity.getDesmax());
-        }
-        return new ApiResponseObject<ListPriceArticleEntity>(Optional.of(this.listPriceArticleRepository.save(calculateFields(listPriceArticleEntity))));
+        return new ApiResponseList<>(Optional.of(listEntity));
     }
 
     @Override
-    public ApiResponseObject<ListPriceArticleEntity> delete(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
+    public ApiResponseObject<ListPriceArticleEntity> findById(ListPriceArticleDTO dto) throws GenericObjectServiceException {
         Integer idcompany = securityContextInitializer.getIdCompany();
-        ListPriceArticlePK tmp = new ListPriceArticlePK(idcompany,listPriceArticleEntity.getCodlistprice(),listPriceArticleEntity.getCodart());
-        this.listPriceArticleRepository.deleteById(tmp);
-        return new ApiResponseObject<ListPriceArticleEntity>(Optional.empty());
+        ListPriceArticlePK id = new ListPriceArticlePK(idcompany,dto.getCodlistprice(),dto.getCodart());
+        Optional<ListPriceArticleEntity> searchEntity = this.listPriceArticleRepository.findById(id);
+        if (!this.listPriceArticleRepository.existsById(id)){
+            throw new GenericObjectServiceException(ID_NOT_EXISTS(id.toString()));
+        }
+        return new ApiResponseObject<>(searchEntity);
     }
 
     @Override
-    public ApiResponseObject<ListPriceArticleEntity> undelete(ListPriceArticleEntity listPriceArticleEntity) throws GenericObjectServiceException {
-        throw new GenericObjectServiceException(405);
+    public ApiResponseObject<ListPriceArticleEntity> save(ListPriceArticleDTO dto) throws GenericObjectServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        String codUser = securityContextInitializer.getCodUser();
+        ListPriceArticlePK id = new ListPriceArticlePK(idcompany,dto.getCodlistprice(),dto.getCodart());
+        if (this.listPriceArticleRepository.existsById(id)){
+           throw new GenericObjectServiceException(ID_EXISTS(id.toString()));
+        }
+        ListPriceArticleEntity newEntity = this.listPriceArticleMapper.toListPriceArticleEntity(dto);
+        newEntity.setIdcompany(idcompany);
+        newEntity.setCreateby(codUser);
+        newEntity.setCreateat(LocalDateTime.now());
+        newEntity = calculateFields(newEntity);
+        ListPriceArticleEntity savedEntity = this.listPriceArticleRepository.save(newEntity);
+        return new ApiResponseObject<>(Optional.of(savedEntity));
+    }
+
+    @Override
+    public ApiResponseObject<ListPriceArticleEntity> update(ListPriceArticleDTO dto) throws GenericObjectServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        String codUser = securityContextInitializer.getCodUser();
+        ListPriceArticlePK id = new ListPriceArticlePK(idcompany,dto.getCodlistprice(),dto.getCodart());
+        ListPriceArticleEntity existingEntity = this.listPriceArticleRepository.findById(id).orElseThrow(
+                () -> new GenericObjectServiceException(ID_NOT_EXISTS(id.toString()))
+        );
+        ListPriceArticleEntity updateEntity = this.listPriceArticleMapper.toListPriceArticleEntity(dto);
+        updateEntity.setIdcompany(idcompany);
+        updateEntity.setUpdateby(codUser);
+        updateEntity.setUpdateat(LocalDateTime.now());
+        updateEntity = calculateFields(updateEntity);
+        copyNonNullProperties(existingEntity, updateEntity);
+        ListPriceArticleEntity savedEntity = this.listPriceArticleRepository.save(updateEntity);
+        return new ApiResponseObject<>(Optional.of(savedEntity));
+    }
+
+    @Override
+    public ApiResponseObject<ListPriceArticleEntity> delete(ListPriceArticleDTO dto) throws GenericObjectServiceException {
+        Integer idcompany = securityContextInitializer.getIdCompany();
+        ListPriceArticlePK id = new ListPriceArticlePK(idcompany,dto.getCodlistprice(),dto.getCodart());
+        this.listPriceArticleRepository.deleteById(id);
+        return new ApiResponseObject<>(Optional.empty());
     }
 
     public ListPriceArticleEntity calculateFields(ListPriceArticleEntity listPriceArticleEntity){

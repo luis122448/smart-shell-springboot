@@ -4,8 +4,8 @@ import static luis122448.SmartShell.application.domain.web.constant.APIConstants
 
 import java.time.LocalDate;
 
+import luis122448.SmartShell.application.domain.domain.model.ExchangeRateDTO;
 import luis122448.SmartShell.util.exception.GenericListServiceException;
-import luis122448.SmartShell.util.object.api.ApiResponseObject;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
-import luis122448.SmartShell.application.domain.persistence.entity.ExchangeRateEntity;
 import luis122448.SmartShell.util.exception.GenericObjectServiceException;
 import luis122448.SmartShell.application.domain.domain.service.service.ExchangeRateService;
-import luis122448.SmartShell.util.object.api.ApiResponseList;
 
 @Slf4j
 @RestController
@@ -39,38 +37,34 @@ public class ExchangeRateController {
 												   @RequestParam(name="finalat", defaultValue="") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate finalat,
 												   @RequestParam(name="origen", defaultValue="") String origen,
 												   @RequestParam(name="destin", defaultValue="") String destin) throws GenericListServiceException {
-		ApiResponseList<ExchangeRateEntity> lst = this.exchangeRateService.findByLike(startat, finalat, origen, destin);
-		return ResponseEntity.ok(lst);
+		return ResponseEntity.ok(this.exchangeRateService.findByLike(startat, finalat, origen, destin));
 	}
 
 	@GetMapping("/by-id")
-	public ResponseEntity<?> findById(@RequestParam(name = "registdate", defaultValue = "") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate registdate,
-									  @RequestParam(name="origen", defaultValue="") String origen,
-									  @RequestParam(name="destin", defaultValue="") String destin) throws GenericObjectServiceException {
-		ExchangeRateEntity tmp = new ExchangeRateEntity();
-		tmp.setRegistdate(registdate);
-		tmp.setOrigen(origen);
-		tmp.setDestin(destin);
-		ApiResponseObject<ExchangeRateEntity> obj = this.exchangeRateService.findById(tmp);
-		return ResponseEntity.ok(obj);
+	public ResponseEntity<?> findById(@RequestParam(name = "registdate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate registdate,
+									  @RequestParam(name="origen") String origen,
+									  @RequestParam(name="destin") String destin) throws GenericObjectServiceException {
+		ExchangeRateDTO dto = new ExchangeRateDTO();
+		dto.setRegistdate(registdate);
+		dto.setOrigen(origen);
+		dto.setDestin(destin);
+		return ResponseEntity.ok(this.exchangeRateService.findById(dto));
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody ExchangeRateEntity t) throws GenericObjectServiceException {
-		ApiResponseObject<ExchangeRateEntity> obj =  this.exchangeRateService.save(t);
-		return ResponseEntity.ok(obj);
+	public ResponseEntity<?> save(@RequestBody ExchangeRateDTO dto) throws GenericObjectServiceException {
+		return ResponseEntity.ok(this.exchangeRateService.save(dto));
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<?> delete(@RequestParam(name="registdate", defaultValue="") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate registdate,
-											@RequestParam(name="origen", defaultValue="") String origen,
-											@RequestParam(name="destin", defaultValue="") String destin) throws GenericObjectServiceException {
-		ExchangeRateEntity tmp = new ExchangeRateEntity();
-		tmp.setRegistdate(registdate);
-		tmp.setOrigen(origen);
-		tmp.setDestin(destin);
-		ApiResponseObject<ExchangeRateEntity> obj =  this.exchangeRateService.delete(tmp);
-		return ResponseEntity.ok(obj);
+	public ResponseEntity<?> delete(@RequestParam(name="registdate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate registdate,
+											@RequestParam(name="origen") String origen,
+											@RequestParam(name="destin") String destin) throws GenericObjectServiceException {
+		ExchangeRateDTO dto = new ExchangeRateDTO();
+		dto.setRegistdate(registdate);
+		dto.setOrigen(origen);
+		dto.setDestin(destin);
+		return ResponseEntity.ok(this.exchangeRateService.delete(dto));
 	}
 	
 }
