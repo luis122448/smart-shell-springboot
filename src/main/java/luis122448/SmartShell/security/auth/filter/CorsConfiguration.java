@@ -14,10 +14,17 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:4200",
+                        // .allowedOrigins(
+                        //         "http://localhost:*",
+                        //         "http://smart-shell-angular:*",
+                        //         "https://smart-shell.luis122448.com",
+                        //         "http://smart-shell.luis122448.com"
+                        // )
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
+                                "http://smart-shell-angular:*",
                                 "https://smart-shell.luis122448.com",
-                                "https://smart-shell-angular-production.up.railway.app"
+                                "http://smart-shell.luis122448.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
