@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: springboot-ingress
+  namespace: smart-shell-production
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  labels:
+    app.kubernetes.io/name: springboot-ingress
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: luis122448-dev-suite
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "smart-shell.luis122448.dev"
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: springboot-service
+              port:
+                number: 8080
+  tls:
+    - hosts:
+        - "smart-shell.luis122448.dev"
+      secretName: luis122448-dev-aws-tls

@@ -4,7 +4,15 @@ metadata:
   name: springboot-deployment
   namespace: smart-shell-production
 spec:
-  replicas: 3
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
   selector:
     matchLabels:
       app: springboot
@@ -16,3 +24,67 @@ spec:
       containers:
       - name: springboot
         image: luis122448/smart-shell-springboot:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POSTGRES_HOST
+          value: "postgres-service.smart-shell-production.svc.cluster.local"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_DB
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: MONGO_HOST
+          value: "mongo-service.smart-shell-production.svc.cluster.local"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: MONGO_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_DATABASE
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
+        - name: REDIS_HOST
+          value: "redis-service.smart-shell-production.svc.cluster.local"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_USERNAME
+          value: "default"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1

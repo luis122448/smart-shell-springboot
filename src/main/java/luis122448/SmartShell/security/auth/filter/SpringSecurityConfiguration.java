@@ -34,6 +34,7 @@ public class SpringSecurityConfiguration {
 			// Establece la política de gestión de sesiones en "STATELESS", lo que significa que no se mantendrán sesiones en el servidor y 
 			// cada solicitud debe incluir la información de autenticación necesaria.
 			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/actuator/**").permitAll());
 			http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/**").permitAll());
 			http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/ecommerce/**").permitAll());
 			http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api-docs/**").permitAll());
