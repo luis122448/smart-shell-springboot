@@ -2,7 +2,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: springboot-hpa
-  namespace: smart-shell-production
+  namespace: smart-shell-test
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

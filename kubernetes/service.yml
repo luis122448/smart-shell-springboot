@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: springboot-service
-  namespace: smart-shell-production
+  namespace: smart-shell-test
 spec:
   type: ClusterIP
   selector:
@@ -11,6 +11,6 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-      name: springboo 
+      name: springboot
   selector:
     app: springboot

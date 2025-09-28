@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springboot-deployment
-  namespace: smart-shell-production
+  namespace: smart-shell-test
 spec:
   replicas: 3
   selector:
@@ -22,7 +22,7 @@ spec:
         - name: CORS_ALLOWED_ORIGINS
           value: "http://smart-shell.luis122448.com,https://smart-shell.luis122448.com"
         - name: POSTGRES_HOST
-          value: "postgres-service.smart-shell-production.svc.cluster.local"
+          value: "postgres-service.smart-shell-test.svc.cluster.local"
         - name: POSTGRES_PORT
           value: "5432"
         - name: POSTGRES_DATABASE
@@ -41,7 +41,7 @@ spec:
               name: postgres-secret
               key: POSTGRES_PASSWORD
         - name: MONGO_HOST
-          value: "mongo-service.smart-shell-production.svc.cluster.local"
+          value: "mongo-service.smart-shell-test.svc.cluster.local"
         - name: MONGO_PORT
           value: "27017"
         - name: MONGO_DATABASE
@@ -60,7 +60,7 @@ spec:
               name: mongo-secret
               key: MONGO_INITDB_ROOT_PASSWORD
         - name: REDIS_HOST
-          value: "redis-service.smart-shell-production.svc.cluster.local"
+          value: "redis-service.smart-shell-test.svc.cluster.local"
         - name: REDIS_PORT
           value: "6379"
         - name: REDIS_USERNAME
